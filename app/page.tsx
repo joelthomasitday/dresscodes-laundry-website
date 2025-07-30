@@ -83,7 +83,7 @@ export default function HomePage() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero-laundry.jpg"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1966.jpg-U85wNEDbCEgQ30TBhz8sxjfOKPORde.jpeg"
             alt="Professional laundry service - hands loading clothes into washing machine"
             fill
             className="object-cover"

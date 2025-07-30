@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Award, Users, Clock, Leaf, Heart, Shield } from "lucide-react"
 import type { Metadata } from "next"
+import { Navigation } from "@/components/navigation"
 
 export const metadata: Metadata = {
   title: "About Us - Professional Laundry Service | Dresscode Laundry",
@@ -58,69 +59,13 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold text-teal-600">
-                DRESSCODE
-              </Link>
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/"
-                  className="text-gray-500 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/services"
-                  className="text-gray-500 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Services
-                </Link>
-                <Link
-                  href="/booking"
-                  className="text-gray-500 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Book Now
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-gray-900 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                  aria-current="page"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/blog"
-                  className="text-gray-500 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Blog
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-gray-500 hover:text-teal-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Contact
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button asChild className="bg-teal-600 hover:bg-teal-700 transition-colors">
-                <Link href="/booking">Schedule Pickup</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation variant="solid" />
 
       {/* Hero Section */}
-      <section className="bg-teal-600 text-white py-12 sm:py-16">
+      <section className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white py-12 sm:py-16 pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">About Dresscode Laundry</h1>
-          <p className="text-lg sm:text-xl text-teal-100 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-emerald-100 max-w-2xl mx-auto">
             Your trusted partner for professional laundry and dry cleaning services in Kottayam
           </p>
         </div>
@@ -131,7 +76,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-teal-100 text-teal-800">Our Story</Badge>
+              <Badge className="mb-4 bg-emerald-100 text-emerald-800">Our Story</Badge>
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Redefining Laundry Care in Kottayam</h2>
               <div className="space-y-4 text-gray-600 text-sm sm:text-base">
                 <p>
@@ -173,7 +118,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-teal-600 mb-2">{stat.number}</div>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">{stat.number}</div>
                 <div className="text-gray-600 text-sm sm:text-base">{stat.label}</div>
               </div>
             ))}
@@ -185,7 +130,7 @@ export default function AboutPage() {
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-teal-100 text-teal-800">Our Values</Badge>
+            <Badge className="mb-4 bg-emerald-100 text-emerald-800">Our Values</Badge>
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">What Drives Us</h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Our core values guide everything we do, from how we treat your garments to how we serve our community.
@@ -195,7 +140,7 @@ export default function AboutPage() {
             {values.map((value, index) => (
               <Card key={index} className="text-center p-4 sm:p-6 hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <value.icon className="h-10 w-10 sm:h-12 sm:w-12 text-teal-600 mx-auto mb-4" />
+                  <value.icon className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-600 mx-auto mb-4" />
                   <h3 className="text-lg sm:text-xl font-semibold mb-3">{value.title}</h3>
                   <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{value.description}</p>
                 </CardContent>
@@ -243,7 +188,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -255,7 +200,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -267,7 +212,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -281,7 +226,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -293,7 +238,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -305,7 +250,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
@@ -322,17 +267,17 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-teal-600 text-white">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-emerald-500 to-emerald-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Experience the Dresscode Difference?</h2>
-          <p className="text-lg sm:text-xl mb-8 text-teal-100">
+          <p className="text-lg sm:text-xl mb-8 text-emerald-100">
             Join thousands of satisfied customers who trust us with their garment care needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               asChild
-              className="bg-white text-teal-600 hover:bg-gray-100 transition-colors rounded-full"
+              className="bg-white text-emerald-600 hover:bg-gray-100 transition-colors rounded-full"
             >
               <Link href="/booking">Schedule Your First Pickup</Link>
             </Button>
@@ -340,7 +285,7 @@ export default function AboutPage() {
               size="lg"
               variant="outline"
               asChild
-              className="border-white text-white hover:bg-white hover:text-teal-600 bg-transparent transition-colors rounded-full"
+              className="border-white text-white hover:bg-white hover:text-emerald-600 bg-transparent transition-colors rounded-full"
             >
               <Link href="/contact">Get in Touch</Link>
             </Button>
