@@ -49,7 +49,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
     return (
       <>
         <nav
-          className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/10 border-b border-white/10 shadow-2xl"
+          className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/80 border-b border-gray-800/20 shadow-2xl"
           role="navigation"
           aria-label="Main navigation"
         >
@@ -462,7 +462,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
                 aria-expanded={isMobileMenuOpen}
               >
-                <Menu className="h-5 w-5 text-white" />
+                <Menu className="h-5 w-5 text-[#07553f]" />
               </Button>
             </div>
 
