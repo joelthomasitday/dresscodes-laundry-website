@@ -211,7 +211,7 @@ export default function HomePage() {
                   <p className="text-gray-600 mb-4">{service.description}</p>
 
                   <div className="mb-4">
-                    <span className="text-2xl font-bold text-emerald-600">{service.price}</span>
+                    <span className="text-xl font-bold text-emerald-600 ">{service.price}</span>
                   </div>
 
                   <ul className="space-y-2 mb-6">
