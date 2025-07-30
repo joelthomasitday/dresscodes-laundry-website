@@ -57,7 +57,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
             <div className="flex justify-between items-center h-20">
               {/* Logo */}
               <div className="flex items-center">
-                <Link href="/" className="text-xl font-bold text-emerald-600" aria-label="Dresscode Laundry Home">
+                <Link href="/" className="text-xl font-bold text-white" aria-label="Dresscode Laundry Home">
                   DRESSCODE
                 </Link>
               </div>
@@ -82,7 +82,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                   className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50/20 p-2 rounded-full transition-all duration-200"
                   aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-5 w-5 text-white" />
                 </Button>
               </div>
 
@@ -95,8 +95,8 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                       href={item.href}
                       className={`px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl hover:bg-emerald-50/20 backdrop-blur-sm drop-shadow-sm ${
                         isActive(item.href)
-                          ? "text-emerald-600 font-semibold hover:text-emerald-700"
-                          : "text-emerald-600/80 hover:text-emerald-600"
+                          ? "text-white font-semibold hover:text-emerald-700"
+                          : "text-white/80 hover:text-emerald-600"
                       }`}
                       aria-current={isActive(item.href) ? "page" : undefined}
                     >
@@ -184,7 +184,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
                 <div className="space-y-3">
                   <Link
-                    href="tel:+919843437272"
+                    href="tel:+918943437272"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -192,7 +192,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                     <span>+91 89434 37272</span>
                   </Link>
                   <Link
-                    href="https://wa.me/919843437272"
+                    href="https://wa.me/918943437272"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
@@ -276,7 +276,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                   aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
                   aria-expanded={isMobileMenuOpen}
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-5 w-5 text-white" />
                 </Button>
               </div>
 
@@ -372,7 +372,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
                 <div className="space-y-3">
                   <Link
-                    href="tel:+919843437272"
+                    href="tel:+918943437272"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -380,7 +380,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                     <span>+91 89434 37272</span>
                   </Link>
                   <Link
-                    href="https://wa.me/919843437272"
+                    href="https://wa.me/918943437272"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
@@ -462,7 +462,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
                 aria-expanded={isMobileMenuOpen}
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 text-white" />
               </Button>
             </div>
 
@@ -558,7 +558,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
               <div className="space-y-3">
                 <Link
-                  href="tel:+919843437272"
+                  href="tel:+918943437272"
                   className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -566,7 +566,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                   <span>+91 89434 37272</span>
                 </Link>
                 <Link
-                  href="https://wa.me/919843437272"
+                  href="https://wa.me/918943437272"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"

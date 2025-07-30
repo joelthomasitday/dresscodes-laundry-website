@@ -129,7 +129,7 @@ export default function ContactPage() {
           {/* Quick Contact Options */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button asChild size="lg" className="bg-white text-emerald-600 hover:bg-gray-100 rounded-full">
-              <Link href="tel:+919843437272">
+              <Link href="tel:+918943437272">
                 <Phone className="h-5 w-5 mr-2" />
                 Call +91 89434 37272
               </Link>
@@ -142,7 +142,7 @@ export default function ContactPage() {
               className="border-white/30 text-white hover:bg-white/10 rounded-full bg-transparent"
             >
               <Link
-                href="https://wa.me/919843437272?text=Hi! I have a question about your laundry services."
+                href="https://wa.me/918943437272?text=Hi! I have a question about your laundry services."
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -179,7 +179,7 @@ export default function ContactPage() {
                       <div>
                         <h3 className="text-lg font-semibold mb-2">Phone</h3>
                         <p className="text-gray-600 mb-2">Call us for immediate assistance</p>
-                        <Link href="tel:+919843437272" className="text-emerald-600 hover:text-emerald-700 font-medium">
+                        <Link href="tel:+918943437272" className="text-emerald-600 hover:text-emerald-700 font-medium">
                           +91 89434 37272
                         </Link>
                       </div>
@@ -199,7 +199,7 @@ export default function ContactPage() {
                         <h3 className="text-lg font-semibold mb-2">WhatsApp</h3>
                         <p className="text-gray-600 mb-2">Quick chat support</p>
                         <Link
-                          href="https://wa.me/919843437272"
+                          href="https://wa.me/918943437272"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-emerald-600 hover:text-emerald-700 font-medium"
