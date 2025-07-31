@@ -1,7 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend("re_e8DTFsKf_FtfCyC8wqRmJRar7EFLizP41")
+const resend = new Resend(process.env.RESEND_API_KEY)
+async function logApiKeys() {
+  const apiKeys = await resend.apiKeys.list();
+  console.log('Available API Keys:', apiKeys);
+}
+
+logApiKeys();
 
 export async function POST(request: NextRequest) {
   try {
