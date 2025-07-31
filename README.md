@@ -132,12 +132,6 @@ tailwind.config.ts   → Styling configuration
 - Proper HTTP status codes
 
 
-### **3. Environment Variables**
-
-```shellscript
-RESEND_API_KEY=re_e8DTFskf_FtfCyCBwqRmJRar7EFLizP41
-BUSINESS_EMAIL=joelthomas6094@gmail.com
-```
 
 - Keeps secrets secure
 - Different configs for dev/production
@@ -201,16 +195,6 @@ const bookingId = `BK${Date.now()}` // Unique ID
 ```
 
 
-3. **Email Sending**
-
-```javascript
-// Two emails sent via Resend
-resend.emails.send({
-  from: "onboarding@resend.dev",
-  to: "joelthomas6094@gmail.com", // Your email
-  subject: "New Booking Request - BK1753941698047"
-})
-```
 
 
 
