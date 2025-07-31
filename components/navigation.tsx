@@ -41,77 +41,95 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
   if (variant === "dark") {
     return (
       <>
-        <nav
-          className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/80 border-b border-gray-800/20 shadow-2xl"
-          role="navigation"
-          aria-label="Main navigation"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-20">
-              {/* Logo */}
-              <div className="flex items-center">
-                <Link href="/" className="text-xl font-bold text-white" aria-label="Dresscode Laundry Home">
-                  DRESSCODE
+       <nav
+      className="fixed top-0 left-0 right-0 z-50 bg-[#f3f2ef] border-b border-gray-200"
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-24">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link href="/" className="text-2xl font-bold text-green-600" aria-label="Dresscode Laundry Home">
+              DRESSCODE
+            </Link>
+          </div>
+
+          {/* Desktop navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-center space-x-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative text-base font-medium transition-colors duration-300 group ${
+                    isActive(item.href)
+                      ? "text-green-600 after:w-full"
+                      : "text-gray-700 hover:text-green-600"
+                  }`}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
                 </Link>
-              </div>
-
-              {/* Center - Book Now Button (Mobile) */}
-              <div className="md:hidden">
-                <Button
-                  asChild
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-full text-sm font-medium"
-                >
-                  <Link href="/booking">Book Now</Link>
-                </Button>
-              </div>
-
-              {/* Right - Menu Button (Mobile) */}
-              <div className="md:hidden">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleMobileMenu}
-                  className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50/20 p-2 rounded-full transition-all duration-200"
-                  aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                >
-                  <Menu className="h-5 w-5 text-white" />
-                </Button>
-              </div>
-
-              {/* Desktop navigation */}
-              <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-1">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl hover:bg-emerald-50/20 backdrop-blur-sm drop-shadow-sm ${
-                        isActive(item.href)
-                          ? "text-white font-semibold hover:text-emerald-700"
-                          : "text-white/80 hover:text-emerald-600"
-                      }`}
-                      aria-current={isActive(item.href) ? "page" : undefined}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Desktop Book Now Button */}
-              <div className="hidden md:flex items-center space-x-4">
-                <Button
-                  asChild
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full transition-all duration-200"
-                >
-                  <Link href="/booking">Book Now</Link>
-                </Button>
-              </div>
+              ))}
             </div>
           </div>
-        </nav>
+
+          {/* Desktop Book Now Button */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Button
+              asChild
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full transition-all duration-200"
+            >
+              <Link href="/booking">Book Now</Link>
+            </Button>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center gap-4">
+            <Button
+              asChild
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium"
+            >
+              <Link href="/booking">Book Now</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMobileMenu}
+              className="p-2 transition-all duration-200"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6 text-green-600" /> : <Menu className="h-6 w-6 text-green-600" />}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu - Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-[#f3f2ef] shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ${
+                  isActive(item.href)
+                    ? "bg-green-50 text-green-600 font-semibold"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-green-600"
+                }`}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
 
         {/* Mobile Side Menu Overlay */}
         {isMobileMenuOpen && (
