@@ -86,7 +86,7 @@ export default function HomePage() {
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1966.jpg-U85wNEDbCEgQ30TBhz8sxjfOKPORde.jpeg"
             alt="Professional laundry service - hands loading clothes into washing machine"
             fill
-            className="object-cover"
+            className="object-cover sm:blur-0 blur-[4px]" 
             priority
           />
           <div className="absolute inset-0 bg-black/30"></div>
