@@ -51,7 +51,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-green-600" aria-label="Dresscode Laundry Home">
-              DRESSCODE
+               DressCode
             </Link>
           </div>
 
