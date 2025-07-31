@@ -17,8 +17,29 @@ import {
   Phone,
   MapPin,
   PhoneIcon,
+  MessageCircle,
 } from "lucide-react"
 import { Navigation } from "@/components/navigation"
+const cardData = [
+  {
+    icon: <MessageCircle className="h-8 w-8 text-green-600" />,
+    title: "Free Pickup & Delivery",
+    description:
+      "Doorstep service across Kottayam. Schedule a pickup with just one call. It's fast, easy, and hassle-free.",
+  },
+  {
+    icon: <Clock className="h-8 w-8 text-green-600" />,
+    title: "24–48 Hour Turnaround",
+    description:
+      "Fast service without compromising quality. Express options available. Clean clothes, right on time.",
+  },
+  {
+    icon: <CheckCircle className="h-8 w-8 text-green-600" />,
+    title: "100% Satisfaction Guaranteed",
+    description:
+      "Not satisfied? We’ll make it right. Your happiness is our priority — no questions asked.",
+  },
+];
 
 const WhatsappIcon = (props:any) => (
  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="mr-2">
@@ -171,41 +192,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 shadow-md">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Truck className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">Free Pickup & Delivery</h3>
-                <p className="text-gray-600">
-                  Convenient doorstep service across Kottayam. Schedule pickup with just one call
-                </p>
-              </CardContent>
-            </Card>
+    
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {cardData.map((card, index) => (
+    <div
+      key={index}
+      className="flex flex-col justify-between bg-[#ffffff] p-5 rounded-3xl shadow-md min-h-[300px]"
+    >
+      {/* Top Section */}
+      <div>
+        <div className="mb-4">{card.icon}</div>
 
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 shadow-md">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Clock className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">24-48 Hour Service</h3>
-                <p className="text-gray-600">
-                  Quick turnaround time without compromising on quality. Express service available.
-                </p>
-              </CardContent>
-            </Card>
+        <h2 className="text-2xl font-normal text-gray-900 mb-2 leading-snug">
+          {card.title}
+        </h2>
 
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 shadow-md">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Shield className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4">100% Satisfaction</h3>
-                <p className="text-gray-600">Quality guarantee on all services. Not satisfied? We'll make it right.</p>
-              </CardContent>
-            </Card>
-          </div>
+        <p className="text-gray-600 text-sm leading-relaxed mb-4">
+          {card.description}
+        </p>
+      </div>
+
+      {/* Button */}
+      <Button
+        asChild
+        variant="outline"
+        size="lg"
+        className="border-gray-300 text-gray-800 hover:text-[#008c5d] hover:border-[#008c5d] bg-transparent rounded-full transition-colors duration-200"
+      >
+        <Link href="/blog">Read More</Link>
+      </Button>
+    </div>
+  ))}
+</div>
+
+
         </div>
       </section>
 
@@ -224,7 +244,7 @@ export default function HomePage() {
               <Card key={index} className="hover:shadow-xl transition-all duration-300 border-0 shadow-md group">
                 <CardContent className="p-6">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <service.icon className="h-6 w-6 text-white" />
+                    <service.icon className="h-8 w-8 text-white" />
                   </div>
 
                   <h3 className="text-xl font-semibold mb-2">{service.title}</h3>

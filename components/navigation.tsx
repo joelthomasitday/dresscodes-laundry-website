@@ -42,7 +42,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
     return (
       <>
        <nav
-      className="fixed top-0 left-0 right-0 z-50 bg-[#f3f2ef] border-b border-gray-200"
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200"
       role="navigation"
       aria-label="Main navigation"
     >
@@ -109,7 +109,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
 
       {/* Mobile menu - Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#f3f2ef] shadow-lg">
+        <div className="md:hidden bg-white shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link
@@ -433,7 +433,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200/50 shadow-lg"
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white border-b border-gray-200/50 shadow-lg"
         role="navigation"
         aria-label="Main navigation"
       >
