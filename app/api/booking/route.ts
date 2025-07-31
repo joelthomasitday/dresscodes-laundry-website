@@ -1,35 +1,71 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { Resend } from "resend"
+
+const resend = new Resend("re_e8DTFsKf_FtfCyC8wqRmJRar7EFLizP41")
 
 export async function POST(request: NextRequest) {
   try {
     const bookingData = await request.json()
+    const { name, phone, email, address, selectedDate, timeSlot, selectedServices, specialInstructions } = bookingData
+    const servicesText = selectedServices.join(", ")
+    const bookingId = `BK${Date.now()}`
 
-    // Here you would typically:
-    // 1. Validate the data
-    // 2. Save to database
-    // 3. Send confirmation emails
-    // 4. Send SMS notifications
+    // Send email to business owner
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: "hellodresscodes@gmail.com",
+      subject: `New Booking Request - ${bookingId}`,
+      html: `
+        <h2>New Booking Request</h2>
+        <p><strong>Booking ID:</strong> ${bookingId}</p>
+        <p><strong>Customer:</strong> ${name}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Address:</strong> ${address}</p>
+        <p><strong>Pickup Date:</strong> ${new Date(selectedDate).toLocaleDateString("en-IN")}</p>
+        <p><strong>Time Slot:</strong> ${timeSlot}</p>
+        <p><strong>Services:</strong> ${servicesText}</p>
+        ${specialInstructions ? `<p><strong>Special Instructions:</strong> ${specialInstructions}</p>` : ""}
+        <hr>
+        <p><small>Submitted at: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</small></p>
+      `,
+    })
 
-    // For now, we'll simulate the process
-    console.log("Booking received:", bookingData)
+    console.log("Business email sent successfully")
 
-    // Simulate processing time
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Send confirmation to customer (if email provided)
+    if (email) {
+      await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: `Booking Confirmation - ${bookingId}`,
+        html: `
+          <h2>Booking Confirmation</h2>
+          <p>Dear ${name},</p>
+          <p>Thank you for choosing Dresscode Laundry! Your booking has been received.</p>
+          <p><strong>Booking Details:</strong></p>
+          <ul>
+            <li><strong>Booking ID:</strong> ${bookingId}</li>
+            <li><strong>Pickup Date:</strong> ${new Date(selectedDate).toLocaleDateString("en-IN")}</li>
+            <li><strong>Time Slot:</strong> ${timeSlot}</li>
+            <li><strong>Services:</strong> ${servicesText}</li>
+            <li><strong>Address:</strong> ${address}</li>
+          </ul>
+          <p>We will contact you shortly to confirm the pickup details.</p>
+          <hr>
+          <p>Best regards,<br>Dresscode Laundry Team</p>
+          <p>Phone: +91 89434 37272<br>Email: hellodresscodes@gmail.com</p>
+        `,
+      })
 
-    // In production, you would:
-    // - Send email to business owner
-    // - Send confirmation email to customer
-    // - Save to database
-    // - Send WhatsApp/SMS notifications
+      console.log("Customer confirmation email sent successfully")
+    }
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Booking request submitted successfully",
-        bookingId: `BK${Date.now()}`,
-      },
-      { status: 200 },
-    )
+    return NextResponse.json({
+      success: true,
+      message: "Booking request submitted successfully",
+      bookingId,
+    })
   } catch (error) {
     console.error("Error processing booking:", error)
     return NextResponse.json({ error: "Failed to process booking request" }, { status: 500 })

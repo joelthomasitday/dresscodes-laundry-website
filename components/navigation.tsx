@@ -1,27 +1,21 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Menu, X, Phone } from "lucide-react"
 import { usePathname } from "next/navigation"
-
 interface NavigationProps {
   variant?: "glass" | "solid" | "dark"
 }
-
 export function Navigation({ variant = "solid" }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
   }
-
   const isActive = (path: string) => {
     return pathname === path
   }
-
   // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -43,7 +37,6 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ]
-
   // Dark variant (for homepage with light background image)
   if (variant === "dark") {
     return (
@@ -232,7 +225,6 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
       </>
     )
   }
-
   // Glass variant (for homepage with background image)
   if (variant === "glass") {
     return (
@@ -419,7 +411,6 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
       </>
     )
   }
-
   // Solid variant (for other pages with white background)
   return (
     <>
