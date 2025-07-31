@@ -143,6 +143,7 @@ export default function HomePage() {
 
       {/* Features Section */}
       <section className="py-16 sm:py-24 bg-white">
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why Choose Dresscode?</h2>
@@ -159,7 +160,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Free Pickup & Delivery</h3>
                 <p className="text-gray-600">
-                  Convenient doorstep service across Kottayam. Schedule pickup with just one call.
+                  Convenient doorstep service across Kottayam. Schedule pickup with just one call
                 </p>
               </CardContent>
             </Card>
