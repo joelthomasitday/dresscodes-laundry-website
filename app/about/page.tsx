@@ -1,18 +1,19 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import Image from "next/image"
-import { Award, Users, Clock, Leaf, Heart, Shield } from "lucide-react"
-import type { Metadata } from "next"
-import { Navigation } from "@/components/navigation"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import Image from "next/image";
+import { Award, Users, Clock, Leaf, Heart, Shield } from "lucide-react";
+import type { Metadata } from "next";
+import { Navigation } from "@/components/navigation";
 
 export const metadata: Metadata = {
   title: "About Us - Professional Laundry Service | Dresscode Laundry",
   description:
     "Learn about Dresscode Laundry's mission, values, and commitment to providing exceptional laundry and dry cleaning services in Kottayam since our founding.",
-  keywords: "about dresscode laundry, laundry service history, professional cleaning team, Kottayam laundry",
-}
+  keywords:
+    "about dresscode laundry, laundry service history, professional cleaning team, Kottayam laundry",
+};
 
 export default function AboutPage() {
   const values = [
@@ -25,36 +26,41 @@ export default function AboutPage() {
     {
       icon: Users,
       title: "Customer First",
-      description: "Your satisfaction is our priority. We listen, adapt, and deliver personalized service every time.",
+      description:
+        "Your satisfaction is our priority. We listen, adapt, and deliver personalized service every time.",
     },
     {
       icon: Clock,
       title: "Reliability",
-      description: "Consistent, on-time service you can depend on. We respect your schedule and commitments.",
+      description:
+        "Consistent, on-time service you can depend on. We respect your schedule and commitments.",
     },
     {
       icon: Leaf,
       title: "Eco-Friendly",
-      description: "Committed to sustainable practices with biodegradable detergents and energy-efficient processes.",
+      description:
+        "Committed to sustainable practices with biodegradable detergents and energy-efficient processes.",
     },
     {
       icon: Heart,
       title: "Care & Attention",
-      description: "Every garment receives individual attention and care as if it were our own.",
+      description:
+        "Every garment receives individual attention and care as if it were our own.",
     },
     {
       icon: Shield,
       title: "Trust & Security",
-      description: "Your belongings are safe with us. We maintain strict security and handling protocols.",
+      description:
+        "Your belongings are safe with us. We maintain strict security and handling protocols.",
     },
-  ]
+  ];
 
   const stats = [
     { number: "5000+", label: "Happy Customers" },
     { number: "50,000+", label: "Garments Cleaned" },
     { number: "99.8%", label: "Satisfaction Rate" },
     { number: "24-48h", label: "Turnaround Time" },
-  ]
+  ];
 
   return (
     <div className="min-h-screen">
@@ -62,11 +68,14 @@ export default function AboutPage() {
       <Navigation variant="solid" />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white py-12 sm:py-16 pt-32">
+      <section className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white py-16 sm:py-28 pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">About Dresscode Laundry</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+            About Dresscode Laundry
+          </h1>
           <p className="text-lg sm:text-xl text-emerald-100 max-w-2xl mx-auto">
-            Your trusted partner for professional laundry and dry cleaning services in Kottayam
+            Your trusted partner for professional laundry and dry cleaning
+            services in Kottayam
           </p>
         </div>
       </section>
@@ -76,21 +85,31 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-emerald-100 text-emerald-800">Our Story</Badge>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Redefining Laundry Care in Kottayam</h2>
+              <Badge className="mb-4 bg-emerald-100 text-emerald-800">
+                Our Story
+              </Badge>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+                Redefining Laundry Care in Kottayam
+              </h2>
               <div className="space-y-4 text-gray-600 text-sm sm:text-base">
                 <p>
-                  Founded with a vision to transform the laundry experience, Dresscode Laundry has been serving the
-                  Kottayam community with dedication and excellence. What started as a small local business has grown
-                  into a trusted name in professional garment care.
+                  Founded with a vision to transform the laundry experience,
+                  Dresscode Laundry has been serving the Kottayam community with
+                  dedication and excellence. What started as a small local
+                  business has grown into a trusted name in professional garment
+                  care.
                 </p>
                 <p>
-                  We understand that your clothes are more than just fabric – they're an expression of your personality
-                  and professionalism. That's why we treat every garment with the utmost care and attention it deserves.
+                  We understand that your clothes are more than just fabric –
+                  they're an expression of your personality and professionalism.
+                  That's why we treat every garment with the utmost care and
+                  attention it deserves.
                 </p>
                 <p>
-                  Our commitment to quality, convenience, and customer satisfaction has made us the preferred choice for
-                  thousands of families and professionals across Kottayam and surrounding areas.
+                  Our commitment to quality, convenience, and customer
+                  satisfaction has made us the preferred choice for thousands of
+                  families and professionals across Kottayam and surrounding
+                  areas.
                 </p>
               </div>
             </div>
@@ -112,14 +131,22 @@ export default function AboutPage() {
       <section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Our Impact</h2>
-            <p className="text-base sm:text-lg text-gray-600">Numbers that reflect our commitment to excellence</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              Our Impact
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              Numbers that reflect our commitment to excellence
+            </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600 text-sm sm:text-base">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-gray-600 text-sm sm:text-base">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -130,19 +157,31 @@ export default function AboutPage() {
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-emerald-100 text-emerald-800">Our Values</Badge>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">What Drives Us</h2>
+            <Badge className="mb-4 bg-emerald-100 text-emerald-800">
+              Our Values
+            </Badge>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              What Drives Us
+            </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Our core values guide everything we do, from how we treat your garments to how we serve our community.
+              Our core values guide everything we do, from how we treat your
+              garments to how we serve our community.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="text-center p-4 sm:p-6 hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-center p-4 sm:p-6 hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="pt-6">
                   <value.icon className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-600 mx-auto mb-4" />
-                  <h3 className="text-lg sm:text-xl font-semibold mb-3">{value.title}</h3>
-                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{value.description}</p>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-3">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    {value.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -156,21 +195,29 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             <Card className="p-6 sm:p-8">
               <CardContent className="pt-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                  Our Mission
+                </h3>
                 <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  To provide exceptional laundry and dry cleaning services that exceed customer expectations while
-                  maintaining the highest standards of quality, convenience, and environmental responsibility. We strive
-                  to make professional garment care accessible and affordable for everyone in our community.
+                  To provide exceptional laundry and dry cleaning services that
+                  exceed customer expectations while maintaining the highest
+                  standards of quality, convenience, and environmental
+                  responsibility. We strive to make professional garment care
+                  accessible and affordable for everyone in our community.
                 </p>
               </CardContent>
             </Card>
             <Card className="p-6 sm:p-8">
               <CardContent className="pt-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                  Our Vision
+                </h3>
                 <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  To become the most trusted and preferred laundry service provider in Kerala, known for our innovation,
-                  reliability, and commitment to customer satisfaction. We envision a future where professional garment
-                  care is seamlessly integrated into everyone's lifestyle.
+                  To become the most trusted and preferred laundry service
+                  provider in Kerala, known for our innovation, reliability, and
+                  commitment to customer satisfaction. We envision a future
+                  where professional garment care is seamlessly integrated into
+                  everyone's lifestyle.
                 </p>
               </CardContent>
             </Card>
@@ -182,8 +229,12 @@ export default function AboutPage() {
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Why Choose Dresscode Laundry?</h2>
-            <p className="text-base sm:text-lg text-gray-600">Experience the difference that sets us apart</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              Why Choose Dresscode Laundry?
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              Experience the difference that sets us apart
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div className="space-y-6">
@@ -192,10 +243,13 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">State-of-the-Art Equipment</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    State-of-the-Art Equipment
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    We use the latest commercial-grade washing machines, dryers, and pressing equipment to ensure
-                    optimal results for every garment.
+                    We use the latest commercial-grade washing machines, dryers,
+                    and pressing equipment to ensure optimal results for every
+                    garment.
                   </p>
                 </div>
               </div>
@@ -204,10 +258,13 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Expert Team</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Expert Team
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    Our trained professionals have years of experience in handling all types of fabrics and stains,
-                    ensuring your clothes receive the best care possible.
+                    Our trained professionals have years of experience in
+                    handling all types of fabrics and stains, ensuring your
+                    clothes receive the best care possible.
                   </p>
                 </div>
               </div>
@@ -216,10 +273,12 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Convenient Service</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Convenient Service
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    Free pickup and delivery service saves you time and effort. Schedule online or call us – we make it
-                    easy for you.
+                    Free pickup and delivery service saves you time and effort.
+                    Schedule online or call us – we make it easy for you.
                   </p>
                 </div>
               </div>
@@ -230,10 +289,13 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Transparent Pricing</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Transparent Pricing
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    No hidden fees or surprise charges. Our pricing is clear, competitive, and provides excellent value
-                    for professional service.
+                    No hidden fees or surprise charges. Our pricing is clear,
+                    competitive, and provides excellent value for professional
+                    service.
                   </p>
                 </div>
               </div>
@@ -242,10 +304,12 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Quality Guarantee</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Quality Guarantee
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    We stand behind our work with a 100% satisfaction guarantee. If you're not happy, we'll make it
-                    right.
+                    We stand behind our work with a 100% satisfaction guarantee.
+                    If you're not happy, we'll make it right.
                   </p>
                 </div>
               </div>
@@ -254,10 +318,13 @@ export default function AboutPage() {
                   <span className="text-white text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Community Focused</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Community Focused
+                  </h4>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    As a local business, we're committed to serving our community and building lasting relationships
-                    with our customers.
+                    As a local business, we're committed to serving our
+                    community and building lasting relationships with our
+                    customers.
                   </p>
                 </div>
               </div>
@@ -269,9 +336,12 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section className="py-12 sm:py-16 bg-gradient-to-r from-emerald-500 to-emerald-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Experience the Dresscode Difference?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+            Ready to Experience the Dresscode Difference?
+          </h2>
           <p className="text-lg sm:text-xl mb-8 text-emerald-100">
-            Join thousands of satisfied customers who trust us with their garment care needs.
+            Join thousands of satisfied customers who trust us with their
+            garment care needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -293,5 +363,5 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

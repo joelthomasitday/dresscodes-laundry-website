@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import Image from "next/image"
-import { Calendar, User, ArrowRight, Clock } from "lucide-react"
-import { Navigation } from "@/components/navigation"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import Image from "next/image";
+import { Calendar, User, ArrowRight, Clock } from "lucide-react";
+import { Navigation } from "@/components/navigation";
 
 export default function BlogPage() {
   const blogPosts = [
@@ -74,9 +74,16 @@ export default function BlogPage() {
       category: "Storage Tips",
       readTime: "6 min read",
     },
-  ]
+  ];
 
-  const categories = ["All", "Tips & Tricks", "Education", "Sustainability", "Seasonal Care", "Storage Tips"]
+  const categories = [
+    "All",
+    "Tips & Tricks",
+    "Education",
+    "Sustainability",
+    "Seasonal Care",
+    "Storage Tips",
+  ];
 
   return (
     <div className="min-h-screen">
@@ -84,11 +91,14 @@ export default function BlogPage() {
       <Navigation variant="solid" />
 
       {/* Hero Section */}
-      <section className="bg-teal-600 text-white py-16">
+      <section className="bg-teal-600 text-white py-16 sm:py-20 mt-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Laundry Care Blog</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Laundry Care Blog
+          </h1>
           <p className="text-xl text-teal-100 max-w-2xl mx-auto">
-            Expert tips, industry insights, and helpful guides for all your garment care needs
+            Expert tips, industry insights, and helpful guides for all your
+            garment care needs
           </p>
         </div>
       </section>
@@ -119,7 +129,9 @@ export default function BlogPage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <Badge className="mb-4 bg-teal-100 text-teal-800">Featured Post</Badge>
+            <Badge className="mb-4 bg-teal-100 text-teal-800">
+              Featured Post
+            </Badge>
             <Card className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="md:flex">
                 <div className="md:w-1/2">
@@ -143,12 +155,18 @@ export default function BlogPage() {
                       {blogPosts[0].readTime}
                     </div>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4">{blogPosts[0].title}</h2>
-                  <p className="text-gray-600 mb-6 text-lg">{blogPosts[0].excerpt}</p>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                    {blogPosts[0].title}
+                  </h2>
+                  <p className="text-gray-600 mb-6 text-lg">
+                    {blogPosts[0].excerpt}
+                  </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <User className="h-4 w-4 mr-2 text-gray-400" />
-                      <span className="text-sm text-gray-600">{blogPosts[0].author}</span>
+                      <span className="text-sm text-gray-600">
+                        {blogPosts[0].author}
+                      </span>
                     </div>
                     <Button
                       asChild
@@ -169,10 +187,15 @@ export default function BlogPage() {
       {/* Blog Posts Grid */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Latest Articles</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Latest Articles
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.slice(1).map((post) => (
-              <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <Card
+                key={post.id}
+                className="overflow-hidden hover:shadow-lg transition-shadow"
+              >
                 <Image
                   src={post.image || "/placeholder.svg"}
                   alt={post.title}
@@ -190,8 +213,12 @@ export default function BlogPage() {
                       {post.readTime}
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 line-clamp-2">{post.title}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                  <h3 className="text-xl font-semibold mb-3 line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    {post.excerpt}
+                  </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center text-sm text-gray-500">
                       <User className="h-4 w-4 mr-1" />
@@ -204,7 +231,11 @@ export default function BlogPage() {
                   </div>
                 </CardContent>
                 <div className="px-6 pb-6">
-                  <Button asChild variant="outline" className="w-full bg-transparent">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full bg-transparent"
+                  >
                     <Link href={`/blog/${post.id}`}>
                       Read Article <ArrowRight className="h-4 w-4 ml-2" />
                     </Link>
@@ -221,14 +252,21 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
           <p className="text-xl mb-8 text-teal-100">
-            Subscribe to our newsletter for the latest laundry tips, special offers, and industry insights
+            Subscribe to our newsletter for the latest laundry tips, special
+            offers, and industry insights
           </p>
           <div className="max-w-md mx-auto flex gap-4">
-            <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-2 rounded-lg text-gray-900" />
-            <Button className="bg-white text-emerald-600 hover:bg-gray-100 rounded-full">Subscribe</Button>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 px-4 py-2 rounded-lg text-gray-900"
+            />
+            <Button className="bg-white text-emerald-600 hover:bg-gray-100 rounded-full">
+              Subscribe
+            </Button>
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -28,6 +28,7 @@ import { CalendarIcon, Clock, Phone, CreditCard, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 import { Navigation } from "@/components/navigation";
+import { PriceEstimator } from "@/components/price-estimator";
 
 export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -518,6 +519,11 @@ export default function BookingPage() {
                     <CardTitle>Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <h4 className="font-medium">Quick Price Estimator</h4>
+                      <PriceEstimator />
+                    </div>
+
                     <div>
                       <h4 className="font-medium mb-2">Selected Services:</h4>
                       {selectedServices.length > 0 ? (
