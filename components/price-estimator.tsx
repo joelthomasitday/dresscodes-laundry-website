@@ -70,8 +70,8 @@ export function PriceEstimator() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="amount">
-            {isPerKg ? "Weight (kg)" : "Quantity (pieces)"}
+          <Label htmlFor="amount" className="whitespace-nowrap">
+            {isPerKg ? "Weight (kg)" : "Quantity"}
           </Label>
           <Input
             id="amount"
