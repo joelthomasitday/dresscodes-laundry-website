@@ -189,7 +189,7 @@ export default function BookingPage() {
                 size="sm"
                 className="border-white/30 text-white hover:bg-white/10 rounded-full bg-transparent"
               >
-                <Link href="tel:+8943437272">
+                <Link href="tel:+918943437272">
                   <Phone className="h-4 w-4 mr-2" />
                   Call Now
                 </Link>
@@ -202,7 +202,7 @@ export default function BookingPage() {
                 className="border-white/30 text-white hover:bg-white/10 rounded-full bg-transparent"
               >
                 <Link
-                  href="https://wa.me/8943437272?text=Hi! I need help with booking my laundry service."
+                  href="https://wa.me/918943437272?text=Hi! I need help with booking my laundry service."
                   target="_blank"
                   rel="noopener noreferrer"
                 >
