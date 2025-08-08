@@ -502,14 +502,14 @@ export default function BookingPage() {
                       <p className="text-sm text-gray-500">Need help?</p>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" asChild className="rounded-full bg-transparent flex-1">
-                          <Link href="tel:+8943437272">
+                          <Link href="tel:+918943437272">
                             <Phone className="h-4 w-4 mr-1" />
                             Call
                           </Link>
                         </Button>
                         <Button variant="outline" size="sm" asChild className="rounded-full bg-transparent flex-1">
                           <Link
-                            href="https://wa.me/8943437272?text=Hi! I need help with my booking."
+                            href="https://wa.me/918943437272?text=Hi! I need help with my booking."
                             target="_blank"
                             rel="noopener noreferrer"
                           >

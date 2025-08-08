@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
         <p>${message.replace(/\n/g, "<br>")}</p>
         <hr>
         <p>Best regards,<br>Dresscode Laundry Team</p>
-        <p>Phone: +91 89434 37272<br>Email: hellodresscodes@gmail.com</p>
+        <p>Phone: +9189434 37272<br>Email: hellodresscodes@gmail.com</p>
       `,
     })
 

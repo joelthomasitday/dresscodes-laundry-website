@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
           <p>We will contact you shortly to confirm the pickup details.</p>
           <hr>
           <p>Best regards,<br>Dresscode Laundry Team</p>
-          <p>Phone: +91 89434 37272<br>Email: hellodresscodes@gmail.com</p>
+          <p>Phone: +9189434 37272<br>Email: hellodresscodes@gmail.com</p>
         `,
       })
 
