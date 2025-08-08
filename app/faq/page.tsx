@@ -1,9 +1,14 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import Link from "next/link"
-import { HelpCircle, Phone, Mail } from "lucide-react"
-import { Navigation } from "@/components/navigation"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import Link from "next/link";
+import { HelpCircle, Phone, Mail } from "lucide-react";
+import { Navigation } from "@/components/navigation";
 
 export default function FAQPage() {
   const faqCategories = [
@@ -38,7 +43,7 @@ export default function FAQPage() {
         {
           question: "What services do you offer?",
           answer:
-            "We offer wash & fold (₹80/kg), dry cleaning (starting at ₹150/piece), ironing & pressing (₹25/piece), and premium care for specialty items. We also handle bedding, curtains, and other household textiles.",
+            "We offer wash & fold (₹140/kg), dry cleaning (coming soon), ironing & pressing (₹20/piece), and wash & iron (₹30/piece). We also handle bedding, curtains, and other household textiles.",
         },
         {
           question: "How is pricing calculated?",
@@ -132,7 +137,7 @@ export default function FAQPage() {
         },
       ],
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen">
@@ -143,9 +148,12 @@ export default function FAQPage() {
       <section className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white py-12 sm:py-16 pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <HelpCircle className="h-16 w-16 mx-auto mb-4" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Frequently Asked Questions</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Frequently Asked Questions
+          </h1>
           <p className="text-xl text-teal-100 max-w-2xl mx-auto">
-            Find answers to common questions about our laundry and dry cleaning services
+            Find answers to common questions about our laundry and dry cleaning
+            services
           </p>
         </div>
       </section>
@@ -156,7 +164,9 @@ export default function FAQPage() {
           <div className="space-y-8">
             {faqCategories.map((category, categoryIndex) => (
               <div key={categoryIndex}>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">{category.title}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  {category.title}
+                </h2>
                 <Accordion type="single" collapsible className="space-y-4">
                   {category.faqs.map((faq, faqIndex) => (
                     <AccordionItem
@@ -167,7 +177,9 @@ export default function FAQPage() {
                       <AccordionTrigger className="text-left font-medium hover:no-underline">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="text-gray-600 pb-4">{faq.answer}</AccordionContent>
+                      <AccordionContent className="text-gray-600 pb-4">
+                        {faq.answer}
+                      </AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
@@ -181,9 +193,12 @@ export default function FAQPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Still Have Questions?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Still Have Questions?
+            </h2>
             <p className="text-lg text-gray-600">
-              Can't find what you're looking for? Our friendly team is here to help!
+              Can't find what you're looking for? Our friendly team is here to
+              help!
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -191,7 +206,9 @@ export default function FAQPage() {
               <CardContent className="pt-6">
                 <Phone className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-                <p className="text-gray-600 mb-4">Speak directly with our customer service team</p>
+                <p className="text-gray-600 mb-4">
+                  Speak directly with our customer service team
+                </p>
                 <Button
                   asChild
                   className="bg-gradient-to-r from-emerald-500 to-emerald-900 hover:from-emerald-600 hover:to-emerald-800 rounded-full"
@@ -204,9 +221,13 @@ export default function FAQPage() {
               <CardContent className="pt-6">
                 <Mail className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-                <p className="text-gray-600 mb-4">Send us your questions and we'll respond within 24 hours</p>
+                <p className="text-gray-600 mb-4">
+                  Send us your questions and we'll respond within 24 hours
+                </p>
                 <Button asChild variant="outline">
-                  <Link href="mailto:hellodresscodes@gmail.com">Send Email</Link>
+                  <Link href="mailto:hellodresscodes@gmail.com">
+                    Send Email
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -214,7 +235,9 @@ export default function FAQPage() {
               <CardContent className="pt-6">
                 <HelpCircle className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Contact Form</h3>
-                <p className="text-gray-600 mb-4">Fill out our detailed contact form for specific inquiries</p>
+                <p className="text-gray-600 mb-4">
+                  Fill out our detailed contact form for specific inquiries
+                </p>
                 <Button asChild variant="outline">
                   <Link href="/contact">Contact Form</Link>
                 </Button>
@@ -228,8 +251,12 @@ export default function FAQPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Quick Tips</h2>
-            <p className="text-lg text-gray-600">Helpful tips to get the most out of our services</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Quick Tips
+            </h2>
+            <p className="text-lg text-gray-600">
+              Helpful tips to get the most out of our services
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="p-4 text-center">
@@ -239,7 +266,8 @@ export default function FAQPage() {
                 </div>
                 <h3 className="font-semibold mb-2">Check Pockets</h3>
                 <p className="text-sm text-gray-600">
-                  Always check pockets for items before sending clothes for cleaning
+                  Always check pockets for items before sending clothes for
+                  cleaning
                 </p>
               </CardContent>
             </Card>
@@ -250,7 +278,8 @@ export default function FAQPage() {
                 </div>
                 <h3 className="font-semibold mb-2">Point Out Stains</h3>
                 <p className="text-sm text-gray-600">
-                  Let us know about any stains and what caused them for better treatment
+                  Let us know about any stains and what caused them for better
+                  treatment
                 </p>
               </CardContent>
             </Card>
@@ -260,7 +289,9 @@ export default function FAQPage() {
                   3
                 </div>
                 <h3 className="font-semibold mb-2">Separate Items</h3>
-                <p className="text-sm text-gray-600">Separate dry cleaning items from regular wash & fold items</p>
+                <p className="text-sm text-gray-600">
+                  Separate dry cleaning items from regular wash & fold items
+                </p>
               </CardContent>
             </Card>
             <Card className="p-4 text-center">
@@ -269,12 +300,14 @@ export default function FAQPage() {
                   4
                 </div>
                 <h3 className="font-semibold mb-2">Book in Advance</h3>
-                <p className="text-sm text-gray-600">Schedule pickups 24 hours ahead for guaranteed time slots</p>
+                <p className="text-sm text-gray-600">
+                  Schedule pickups 24 hours ahead for guaranteed time slots
+                </p>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }
