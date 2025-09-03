@@ -20,6 +20,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
+import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
 const cardData = [
   {
     icon: <MessageCircle className="h-8 w-8 text-green-600" />,
@@ -159,17 +160,17 @@ export default function HomePage() {
 
               <div className="flex flex-col justify-center lg:justify-start gap-4 text-gray-700 font-medium">
                 <Link
-                  href="tel:+918943437272"
+                  href={getTelHref()}
                   className="flex items-center gap-2 group hover:text-[#008c5b] transition-colors duration-200"
                 >
                   <Phone className="h-5 w-5" />
                   <span className="relative pb-0.5 after:bg-[#008c5b] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 group-hover:after:w-full after:transition-all after:duration-300">
-                    Call: +91 89434 37272
+                    Call: {PHONE_DISPLAY}
                   </span>
                 </Link>
 
                 <Link
-                  href="https://wa.me/918943437272"
+                  href={getWhatsAppHref()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 group hover:text-[#008c5b] transition-colors duration-200"
@@ -311,7 +312,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section
       <section className="py-16 sm:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -355,7 +356,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-16 sm:py-24 bg-gradient-to-r from-emerald-600 to-emerald-800">
@@ -383,7 +384,7 @@ export default function HomePage() {
               size="lg"
               className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 rounded-full bg-transparent"
             >
-              <Link href="tel:+918943437272">Call Now</Link>
+              <Link href={getTelHref()}>Call Now</Link>
             </Button>
           </div>
         </div>
@@ -407,7 +408,7 @@ export default function HomePage() {
                   size="sm"
                   className="rounded-full bg-transparent"
                 >
-                  <Link href="tel:+918943437272">
+                  <Link href={getTelHref()}>
                     <Phone className="h-4 w-4 mr-2" />
                     Call Us
                   </Link>
@@ -419,7 +420,7 @@ export default function HomePage() {
                   className="rounded-full bg-transparent"
                 >
                   <Link
-                    href="https://wa.me/918943437272"
+                    href={getWhatsAppHref()}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -481,7 +482,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center">
                   <Phone className="h-4 w-4 mr-2" />
-                  +91 89434 37272
+                  {PHONE_DISPLAY}
                 </li>
                 <li className="flex items-center">
                   <MapPin className="h-4 w-4 mr-2" />

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Menu, X, Phone } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone"
 interface NavigationProps {
   variant?: "glass" | "solid" | "dark"
 }
@@ -195,15 +196,15 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
                 <div className="space-y-3">
                   <Link
-                    href="tel:+918943437272"
+                    href={getTelHref()}
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                    <span>+91 89434 37272</span>
+                    <span>{PHONE_DISPLAY}</span>
                   </Link>
                   <Link
-                    href="https://wa.me/918943437272"
+                    href={getWhatsAppHref()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
@@ -382,15 +383,15 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
                 <div className="space-y-3">
                   <Link
-                    href="tel:+918943437272"
+                    href={getTelHref()}
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                    <span>+91 89434 37272</span>
+                    <span>{PHONE_DISPLAY}</span>
                   </Link>
                   <Link
-                    href="https://wa.me/918943437272"
+                    href={getWhatsAppHref()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
@@ -567,15 +568,15 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Contact Us</h3>
               <div className="space-y-3">
                 <Link
-                  href="tel:+918943437272"
+                  href={getTelHref()}
                   className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Phone className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                  <span>+91 89434 37272</span>
+                  <span>{PHONE_DISPLAY}</span>
                 </Link>
                 <Link
-                  href="https://wa.me/918943437272"
+                  href={getWhatsAppHref()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-sm group"

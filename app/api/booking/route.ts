@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
+import { PHONE_DISPLAY } from "@/lib/phone"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 async function logApiKeys() {
@@ -60,7 +61,7 @@ export async function POST(request: NextRequest) {
           <p>We will contact you shortly to confirm the pickup details.</p>
           <hr>
           <p>Best regards,<br>Dresscode Laundry Team</p>
-          <p>Phone: +9189434 37272<br>Email: hellodresscodes@gmail.com</p>
+          <p>Phone: ${PHONE_DISPLAY}<br>Email: hellodresscodes@gmail.com</p>
         `,
       })
 

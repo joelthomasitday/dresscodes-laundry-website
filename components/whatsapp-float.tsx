@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone"
 
 export function WhatsAppFloat() {
-  const whatsappNumber = "+918943437272"
-  const whatsappUrl = `https://wa.me/918943437272?text=Hi! I'm interested in your laundry services.`
+  const whatsappUrl = getWhatsAppHref("Hi! I'm interested in your laundry services.")
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
