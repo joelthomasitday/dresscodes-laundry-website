@@ -115,7 +115,7 @@ export default function AboutPage() {
             </div>
             <div className="relative">
               <Image
-                src="https://picsum.photos/600/500?random=about"
+                src="/ChatGPT Image Sep 4, 2025, 12_24_34 AM.png"
                 alt="Dresscode Laundry facility"
                 width={600}
                 height={500}
@@ -127,31 +127,37 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 sm:py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-              Our Impact
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600">
-              Numbers that reflect our commitment to excellence
-            </p>
+    {/* Vision / Future Goals Section */}
+<section className="py-12 sm:py-16 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-12">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+        Our Journey Ahead
+      </h2>
+      <p className="text-base sm:text-lg text-gray-600">
+        We’re just getting started, but here’s what drives us forward
+      </p>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+      {[
+        { number: "5+", label: "Dedicated Minds Behind the Vision" },
+        { number: "10+", label: "Innovative Ideas in Development" },
+        { number: "100%", label: "Focus on Quality & Reliability" },
+        { number: "1 Goal", label: "Building for Long-Term Impact" },
+      ].map((stat, index) => (
+        <div key={index} className="text-center">
+          <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
+            {stat.number}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 text-sm sm:text-base">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+          <div className="text-gray-600 text-sm sm:text-base">
+            {stat.label}
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Our Values */}
       <section className="py-12 sm:py-16">

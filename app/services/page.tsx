@@ -27,7 +27,7 @@ export default function ServicesPage() {
         "Professional folding and packaging",
         "Same-day service available",
       ],
-      image: "https://picsum.photos/400/300?random=washfold",
+      image: "/Gemini_Generated_Image_qxapelqxapelqxap (1).png",
     },
     {
       id: "dry-cleaning",
@@ -42,7 +42,7 @@ export default function ServicesPage() {
         "Delicate fabric care",
         "Professional pressing included",
       ],
-      image: "https://picsum.photos/400/300?random=drycleaning",
+      image: "/Gemini_Generated_Image_qxapelqxapelqxap.png",
     },
     {
       id: "ironing",
@@ -57,7 +57,7 @@ export default function ServicesPage() {
         "Proper hanging and packaging",
         "Quick turnaround time",
       ],
-      image: "https://picsum.photos/400/300?random=ironing",
+      image: "/Gemini_Generated_Image_qxapelqxapelqxap (4).png",
     },
     {
       id: "premium",
@@ -72,7 +72,7 @@ export default function ServicesPage() {
         "Designer garment care",
         "Custom packaging",
       ],
-      image: "https://picsum.photos/400/300?random=premium",
+      image: "/Gemini_Generated_Image_qxapelqxapelqxap (3).png",
     },
   ];
 

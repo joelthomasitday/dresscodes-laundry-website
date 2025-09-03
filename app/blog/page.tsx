@@ -7,13 +7,14 @@ import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 
 export default function BlogPage() {
+
   const blogPosts = [
     {
       id: 1,
       title: "5 Essential Laundry Tips for Busy Professionals",
       excerpt:
         "Discover time-saving laundry hacks that will keep your work wardrobe looking professional and fresh, even with a hectic schedule.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Priya Thomas",
       date: "2024-01-15",
       category: "Tips & Tricks",
@@ -24,7 +25,7 @@ export default function BlogPage() {
       title: "The Complete Guide to Fabric Care Labels",
       excerpt:
         "Learn to decode those mysterious symbols on your clothing labels and understand what they mean for proper garment care.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Arun Kumar",
       date: "2024-01-10",
       category: "Education",
@@ -35,7 +36,7 @@ export default function BlogPage() {
       title: "Eco-Friendly Laundry: Our Green Initiatives",
       excerpt:
         "Discover how Dresscode Laundry is leading the way in sustainable cleaning practices and what it means for the environment.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Rajesh Nair",
       date: "2024-01-05",
       category: "Sustainability",
@@ -46,7 +47,7 @@ export default function BlogPage() {
       title: "Stain Removal 101: Common Stains and Solutions",
       excerpt:
         "From coffee spills to ink marks, learn professional techniques for removing the most common household stains effectively.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Priya Thomas",
       date: "2023-12-28",
       category: "Tips & Tricks",
@@ -57,7 +58,7 @@ export default function BlogPage() {
       title: "Seasonal Wardrobe Care: Preparing for Monsoon",
       excerpt:
         "Essential tips for protecting your clothes during Kerala's monsoon season and preventing mold, mildew, and odors.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1582063289852-62e3ba2747f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Arun Kumar",
       date: "2023-12-20",
       category: "Seasonal Care",
@@ -68,7 +69,7 @@ export default function BlogPage() {
       title: "The Art of Proper Garment Storage",
       excerpt:
         "Professional techniques for storing seasonal clothing, formal wear, and delicate items to maintain their quality and longevity.",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       author: "Rajesh Nair",
       date: "2023-12-15",
       category: "Storage Tips",
