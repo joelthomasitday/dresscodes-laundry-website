@@ -12,7 +12,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('Generating QR code for:', { customerName, totalAmount, orderId })
+
     const { message, qrFile } = await prepareWhatsAppOrder(customerName, totalAmount, orderId)
+
+    console.log('QR code generated successfully:', { qrFile })
 
     return NextResponse.json({
       success: true,
@@ -23,7 +27,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error generating QR code:', error)
     return NextResponse.json(
-      { error: 'Failed to generate QR code' },
+      {
+        error: 'Failed to generate QR code',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

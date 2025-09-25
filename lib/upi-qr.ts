@@ -31,17 +31,35 @@ export const generateUPIQR = async (amount: number): Promise<string> => {
  * @returns Promise<string> - Path to the generated PNG file
  */
 export const generateUPIPNG = async (amount: number, orderId: string): Promise<string> => {
-  const upiLink = `upi://pay?pa=4dresscode@fbl&pn=Sobin Scaria&am=${amount}&cu=INR&tn=Order from 4dresscode`
+  try {
+    const upiLink = `upi://pay?pa=4dresscode@fbl&pn=Sobin Scaria&am=${amount}&cu=INR&tn=Order from 4dresscode`
 
-  // Generate PNG buffer
-  const buffer = await QRCode.toBuffer(upiLink, { width: 250 })
+    // Generate PNG buffer
+    const buffer = await QRCode.toBuffer(upiLink, { width: 250 })
 
-  // Save PNG to public folder
-  const qrFileName = `order-${orderId}.png`
-  const qrFilePath = path.join(process.cwd(), "public", qrFileName)
-  fs.writeFileSync(qrFilePath, buffer)
+    // Save PNG to public folder
+    const qrFileName = `order-${orderId}.png`
+    const qrFilePath = path.join(process.cwd(), "public", qrFileName)
 
-  return `/${qrFileName}` // Public path for client access
+    // Ensure the directory exists
+    const publicDir = path.join(process.cwd(), "public")
+    if (!fs.existsSync(publicDir)) {
+      throw new Error(`Public directory does not exist: ${publicDir}`)
+    }
+
+    // Write the file
+    fs.writeFileSync(qrFilePath, buffer)
+
+    // Verify the file was created
+    if (!fs.existsSync(qrFilePath)) {
+      throw new Error(`Failed to create QR file: ${qrFilePath}`)
+    }
+
+    return `/${qrFileName}` // Public path for client access
+  } catch (error) {
+    console.error('Error in generateUPIPNG:', error)
+    throw new Error(`QR generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
 }
 
 /**
