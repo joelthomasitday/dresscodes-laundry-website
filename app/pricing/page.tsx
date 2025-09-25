@@ -1,7 +1,9 @@
 "use client"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Search, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -232,15 +234,23 @@ const pricingData = {
 export default function PricingPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   const [selectedService, setSelectedService] = useState<string>("Dry Clean")
+  const [searchQuery, setSearchQuery] = useState<string>("")
 
   const categories = Object.keys(pricingData)
   const allItems = Object.values(pricingData).flat()
 
   const getFilteredItems = () => {
-    if (selectedCategory === "All") {
-      return allItems
+    // Always search across all items when there's a search query
+    let items = searchQuery.trim() ? allItems : (selectedCategory === "All" ? allItems : pricingData[selectedCategory as keyof typeof pricingData] || [])
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim()
+      items = items.filter(item =>
+        item.Item.toLowerCase().includes(query)
+      )
     }
-    return pricingData[selectedCategory as keyof typeof pricingData] || []
+
+    return items
   }
 
   return (
@@ -286,25 +296,72 @@ export default function PricingPage() {
               ))}
             </div>
 
+            {/* Search Input - Mobile First */}
+        <div className="pb-4 mb-6">
+      <div className="relative max-w-md mx-auto">
+        <div className="relative group">
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-12 py-4 text-base bg-white border border-gray-200 rounded-full shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 hover:border-gray-300 hover:shadow-md placeholder-gray-400"
+          />
+          
+          {/* Search Icon */}
+          <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+            <Search className="h-5 w-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors duration-200" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
             {/* Pricing Table */}
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-lg  border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-emerald-50">
-                      <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-900">S.No</TableHead>
-                      <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Item</TableHead>
-                      <TableHead className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Clean Craft (₹)</TableHead>
+                      <TableHead className="px-2 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">S.No</TableHead>
+                      <TableHead className="px-2 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Item</TableHead>
+                      <TableHead className="px-2 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm font-semibold text-gray-900">Clean Craft (₹)</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {getFilteredItems().map((item, index) => (
-                      <TableRow key={index} className="hover:bg-gray-50">
-                        <TableCell className="px-6 py-4 text-sm font-medium text-gray-900">{item.SNo}</TableCell>
-                        <TableCell className="px-6 py-4 text-sm text-gray-900">{item.Item}</TableCell>
-                        <TableCell className="px-6 py-4 text-sm text-center text-gray-900">{item["Clean Craft (₹)"]}</TableCell>
+                    {getFilteredItems().length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={3} className="px-6 py-12 text-center">
+                          <div className="flex flex-col items-center justify-center text-gray-500">
+                            <svg className="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m6 5H3a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p className="text-lg font-medium text-gray-900 mb-1">No items found</p>
+                            <p className="text-sm text-gray-500">
+                              {searchQuery ? `No items match "${searchQuery}"` : "No items in this category"}
+                            </p>
+                            {searchQuery && (
+                              <Button
+                                onClick={() => setSearchQuery("")}
+                                variant="outline"
+                                size="sm"
+                                className="mt-3"
+                              >
+                                Clear Search
+                              </Button>
+                            )}
+                          </div>
+                        </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      getFilteredItems().map((item, index) => (
+                        <TableRow key={index} className="hover:bg-gray-50">
+                          <TableCell className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900">{item.SNo}</TableCell>
+                          <TableCell className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900">{item.Item}</TableCell>
+                          <TableCell className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-center text-gray-900">{item["Clean Craft (₹)"]}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
