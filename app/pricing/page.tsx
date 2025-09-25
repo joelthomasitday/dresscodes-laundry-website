@@ -8,6 +8,7 @@ import { Search, X, Plus, Minus, ShoppingCart, MessageCircle } from "lucide-reac
 import Link from "next/link"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { getWhatsAppHref } from "@/lib/phone"
 
 interface CartItem {
   id: string
@@ -319,8 +320,7 @@ export default function PricingPage() {
 
     // Generate WhatsApp message
     const message = generateWhatsAppMessage()
-    const phoneNumber = "919876543210" // Replace with actual WhatsApp business number
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    const whatsappUrl = getWhatsAppHref(message)
     window.open(whatsappUrl, '_blank')
   }
 
@@ -390,8 +390,7 @@ Total Amount: ₹${formatPrice(totalPrice)}
 
   const sendToWhatsApp = () => {
     const message = generateWhatsAppMessage()
-    const phoneNumber = "919876543210" // Replace with actual WhatsApp business number
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    const whatsappUrl = getWhatsAppHref(message)
     window.open(whatsappUrl, '_blank')
   }
 
