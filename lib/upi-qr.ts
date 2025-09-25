@@ -72,13 +72,18 @@ export const prepareWhatsAppOrder = async (customerName: string, totalAmount: nu
   const qrFile = await generateUPIPNG(totalAmount, orderId)
   const message = generateWhatsAppMessage(customerName, totalAmount)
 
-  // Delete the QR file after use to clean up storage
-  try {
-    const qrFilePath = path.join(process.cwd(), "public", `order-${orderId}.png`)
-    fs.unlinkSync(qrFilePath)
-  } catch (error) {
-    console.warn('Failed to delete QR file:', error)
-  }
+  // Schedule QR file deletion after 5 minutes to allow WhatsApp to send it
+  setTimeout(() => {
+    try {
+      const qrFilePath = path.join(process.cwd(), "public", `order-${orderId}.png`)
+      if (fs.existsSync(qrFilePath)) {
+        fs.unlinkSync(qrFilePath)
+        console.log(`QR file deleted: order-${orderId}.png`)
+      }
+    } catch (error) {
+      console.warn('Failed to delete QR file:', error)
+    }
+  }, 5 * 60 * 1000) // 5 minutes delay
 
   return { message, qrFile } // Ready to send on WhatsApp
 }
