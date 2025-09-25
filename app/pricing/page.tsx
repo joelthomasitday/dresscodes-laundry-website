@@ -395,13 +395,28 @@ export default function PricingPage() {
     } catch (error) {
       console.error("Error generating QR code:", error)
 
-      // Extract more specific error message
+      // Extract error message from network response
       let errorMessage = "Failed to generate QR code. Please try again."
+
       if (error instanceof Error) {
-        if (error.message.includes("QR generation failed")) {
-          errorMessage = "QR code generation failed. Please check your connection and try again."
-        } else if (error.message.includes("fetch")) {
-          errorMessage = "Network error. Please check your connection and try again."
+        try {
+          // Try to parse the error response if it's a fetch error
+          const errorData = JSON.parse(error.message)
+          if (errorData.error) {
+            errorMessage = errorData.error
+          }
+          if (errorData.details) {
+            errorMessage += ` (${errorData.details})`
+          }
+        } catch {
+          // If parsing fails, use the original error message
+          if (error.message.includes("QR generation failed")) {
+            errorMessage = "QR code generation failed. Please check your connection and try again."
+          } else if (error.message.includes("fetch") || error.message.includes("NetworkError")) {
+            errorMessage = "Network error. Please check your connection and try again."
+          } else {
+            errorMessage = error.message
+          }
         }
       }
 
