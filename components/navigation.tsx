@@ -33,6 +33,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/booking", label: "Book Now" },
     { href: "/about", label: "About" },
     { href: "/blog", label: "Blog" },
