@@ -392,32 +392,80 @@ export default function PricingPage() {
         description: "Your order with QR code has been sent to WhatsApp!",
         duration: 3000,
       })
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error generating QR code:", error)
+      console.error("Error type:", typeof error)
+      console.error("Error constructor:", error instanceof Error ? error.constructor.name : 'Unknown')
+      console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
+      console.error("Error toString:", error instanceof Error ? error.toString() : String(error))
 
-      // Extract error message from network response
+      // Extract error message from network response - Enhanced for mobile
       let errorMessage = "Failed to generate QR code. Please try again."
 
-      if (error instanceof Error) {
-        try {
-          // Try to parse the error response if it's a fetch error
-          const errorData = JSON.parse(error.message)
-          if (errorData.error) {
-            errorMessage = errorData.error
-          }
-          if (errorData.details) {
-            errorMessage += ` (${errorData.details})`
-          }
-        } catch {
-          // If parsing fails, use the original error message
-          if (error.message.includes("QR generation failed")) {
-            errorMessage = "QR code generation failed. Please check your connection and try again."
-          } else if (error.message.includes("fetch") || error.message.includes("NetworkError")) {
-            errorMessage = "Network error. Please check your connection and try again."
-          } else {
-            errorMessage = error.message
+      // Helper function to extract error message from any object
+      const extractErrorMessage = (err: any): string => {
+        // Try different approaches for different mobile browsers
+
+        // Approach 1: Direct message property
+        if (err?.message && typeof err.message === 'string') {
+          return err.message
+        }
+
+        // Approach 2: Error property
+        if (err?.error && typeof err.error === 'string') {
+          return err.error
+        }
+
+        // Approach 3: Try to parse as JSON (Safari mobile)
+        if (typeof err === 'string') {
+          try {
+            const parsed = JSON.parse(err)
+            if (parsed?.error) return parsed.error
+            if (parsed?.message) return parsed.message
+          } catch {
+            // Not JSON, return as-is
+            return err
           }
         }
+
+        // Approach 4: Check for common mobile Safari error patterns
+        if (err && typeof err === 'object') {
+          // Safari sometimes wraps errors in a different structure
+          if (err.name === 'TypeError' && err.message?.includes('fetch')) {
+            return "Network error. Please check your connection and try again."
+          }
+
+          // Try to find any string property that might contain error info
+          for (const key in err) {
+            if (typeof err[key] === 'string' && err[key].length > 0) {
+              const value = err[key]
+              if (value.includes('fetch') || value.includes('network') || value.includes('failed')) {
+                return value
+              }
+            }
+          }
+        }
+
+        // Approach 5: String representation
+        if (err && typeof err.toString === 'function') {
+          const str = err.toString()
+          if (str && str !== '[object Object]') {
+            return str
+          }
+        }
+
+        return "An unexpected error occurred. Please try again."
+      }
+
+      errorMessage = extractErrorMessage(error)
+
+      // Additional processing for specific error types
+      if (errorMessage.includes("QR generation failed")) {
+        errorMessage = "QR code generation failed. Please check your connection and try again."
+      } else if (errorMessage.includes("fetch") || errorMessage.includes("NetworkError") || errorMessage.includes("Failed to fetch") || errorMessage.includes("TypeError")) {
+        errorMessage = "Network error. Please check your connection and try again."
+      } else if (errorMessage.includes("Missing required fields")) {
+        errorMessage = "Invalid request. Please try again."
       }
 
       toast({
