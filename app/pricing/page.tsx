@@ -323,29 +323,7 @@ export default function PricingPage() {
     if (cart.length === 0) return
 
     try {
-      // Generate QR code first
-      const totalPrice = getTotalPrice()
-      const orderId = `order-${Date.now()}`
-
-      const response = await fetch('/api/generate-qr', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          customerName: 'Customer',
-          totalAmount: totalPrice,
-          orderId: orderId,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!data.success) {
-        throw new Error(data.error)
-      }
-
-      // Generate WhatsApp message with QR instructions
+      // Generate WhatsApp message with bill and UPI details
       const groupedItems = cart.reduce((acc, item) => {
         if (!acc[item.category]) {
           acc[item.category] = []
@@ -355,6 +333,7 @@ export default function PricingPage() {
       }, {} as Record<string, CartItem[]>)
 
       const totalItems = getTotalItems()
+      const totalPrice = getTotalPrice()
 
       let message = `*Your Order Summary from Dresscode Laundry*
 
@@ -376,11 +355,18 @@ export default function PricingPage() {
 • Total Items: ${totalItems}
 • Total Amount: ₹${formatPrice(totalPrice)}
 
+*Payment Details:*
+• UPI ID: dresscode@upi
+• Account Holder: Dresscode Laundry Services
+• Bank: HDFC Bank
+
 *Payment Instructions:*
-1. Scan the QR code image attached below
-2. The exact amount (₹${formatPrice(totalPrice)}) will be auto-filled
-3. Complete the payment using any UPI app
-4. Reply "PAID" or send screenshot for confirmation
+1. Open any UPI app (PhonePe, Google Pay, Paytm, etc.)
+2. Pay to UPI ID: dresscode@upi
+3. Enter amount: ₹${formatPrice(totalPrice)}
+4. Add note: "Laundry Order Payment"
+5. Complete the payment
+6. Reply "PAID" or send screenshot for confirmation
 
 *Thank you for choosing Dresscode Laundry!*`
 
@@ -389,90 +375,24 @@ export default function PricingPage() {
 
       toast({
         title: "Order Sent",
-        description: "Your order with QR code has been sent to WhatsApp!",
+        description: "Your order with payment details has been sent to WhatsApp!",
         duration: 3000,
       })
     } catch (error: unknown) {
-      console.error("Error generating QR code:", error)
-      console.error("Error type:", typeof error)
-      console.error("Error constructor:", error instanceof Error ? error.constructor.name : 'Unknown')
-      console.error("Error message:", error instanceof Error ? error.message : 'Unknown error')
-      console.error("Error toString:", error instanceof Error ? error.toString() : String(error))
+      console.error("Error sending order:", error)
 
-      // Extract error message from network response - Enhanced for mobile
-      let errorMessage = "Failed to generate QR code. Please try again."
+      // Simple error handling for WhatsApp
+      let errorMessage = "Failed to send order to WhatsApp. Please try again."
 
-      // Helper function to extract error message from any object
-      const extractErrorMessage = (err: any): string => {
-        // Try different approaches for different mobile browsers
-
-        // Approach 1: Direct message property
-        if (err?.message && typeof err.message === 'string') {
-          return err.message
-        }
-
-        // Approach 2: Error property
-        if (err?.error && typeof err.error === 'string') {
-          return err.error
-        }
-
-        // Approach 3: Try to parse as JSON (Safari mobile)
-        if (typeof err === 'string') {
-          try {
-            const parsed = JSON.parse(err)
-            if (parsed?.error) return parsed.error
-            if (parsed?.message) return parsed.message
-          } catch {
-            // Not JSON, return as-is
-            return err
-          }
-        }
-
-        // Approach 4: Check for common mobile Safari error patterns
-        if (err && typeof err === 'object') {
-          // Safari sometimes wraps errors in a different structure
-          if (err.name === 'TypeError' && err.message?.includes('fetch')) {
-            return "Network error. Please check your connection and try again."
-          }
-
-          // Try to find any string property that might contain error info
-          for (const key in err) {
-            if (typeof err[key] === 'string' && err[key].length > 0) {
-              const value = err[key]
-              if (value.includes('fetch') || value.includes('network') || value.includes('failed')) {
-                return value
-              }
-            }
-          }
-        }
-
-        // Approach 5: String representation
-        if (err && typeof err.toString === 'function') {
-          const str = err.toString()
-          if (str && str !== '[object Object]') {
-            return str
-          }
-        }
-
-        return "An unexpected error occurred. Please try again."
-      }
-
-      errorMessage = extractErrorMessage(error)
-
-      // Additional processing for specific error types
-      if (errorMessage.includes("QR generation failed")) {
-        errorMessage = "QR code generation failed. Please check your connection and try again."
-      } else if (errorMessage.includes("fetch") || errorMessage.includes("NetworkError") || errorMessage.includes("Failed to fetch") || errorMessage.includes("TypeError")) {
-        errorMessage = "Network error. Please check your connection and try again."
-      } else if (errorMessage.includes("Missing required fields")) {
-        errorMessage = "Invalid request. Please try again."
+      if (error instanceof Error) {
+        errorMessage = error.message
       }
 
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
-        duration: 5000,
+        duration: 3000,
       })
     }
   }
