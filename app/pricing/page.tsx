@@ -291,37 +291,116 @@ export default function PricingPage() {
             : cartItem
         )
 
-        // Show quantity update notification
-        toast({
-          title: "Quantity Updated",
-          description: `${item.Item} (${existingItem.quantity + 1}) has been updated in your cart`,
-          duration: 3000,
-        })
+        // Show quantity update notification after state update
+        setTimeout(() => {
+          toast({
+            title: "Quantity Updated",
+            description: `${item.Item} (${existingItem.quantity + 1}) has been updated in your cart`,
+            duration: 3000,
+          })
+        }, 0)
 
         return updatedCart
       } else {
         // Add new item to cart
         const newCart = [...prev, cartItem]
 
-        // Show new item notification
-        toast({
-          title: "Added to Cart",
-          description: `${item.Item} (1) has been added to your cart`,
-          duration: 3000,
-        })
+        // Show new item notification after state update
+        setTimeout(() => {
+          toast({
+            title: "Added to Cart",
+            description: `${item.Item} (1) has been added to your cart`,
+            duration: 3000,
+          })
+        }, 0)
 
         return newCart
       }
     })
   }
 
-  const proceedToCheckout = () => {
+  const proceedToCheckout = async () => {
     if (cart.length === 0) return
 
-    // Generate WhatsApp message
-    const message = generateWhatsAppMessage()
-    const whatsappUrl = getWhatsAppHref(message)
-    window.open(whatsappUrl, '_blank')
+    try {
+      // Generate QR code first
+      const totalPrice = getTotalPrice()
+      const orderId = `order-${Date.now()}`
+
+      const response = await fetch('/api/generate-qr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerName: 'Customer',
+          totalAmount: totalPrice,
+          orderId: orderId,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error(data.error)
+      }
+
+      // Generate WhatsApp message with QR instructions
+      const groupedItems = cart.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = []
+        }
+        acc[item.category].push(item)
+        return acc
+      }, {} as Record<string, CartItem[]>)
+
+      const totalItems = getTotalItems()
+
+      let message = `*Your Order Summary from Dresscode Laundry*
+
+`
+
+      // Add items grouped by category
+      Object.entries(groupedItems).forEach(([category, items]) => {
+        message += `*${category}*
+`
+        items.forEach((item, index) => {
+          message += `${index + 1}. ${item.item} - ₹${formatPrice(item.price)} x ${item.quantity} = ₹${formatPrice(item.price * item.quantity)}
+`
+        })
+        message += `
+`
+      })
+
+      message += `*Order Summary:*
+• Total Items: ${totalItems}
+• Total Amount: ₹${formatPrice(totalPrice)}
+
+*Payment Instructions:*
+1. Scan the QR code image attached below
+2. The exact amount (₹${formatPrice(totalPrice)}) will be auto-filled
+3. Complete the payment using any UPI app
+4. Reply "PAID" or send screenshot for confirmation
+
+*Thank you for choosing Dresscode Laundry!*`
+
+      const whatsappUrl = getWhatsAppHref(message)
+      window.open(whatsappUrl, '_blank')
+
+      toast({
+        title: "Order Sent",
+        description: "Your order with QR code has been sent to WhatsApp!",
+        duration: 3000,
+      })
+    } catch (error) {
+      console.error("Error generating QR code:", error)
+      toast({
+        title: "Error",
+        description: "Failed to generate QR code. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      })
+    }
   }
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -346,53 +425,7 @@ export default function PricingPage() {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
   }
 
-  const generateWhatsAppMessage = () => {
-    if (cart.length === 0) return ""
 
-    // Group items by category
-    const groupedItems = cart.reduce((acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = []
-      }
-      acc[item.category].push(item)
-      return acc
-    }, {} as Record<string, CartItem[]>)
-
-    const totalItems = getTotalItems()
-    const totalPrice = getTotalPrice()
-
-    // Generate UPI payment link
-    const upiLink = `upi://pay?pa=4dresscode@fbl&pn=Sobin%20Scaria&am=${totalPrice}&cu=INR&tn=Laundry%20Services`
-
-    let message = `🧾 Your Order Summary:
-
-`
-
-    // Add items grouped by category
-    Object.entries(groupedItems).forEach(([category, items]) => {
-      message += `Category: ${category}
-`
-      items.forEach((item, index) => {
-        message += `${index + 1}. ${item.item} - ₹${formatPrice(item.price)} x ${item.quantity} = ₹${formatPrice(item.price * item.quantity)}
-`
-      })
-      message += `
-`
-    })
-
-    message += `Total Items: ${totalItems}
-Total Amount: ₹${formatPrice(totalPrice)}
-
-💳 Payment Link: ${upiLink}`
-
-    return message
-  }
-
-  const sendToWhatsApp = () => {
-    const message = generateWhatsAppMessage()
-    const whatsappUrl = getWhatsAppHref(message)
-    window.open(whatsappUrl, '_blank')
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
@@ -512,6 +545,8 @@ Total Amount: ₹${formatPrice(totalPrice)}
             </div>
           </section>
         )}
+
+
 
         {/* Category Filter & Search - Mobile Optimized */}
         <section className="py-6 sm:py-8 bg-gray-50">
