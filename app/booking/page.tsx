@@ -36,6 +36,7 @@ export default function BookingPage() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -426,7 +427,7 @@ export default function BookingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label>Pickup Date *</Label>
-                        <Popover>
+                        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                           <PopoverTrigger asChild>
                             <Button
                               variant="outline"
@@ -446,6 +447,7 @@ export default function BookingPage() {
                               selected={selectedDate}
                               onSelect={(date) => {
                                 setSelectedDate(date);
+                                setIsCalendarOpen(false); // Close popover when date is selected
                                 if (errors.date) {
                                   setErrors((prev) => ({ ...prev, date: "" }));
                                 }
@@ -517,29 +519,51 @@ export default function BookingPage() {
               <div className="lg:col-span-1">
                 <Card className="sticky top-24">
                   <CardHeader>
-                    <CardTitle>Order Summary</CardTitle>
+                    <CardTitle className="text-center text-xl font-bold text-emerald-700">
+                      🧾 Order Summary
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Quick Price Estimator</h4>
-                      <PriceEstimator />
+                  <CardContent className="space-y-6">
+                    {/* Customer Details */}
+                    <div className="bg-emerald-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-emerald-800 mb-3 flex items-center">
+                        <Phone className="h-4 w-4 mr-2" />
+                        Customer Details
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Name:</span>
+                          <span className="font-medium">{formData.name || "Not specified"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Phone:</span>
+                          <span className="font-medium">{formData.phone || "Not specified"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Address:</span>
+                          <span className="font-medium text-right">{formData.address || "Not specified"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Pickup:</span>
+                          <span className="font-medium">
+                            {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Not selected"}
+                            {formData.timeSlot && ` | ${formData.timeSlot}`}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <h4 className="font-medium mb-2">Selected Services:</h4>
+                    {/* Selected Services */}
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-800 mb-3">Selected Services</h4>
                       {selectedServices.length > 0 ? (
                         <div className="space-y-2">
                           {selectedServices.map((serviceId) => {
-                            const service = services.find(
-                              (s) => s.id === serviceId
-                            );
+                            const service = services.find((s) => s.id === serviceId);
                             return (
-                              <div
-                                key={serviceId}
-                                className="flex justify-between text-sm"
-                              >
-                                <span>{service?.name}</span>
-                                <Badge variant="secondary">
+                              <div key={serviceId} className="flex justify-between items-center text-sm">
+                                <span className="text-gray-700">{service?.name}</span>
+                                <Badge variant="secondary" className="bg-white text-blue-700 border-blue-200">
                                   {service?.price}
                                 </Badge>
                               </div>
@@ -547,57 +571,93 @@ export default function BookingPage() {
                           })}
                         </div>
                       ) : (
-                        <p className="text-gray-500 text-sm">
-                          No services selected
-                        </p>
+                        <p className="text-gray-500 text-sm">No services selected</p>
                       )}
                     </div>
 
-                    {selectedDate && (
-                      <div>
-                        <h4 className="font-medium mb-1">Pickup Date:</h4>
-                        <p className="text-sm text-gray-600">
-                          {format(selectedDate, "PPP")}
-                        </p>
+                    {/* Order Summary in New Format */}
+                    {selectedServices.length > 0 && (
+                      <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+                        <div className="space-y-4 text-sm">
+                          {/* Header */}
+                          <div className="text-center border-b pb-2">
+                            <h3 className="text-lg font-bold text-gray-800">🧾 Dresscode Laundry – Order Summary</h3>
+                          </div>
+
+                          {/* Customer Details */}
+                          <div>
+                            <h4 className="font-bold text-gray-800 mb-2">Customer Details</h4>
+                            <div className="space-y-1 text-gray-700">
+                              <p><strong>Name:</strong> {formData.name || "Not specified"}</p>
+                              <p><strong>Phone:</strong> {formData.phone || "Not specified"}</p>
+                              <p><strong>Address:</strong> {formData.address || "Not specified"}</p>
+                              <p><strong>Pickup:</strong> {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Not selected"}
+                                {formData.timeSlot && ` | ${formData.timeSlot}`}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Order Items */}
+                          <div>
+                            <h4 className="font-bold text-gray-800 mb-2">Order Items</h4>
+                            <div className="space-y-1">
+                              <p>1. Shirt — ₹100 × 1 = <strong>₹100</strong></p>
+                            </div>
+                          </div>
+
+                          {/* Summary */}
+                          <div>
+                            <h4 className="font-bold text-gray-800 mb-2">Summary</h4>
+                            <div className="space-y-1 text-gray-700">
+                              <p><strong>Total Items:</strong> {selectedServices.length || 0}</p>
+                              <p><strong>Total Amount:</strong> <strong>₹{selectedServices.length > 0 ? "100" : "0"}</strong></p>
+                            </div>
+                          </div>
+
+                          {/* Payment Details */}
+                          <div>
+                            <h4 className="font-bold text-gray-800 mb-2">Payment Details</h4>
+                            <div className="space-y-1 text-gray-700">
+                              <p><strong>UPI ID:</strong> dresscode@upi</p>
+                              <p><strong>Account Holder:</strong> Dresscode Laundry Services</p>
+                              <p><strong>Bank:</strong> HDFC Bank</p>
+                            </div>
+                          </div>
+
+                          {/* Thank you message */}
+                          <div className="text-center pt-2 border-t">
+                            <p className="text-green-600 font-medium">✅ Thank you for choosing <strong>Dresscode Laundry!</strong></p>
+                          </div>
+
+                          {/* Separator */}
+                          <div className="border-t pt-2">
+                            <p className="text-xs text-gray-500 text-center">---</p>
+                          </div>
+                        </div>
                       </div>
                     )}
 
-                    {formData.timeSlot && (
-                      <div>
-                        <h4 className="font-medium mb-1">Time Slot:</h4>
-                        <p className="text-sm text-gray-600">
-                          {formData.timeSlot}
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="border-t pt-4">
-                      <div className="flex items-center text-sm text-gray-600 mb-2">
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Payment on Delivery
-                      </div>
-                      <p className="text-xs text-gray-500">
-                        Final pricing will be calculated based on actual items
-                        and services.
-                      </p>
-                    </div>
-
+                    {/* Action Button */}
                     <Button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 transition-colors rounded-full"
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 transition-colors rounded-full text-lg py-3 font-semibold"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                           Submitting...
                         </>
                       ) : (
-                        "Schedule Pickup"
+                        <>
+                          <CreditCard className="h-5 w-5 mr-2" />
+                          Schedule Pickup
+                        </>
                       )}
                     </Button>
 
-                    <div className="text-center space-y-3">
+                    {/* Help Section */}
+                    <div className="text-center space-y-3 pt-4 border-t">
                       <p className="text-sm text-gray-500">Need help?</p>
                       <div className="flex gap-2">
                         <Button

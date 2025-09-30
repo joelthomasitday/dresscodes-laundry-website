@@ -2,9 +2,15 @@
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, X, Plus, Minus, ShoppingCart, MessageCircle } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Search, X, Plus, Minus, ShoppingCart, MessageCircle, User, MapPin, Phone, CalendarIcon, Clock } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -247,6 +253,16 @@ export default function PricingPage() {
   const [selectedService, setSelectedService] = useState<string>("Dry Clean")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [cart, setCart] = useState<CartItem[]>([])
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState<boolean>(false)
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    pickupDate: undefined as Date | undefined,
+    timeSlot: ""
+  })
+  const [customerErrors, setCustomerErrors] = useState<Record<string, string>>({})
+  const [isDatePopoverOpen, setIsDatePopoverOpen] = useState(false)
   const { toast } = useToast()
 
   const categories = Object.keys(pricingData)
@@ -319,7 +335,12 @@ export default function PricingPage() {
     })
   }
 
-  const proceedToCheckout = async () => {
+  const proceedToCheckout = () => {
+    if (cart.length === 0) return
+    setIsCustomerModalOpen(true)
+  }
+
+  const sendToWhatsApp = async () => {
     if (cart.length === 0) return
 
     try {
@@ -408,6 +429,120 @@ export default function PricingPage() {
 
   const getTotalPrice = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+  }
+
+  const validateCustomerInfo = () => {
+    const errors: Record<string, string> = {}
+
+    if (!customerInfo.name.trim()) {
+      errors.name = "Name is required"
+    }
+
+    if (!customerInfo.phone.trim()) {
+      errors.phone = "Phone number is required"
+    } else if (!/^[0-9]{10}$/.test(customerInfo.phone.replace(/[-\s]/g, ""))) {
+      errors.phone = "Please enter a valid 10-digit phone number"
+    }
+
+    if (!customerInfo.address.trim()) {
+      errors.address = "Address is required"
+    }
+
+    if (!customerInfo.pickupDate) {
+      errors.pickupDate = "Please select a pickup date"
+    }
+
+    if (!customerInfo.timeSlot) {
+      errors.timeSlot = "Please select a time slot"
+    }
+
+    setCustomerErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  const generateWhatsAppMessage = (name: string, phone: string, address: string, pickupDate: Date, timeSlot: string) => {
+    const groupedItems = cart.reduce((acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = []
+      }
+      acc[item.category].push(item)
+      return acc
+    }, {} as Record<string, CartItem[]>)
+
+    const totalItems = getTotalItems()
+    const totalPrice = getTotalPrice()
+
+    let message = `*Your Order Summary from Dresscode Laundry*
+
+*Customer Details:*
+• Name: ${name}
+• Phone: ${phone}
+• Address: ${address}
+• Pickup Date: ${pickupDate.toLocaleDateString()}
+• Time Slot: ${timeSlot}
+
+*Order Items:*
+`
+
+    // Add items grouped by category
+    Object.entries(groupedItems).forEach(([category, items]) => {
+      message += `*${category}*
+`
+      items.forEach((item, index) => {
+        message += `${index + 1}. ${item.item} - ₹${formatPrice(item.price)} x ${item.quantity} = ₹${formatPrice(item.price * item.quantity)}
+`
+      })
+      message += `
+`
+    })
+
+    message += `*Order Summary:*
+• Total Items: ${totalItems}
+• Total Amount: ₹${formatPrice(totalPrice)}
+
+*Payment Details:*
+• UPI ID: dresscode@upi
+• Account Holder: Dresscode Laundry Services
+• Bank: HDFC Bank
+
+*Pickup Schedule:*
+• Date: ${pickupDate.toLocaleDateString()}
+• Time: ${timeSlot}
+
+*Thank you for choosing Dresscode Laundry!*`
+
+    return message
+  }
+
+  const handleCustomerInfoSubmit = () => {
+    if (validateCustomerInfo() && customerInfo.pickupDate) {
+      const message = generateWhatsAppMessage(
+        customerInfo.name,
+        customerInfo.phone,
+        customerInfo.address,
+        customerInfo.pickupDate,
+        customerInfo.timeSlot
+      )
+      const whatsappUrl = getWhatsAppHref(message)
+      window.open(whatsappUrl, '_blank')
+
+      toast({
+        title: "Order Sent",
+        description: "Your order with customer details has been sent to WhatsApp!",
+        duration: 3000,
+      })
+
+      // Reset form and close modal
+      setCustomerInfo({
+        name: "",
+        phone: "",
+        address: "",
+        pickupDate: undefined,
+        timeSlot: ""
+      })
+      setCustomerErrors({})
+      setIsCustomerModalOpen(false)
+    }
   }
 
 
@@ -737,6 +872,151 @@ export default function PricingPage() {
           </div>
         </section>
       </main>
+
+      {/* Customer Information Modal - Full Screen on Mobile */}
+      <Dialog open={isCustomerModalOpen} onOpenChange={setIsCustomerModalOpen}>
+        <DialogContent className="sm:max-w-md max-w-[95vw] h-[90vh] sm:h-auto overflow-y-auto">
+          <DialogHeader className="space-y-3">
+            <DialogTitle className="flex items-center gap-2 text-emerald-700">
+              <User className="h-5 w-5" />
+              Customer Information
+            </DialogTitle>
+            <p className="text-sm text-gray-600">
+              Please provide your details to proceed with the WhatsApp order.
+            </p>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            <div className="space-y-5">
+              <div>
+                <Label htmlFor="customerName" className="text-sm font-medium text-gray-700">Full Name *</Label>
+                <Input
+                  id="customerName"
+                  value={customerInfo.name}
+                  onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter your full name"
+                  className={`mt-1 rounded-full ${customerErrors.name ? "border-red-500" : ""}`}
+                />
+                {customerErrors.name && (
+                  <p className="text-red-500 text-sm mt-1">{customerErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="customerPhone" className="text-sm font-medium text-gray-700">Phone Number *</Label>
+                <Input
+                  id="customerPhone"
+                  type="tel"
+                  value={customerInfo.phone}
+                  onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
+                  placeholder="Enter your 10-digit phone number"
+                  className={`mt-1 rounded-full ${customerErrors.phone ? "border-red-500" : ""}`}
+                />
+                {customerErrors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{customerErrors.phone}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="customerAddress" className="text-sm font-medium text-gray-700">Pickup Address *</Label>
+                <Textarea
+                  id="customerAddress"
+                  value={customerInfo.address}
+                  onChange={(e) => setCustomerInfo(prev => ({ ...prev, address: e.target.value }))}
+                  placeholder="Enter your complete pickup address"
+                  rows={3}
+                  className={`mt-1 rounded-lg ${customerErrors.address ? "border-red-500" : ""}`}
+                />
+                {customerErrors.address && (
+                  <p className="text-red-500 text-sm mt-1">{customerErrors.address}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Pickup Date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={`w-full mt-1 justify-start text-left font-normal rounded-full ${
+                          customerErrors.pickupDate ? "border-red-500" : ""
+                        }`}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {customerInfo.pickupDate
+                          ? customerInfo.pickupDate.toLocaleDateString()
+                          : "Select date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={customerInfo.pickupDate}
+                        onSelect={(date) => {
+                          setCustomerInfo(prev => ({ ...prev, pickupDate: date }));
+                          if (customerErrors.pickupDate) {
+                            setCustomerErrors(prev => ({ ...prev, pickupDate: "" }));
+                          }
+                        }}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {customerErrors.pickupDate && (
+                    <p className="text-red-500 text-sm mt-1">{customerErrors.pickupDate}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="timeSlot" className="text-sm font-medium text-gray-700">Time Slot *</Label>
+                  <Select
+                    value={customerInfo.timeSlot}
+                    onValueChange={(value) => {
+                      setCustomerInfo(prev => ({ ...prev, timeSlot: value }));
+                      if (customerErrors.timeSlot) {
+                        setCustomerErrors(prev => ({ ...prev, timeSlot: "" }));
+                      }
+                    }}
+                  >
+                    <SelectTrigger className={`mt-1 rounded-full ${customerErrors.timeSlot ? "border-red-500" : ""}`}>
+                      <SelectValue placeholder="Select time slot" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="9:00 AM - 11:00 AM">9:00 AM - 11:00 AM</SelectItem>
+                      <SelectItem value="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</SelectItem>
+                      <SelectItem value="1:00 PM - 3:00 PM">1:00 PM - 3:00 PM</SelectItem>
+                      <SelectItem value="3:00 PM - 5:00 PM">3:00 PM - 5:00 PM</SelectItem>
+                      <SelectItem value="5:00 PM - 7:00 PM">5:00 PM - 7:00 PM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {customerErrors.timeSlot && (
+                    <p className="text-red-500 text-sm mt-1">{customerErrors.timeSlot}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-6 border-t">
+              <Button
+                onClick={() => setIsCustomerModalOpen(false)}
+                variant="outline"
+                className="flex-1 rounded-full"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCustomerInfoSubmit}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 rounded-full"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Send to WhatsApp
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
