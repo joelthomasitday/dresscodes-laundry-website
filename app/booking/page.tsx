@@ -22,6 +22,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { CalendarIcon, Clock, Phone, CreditCard, Loader2 } from "lucide-react";
@@ -30,13 +37,16 @@ import { toast } from "@/hooks/use-toast";
 import { Navigation } from "@/components/navigation";
 import { PriceEstimator } from "@/components/price-estimator";
 import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function BookingPage() {
+  const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -427,36 +437,74 @@ export default function BookingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label>Pickup Date *</Label>
-                        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={`w-full justify-start text-left font-normal bg-transparent ${
-                                errors.date ? "border-red-500" : ""
-                              }`}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {selectedDate
-                                ? format(selectedDate, "PPP")
-                                : "Select date"}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode="single"
-                              selected={selectedDate}
-                              onSelect={(date) => {
-                                setSelectedDate(date);
-                                setIsCalendarOpen(false); // Close popover when date is selected
-                                if (errors.date) {
-                                  setErrors((prev) => ({ ...prev, date: "" }));
-                                }
-                              }}
-                              disabled={(date) => date < new Date()}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
+                        {isMobile ? (
+                          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                            <SheetTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={`w-full justify-start text-left font-normal bg-transparent ${
+                                  errors.date ? "border-red-500" : ""
+                                }`}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {selectedDate
+                                  ? format(selectedDate, "PPP")
+                                  : "Select date"}
+                              </Button>
+                            </SheetTrigger>
+                            <SheetContent side="bottom" className="h-auto">
+                              <SheetHeader>
+                                <SheetTitle>Select Pickup Date</SheetTitle>
+                              </SheetHeader>
+                              <div className="mt-4">
+                                <Calendar
+                                  mode="single"
+                                  selected={selectedDate}
+                                  onSelect={(date) => {
+                                    setSelectedDate(date);
+                                    setIsSheetOpen(false);
+                                    if (errors.date) {
+                                      setErrors((prev) => ({ ...prev, date: "" }));
+                                    }
+                                  }}
+                                  disabled={(date) => date < new Date()}
+                                  initialFocus
+                                />
+                              </div>
+                            </SheetContent>
+                          </Sheet>
+                        ) : (
+                          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={`w-full justify-start text-left font-normal bg-transparent ${
+                                  errors.date ? "border-red-500" : ""
+                                }`}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {selectedDate
+                                  ? format(selectedDate, "PPP")
+                                  : "Select date"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={selectedDate}
+                                onSelect={(date) => {
+                                  setSelectedDate(date);
+                                  setIsCalendarOpen(false);
+                                  if (errors.date) {
+                                    setErrors((prev) => ({ ...prev, date: "" }));
+                                  }
+                                }}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        )}
                         {errors.date && (
                           <p className="text-red-500 text-sm mt-1" role="alert">
                             {errors.date}

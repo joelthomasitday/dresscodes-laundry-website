@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Search, X, Plus, Minus, ShoppingCart, MessageCircle, User, MapPin, Phone, CalendarIcon, Clock } from "lucide-react"
+import { Search, X, Plus, Minus, ShoppingCart, MessageCircle, User, MapPin, Phone, CalendarIcon, Clock, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -259,10 +260,13 @@ export default function PricingPage() {
     phone: "",
     address: "",
     pickupDate: undefined as Date | undefined,
-    timeSlot: ""
+    timeSlot: "",
+    useCurrentLocation: false
   })
   const [customerErrors, setCustomerErrors] = useState<Record<string, string>>({})
   const [isDatePopoverOpen, setIsDatePopoverOpen] = useState(false)
+  const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(false)
+  const [locationCoords, setLocationCoords] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null })
   const { toast } = useToast()
 
   const categories = Object.keys(pricingData)
@@ -444,7 +448,8 @@ export default function PricingPage() {
       errors.phone = "Please enter a valid 10-digit phone number"
     }
 
-    if (!customerInfo.address.trim()) {
+    // Address is only required if not using current location
+    if (!customerInfo.address.trim() && !customerInfo.useCurrentLocation) {
       errors.address = "Address is required"
     }
 
@@ -472,12 +477,18 @@ export default function PricingPage() {
     const totalItems = getTotalItems()
     const totalPrice = getTotalPrice()
 
+    // Determine address to use in message
+    const displayAddress = customerInfo.useCurrentLocation && locationCoords.lat && locationCoords.lng
+      ? `${address}
+Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.lng}`
+      : address
+
     let message = `*Your Order Summary from Dresscode Laundry*
 
 *Customer Details:*
 • Name: ${name}
 • Phone: ${phone}
-• Address: ${address}
+• Address: ${displayAddress}
 • Pickup Date: ${pickupDate.toLocaleDateString()}
 • Time Slot: ${timeSlot}
 
@@ -514,6 +525,49 @@ export default function PricingPage() {
     return message
   }
 
+  const handleLocationCheckbox = (checked: boolean) => {
+    setCustomerInfo(prev => ({ ...prev, useCurrentLocation: checked }))
+
+    if (checked) {
+      setIsLoadingLocation(true)
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocationCoords({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            })
+            setIsLoadingLocation(false)
+            toast({
+              title: "Location Captured",
+              description: "Your location will be shared via Google Maps link",
+              duration: 3000,
+            })
+          },
+          (error) => {
+            setIsLoadingLocation(false)
+            setCustomerInfo(prev => ({ ...prev, useCurrentLocation: false }))
+            toast({
+              title: "Location Error",
+              description: "Unable to get location. Please enter address manually.",
+              variant: "destructive",
+              duration: 4000,
+            })
+          }
+        )
+      } else {
+        setIsLoadingLocation(false)
+        toast({
+          title: "Not Supported",
+          description: "Geolocation is not supported by your browser",
+          variant: "destructive",
+          duration: 4000,
+        })
+      }
+    }
+  }
+
   const handleCustomerInfoSubmit = () => {
     if (validateCustomerInfo() && customerInfo.pickupDate) {
       const message = generateWhatsAppMessage(
@@ -538,7 +592,8 @@ export default function PricingPage() {
         phone: "",
         address: "",
         pickupDate: undefined,
-        timeSlot: ""
+        timeSlot: "",
+        useCurrentLocation: false
       })
       setCustomerErrors({})
       setIsCustomerModalOpen(false)
@@ -930,6 +985,26 @@ export default function PricingPage() {
                 {customerErrors.address && (
                   <p className="text-red-500 text-sm mt-1">{customerErrors.address}</p>
                 )}
+              </div>
+
+              {/* Location Checkbox */}
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="useCurrentLocation"
+                    checked={customerInfo.useCurrentLocation}
+                    onCheckedChange={handleLocationCheckbox}
+                    className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                  />
+                  <Label
+                    htmlFor="useCurrentLocation"
+                    className="text-sm font-medium text-gray-700 cursor-pointer flex items-center gap-2"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Use my current location
+                    {isLoadingLocation && <Loader2 className="h-4 w-4 animate-spin" />}
+                  </Label>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
