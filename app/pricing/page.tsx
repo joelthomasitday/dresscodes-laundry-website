@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { getWhatsAppHref } from "@/lib/phone"
+import { DatePicker } from "@/components/ui/date-picker"
 
 interface CartItem {
   id: string
@@ -1008,41 +1009,19 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-medium text-gray-700">Pickup Date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={`w-full mt-1 justify-start text-left font-normal rounded-full ${
-                          customerErrors.pickupDate ? "border-red-500" : ""
-                        }`}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {customerInfo.pickupDate
-                          ? customerInfo.pickupDate.toLocaleDateString()
-                          : "Select date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={customerInfo.pickupDate}
-                        onSelect={(date) => {
-                          setCustomerInfo(prev => ({ ...prev, pickupDate: date }));
-                          if (customerErrors.pickupDate) {
-                            setCustomerErrors(prev => ({ ...prev, pickupDate: "" }));
-                          }
-                        }}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {customerErrors.pickupDate && (
-                    <p className="text-red-500 text-sm mt-1">{customerErrors.pickupDate}</p>
-                  )}
-                </div>
+                <DatePicker
+                  date={customerInfo.pickupDate}
+                  onDateChange={(date) => {
+                    setCustomerInfo(prev => ({ ...prev, pickupDate: date }));
+                    if (customerErrors.pickupDate) {
+                      setCustomerErrors(prev => ({ ...prev, pickupDate: "" }));
+                    }
+                  }}
+                  placeholder="Select date"
+                  error={!!customerErrors.pickupDate}
+                  errorMessage={customerErrors.pickupDate}
+                  label="Pickup Date *"
+                />
 
                 <div>
                   <Label htmlFor="timeSlot" className="text-sm font-medium text-gray-700">Time Slot *</Label>

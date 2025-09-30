@@ -16,19 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { CalendarIcon, Clock, Phone, CreditCard, Loader2 } from "lucide-react";
@@ -435,82 +423,19 @@ export default function BookingPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Pickup Date *</Label>
-                        {isMobile ? (
-                          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                            <SheetTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={`w-full justify-start text-left font-normal bg-transparent ${
-                                  errors.date ? "border-red-500" : ""
-                                }`}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate
-                                  ? format(selectedDate, "PPP")
-                                  : "Select date"}
-                              </Button>
-                            </SheetTrigger>
-                            <SheetContent side="bottom" className="h-auto">
-                              <SheetHeader>
-                                <SheetTitle>Select Pickup Date</SheetTitle>
-                              </SheetHeader>
-                              <div className="mt-4">
-                                <Calendar
-                                  mode="single"
-                                  selected={selectedDate}
-                                  onSelect={(date) => {
-                                    setSelectedDate(date);
-                                    setIsSheetOpen(false);
-                                    if (errors.date) {
-                                      setErrors((prev) => ({ ...prev, date: "" }));
-                                    }
-                                  }}
-                                  disabled={(date) => date < new Date()}
-                                  initialFocus
-                                />
-                              </div>
-                            </SheetContent>
-                          </Sheet>
-                        ) : (
-                          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={`w-full justify-start text-left font-normal bg-transparent ${
-                                  errors.date ? "border-red-500" : ""
-                                }`}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate
-                                  ? format(selectedDate, "PPP")
-                                  : "Select date"}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={selectedDate}
-                                onSelect={(date) => {
-                                  setSelectedDate(date);
-                                  setIsCalendarOpen(false);
-                                  if (errors.date) {
-                                    setErrors((prev) => ({ ...prev, date: "" }));
-                                  }
-                                }}
-                                disabled={(date) => date < new Date()}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        )}
-                        {errors.date && (
-                          <p className="text-red-500 text-sm mt-1" role="alert">
-                            {errors.date}
-                          </p>
-                        )}
-                      </div>
+                      <DatePicker
+                        date={selectedDate}
+                        onDateChange={(date) => {
+                          setSelectedDate(date);
+                          if (errors.date) {
+                            setErrors((prev) => ({ ...prev, date: "" }));
+                          }
+                        }}
+                        placeholder="Select date"
+                        error={!!errors.date}
+                        errorMessage={errors.date}
+                        label="Pickup Date *"
+                      />
                       <div>
                         <Label htmlFor="timeSlot">Time Slot *</Label>
                         <Select
