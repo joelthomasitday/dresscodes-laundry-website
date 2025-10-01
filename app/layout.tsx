@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/toaster"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -74,7 +75,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#0d9488" />
       </head>
       <body className={poppins.className}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <WhatsAppFloat />
         <Toaster />
       </body>
