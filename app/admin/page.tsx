@@ -148,7 +148,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col space-y-2 sm:flex-row sm:gap-2 sm:space-y-0">
             <Button
               onClick={() => router.push('/admin/create')}
-              className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+              className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto rounded-lg"
               size="sm"
             >
               <Plus size={16} className="mr-2" />
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
             <Button
               onClick={logout}
               variant="outline"
-              className="bg-red-600 hover:bg-red-700 text-white border-red-600 w-full sm:w-auto"
+              className="bg-red-600 hover:bg-red-700 text-white border-red-600 w-full sm:w-auto rounded-lg"
               size="sm"
             >
               Logout
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                       <TableCell>
                         <Button
                           onClick={() => router.push(`/admin/invoice/${order.id}`)}
-                          className="bg-green-600 hover:bg-green-700 text-white"
+                          className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
                           size="sm"
                         >
                           Create Invoice
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                           <div className="flex gap-2">
                             <Button
                               onClick={() => handleDownloadPDF(invoice)}
-                              className="bg-green-600 hover:bg-green-700 text-white"
+                              className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
                               size="sm"
                             >
                               Download PDF
@@ -263,7 +263,7 @@ export default function AdminDashboard() {
                             <Button
                               onClick={() => handleDeleteInvoice(invoice.id)}
                               variant="outline"
-                              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-lg"
                               size="sm"
                             >
                               <Trash2 size={16} className="mr-1" />
