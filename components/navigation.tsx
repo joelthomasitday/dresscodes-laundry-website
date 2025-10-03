@@ -5,6 +5,8 @@ import Link from "next/link"
 import { Menu, X, Phone } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone"
+import Image from "next/image"
+
 interface NavigationProps {
   variant?: "solid"
 }
@@ -50,16 +52,19 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link
-                href="/"
-                className="text-2xl font-bold text-green-600"
-                aria-label="Dresscode Laundry Home"
-              >
-                dresscode
-              </Link>
-            </div>
+          <div className="flex items-center">
+  <Link href="/" aria-label="Dresscode Laundry Home" className="flex items-center">
+    <Image
+      src="/dresscodelogo2.png"
+      alt="Dresscode Laundry Logo"
+      width={80}
+      height={30}
+      priority
+      className="w-16 h-auto sm:w-18 md:w-20 lg:w-24 transition-all duration-300"
+    />
+  </Link>
+</div>
+
 
             {/* Center - Book Now Button (Mobile) */}
             <div className="md:hidden">
