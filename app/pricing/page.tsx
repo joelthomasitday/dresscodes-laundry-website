@@ -609,18 +609,22 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
 
       <main className="pt-20">
         {/* Hero Section - Mobile Optimized */}
-        <section className="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white py-12 sm:py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
-                Complete Price List
-              </h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-emerald-100 max-w-3xl mx-auto px-4">
-                Transparent pricing for all our laundry and dry cleaning services
-              </p>
-            </div>
-          </div>
-        </section>
+ <section className="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white py-12 sm:py-16">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
+      Laundry & Dry Cleaning Made Simple
+    </h1>
+    <p className="text-lg sm:text-xl md:text-2xl text-emerald-100 max-w-3xl mx-auto px-4">
+      Add your items to the cart, check our transparent pricing, and confirm your pickup
+    </p>
+    <p className="mt-4 text-md sm:text-lg text-emerald-200">
+      Done adding items? Click below to confirm and schedule your pickup.
+    </p>
+  </div>
+</section>
+
+
+
 
         {/* Cart Summary - Moved to top for better visibility */}
         {cart.length > 0 && (

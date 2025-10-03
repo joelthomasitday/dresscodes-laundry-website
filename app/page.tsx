@@ -120,7 +120,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Navigation with dark text */}
-      <Navigation variant="dark" />
+      <Navigation variant="solid" />
 
       {/* Hero Section - Simplified */}
 
