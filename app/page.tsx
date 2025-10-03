@@ -474,6 +474,14 @@ export default function HomePage() {
                     Contact
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Terms & Conditions
+                  </Link>
+                </li>
               </ul>
             </div>
 
