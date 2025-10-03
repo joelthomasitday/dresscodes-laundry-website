@@ -254,8 +254,8 @@ Timestamp: ${new Date().toLocaleString()}`;
                       <div>
                         <h3 className="text-lg font-semibold mb-2">Business Hours</h3>
                         <div className="text-gray-600 space-y-1">
-                          <p>Monday - Saturday: 8:00 AM - 8:00 PM</p>
-                          <p>Sunday: 9:00 AM - 6:00 PM</p>
+                          <p>Monday - Saturday: 9:00 AM - 7:00 PM</p>
+                          <p>Sunday: Closed</p>
                           <p className="text-emerald-600 font-medium">Emergency pickup available</p>
                         </div>
                       </div>
