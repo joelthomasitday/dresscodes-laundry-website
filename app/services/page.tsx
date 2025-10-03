@@ -37,7 +37,7 @@ export default function ServicesPage() {
       icon: Sparkles,
       description:
         "Expert dry cleaning for delicate fabrics, formal wear, and specialty garments.",
-      price: "Coming soon",
+      price: "₹250/garment",
       features: [
         "Eco-friendly dry cleaning solvents",
         "Expert stain removal",
@@ -463,7 +463,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Dry Cleaning</span>
-                    <span className="font-semibold">Coming Soon</span>
+                    <span className="font-semibold">₹250/garment</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Premium Care</span>

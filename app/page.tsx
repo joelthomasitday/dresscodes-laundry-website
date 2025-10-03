@@ -10,10 +10,10 @@ import {
   Shield,
   Star,
   CheckCircle,
-  Shirt,
   Sparkles,
-  AnvilIcon as Iron,
+  Shirt  as Iron,
   Crown,
+  WashingMachine,
   Phone,
   MapPin,
   PhoneIcon,
@@ -56,7 +56,7 @@ const WhatsappIcon = (props: any) => (
 export default function HomePage() {
   const services = [
     {
-      icon: Shirt,
+      icon: WashingMachine ,
       title: "Wash & Fold",
       description: "Professional washing and folding service",
       price: "₹140/kg",
@@ -79,7 +79,7 @@ export default function HomePage() {
     },
     {
       icon: Iron,
-      title: "Ironing & Pressing",
+      title: "Ironing",
       description: "Crisp and professional ironing service",
       price: "₹20/piece",
       features: ["Steam pressing", "Crease-free finish", "Same-day service"],
