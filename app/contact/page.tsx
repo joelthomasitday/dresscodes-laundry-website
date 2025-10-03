@@ -95,6 +95,21 @@ export default function ContactPage() {
         description: "We'll get back to you within 24 hours.",
       })
 
+      // Send message to WhatsApp
+      const whatsappMessage = `New Contact Form Submission:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Subject: ${formData.subject}
+
+Message: ${formData.message}
+
+Timestamp: ${new Date().toLocaleString()}`;
+
+      const whatsappUrl = getWhatsAppHref(whatsappMessage);
+      window.open(whatsappUrl, '_blank');
+
       // Reset form
       setFormData({
         name: "",

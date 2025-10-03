@@ -1,5 +1,5 @@
 // Phone number constants for single source of truth
-export const PHONE_DISPLAY = "+91 8943 437 272";
+export const PHONE_DISPLAY = "+91-89 4343 7272";
 export const PHONE_E164 = "+918943437272";
 export const PHONE_RAW = "918943437272";
 

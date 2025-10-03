@@ -920,7 +920,7 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-emerald-600 px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300"
+                className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300"
               >
                 <Link href="/contact">Contact Us</Link>
               </Button>
