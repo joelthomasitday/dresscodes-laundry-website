@@ -706,7 +706,7 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button
                         onClick={proceedToCheckout}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-4 sm:px-6 py-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                       >
                         <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                         Proceed to WhatsApp
@@ -714,7 +714,7 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
                       <Button
                         onClick={() => setCart([])}
                         variant="outline"
-                        className="px-4 sm:px-6 py-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300"
+                        className="flex-1 px-6 py-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 border-2 border-gray-300 hover:border-gray-400"
                       >
                         Clear Cart
                       </Button>
@@ -1060,15 +1060,15 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
               <Button
                 onClick={() => setIsCustomerModalOpen(false)}
                 variant="outline"
-                className="flex-1 rounded-full"
+                className="flex-1 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300 border-2 border-gray-300 hover:border-gray-400"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleCustomerInfoSubmit}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 rounded-full"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full text-base font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               >
-                <MessageCircle className="h-4 w-4 mr-2" />
+                <MessageCircle className="h-4 w-4" />
                 Send to WhatsApp
               </Button>
             </div>
