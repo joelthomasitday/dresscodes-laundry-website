@@ -13,16 +13,16 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "Dresscode Laundry - Professional Laundry & Dry Cleaning Services",
-    template: "%s | Dresscode Laundry",
+    default: "dresscode laundry - Professional Laundry & Dry Cleaning Services",
+    template: "%s | dresscode laundry",
   },
   description:
     "Premium laundry and dry cleaning services with free pickup and delivery in Kottayam. 24-48 hour turnaround, 100% satisfaction guarantee. Book online today!",
   keywords:
     "laundry service, dry cleaning, Kottayam, pickup delivery, wash fold, professional cleaning, Kerala laundry",
-  authors: [{ name: "Dresscode Laundry" }],
-  creator: "Dresscode Laundry",
-  publisher: "Dresscode Laundry",
+  authors: [{ name: "dresscode laundry" }],
+  creator: "dresscode laundry",
+  publisher: "dresscode laundry",
   formatDetection: {
     email: false,
     address: false,
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://dresscodes.in",
-    title: "Dresscode Laundry - Professional Laundry & Dry Cleaning Services",
+    title: "dresscode laundry - Professional Laundry & Dry Cleaning Services",
     description: "Premium laundry and dry cleaning services with free pickup and delivery in Kottayam",
-    siteName: "Dresscode Laundry",
+    siteName: "dresscode laundry",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dresscode Laundry - Professional Laundry Services",
+    title: "dresscode laundry - Professional Laundry Services",
     description: "Premium laundry and dry cleaning services with free pickup and delivery in Kottayam",
   },
   robots: {

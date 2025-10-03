@@ -8,9 +8,9 @@ import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 
 export const metadata: Metadata = {
-  title: "About Us - Professional Laundry Service | Dresscode Laundry",
+  title: "About Us - Professional Laundry Service | dresscode laundry",
   description:
-    "Learn about Dresscode Laundry's mission, values, and commitment to providing exceptional laundry and dry cleaning services in Kottayam since our founding.",
+    "Learn about dresscode laundry's mission, values, and commitment to providing exceptional laundry and dry cleaning services in Kottayam since our founding.",
   keywords:
     "about dresscode laundry, laundry service history, professional cleaning team, Kottayam laundry",
 };
@@ -71,7 +71,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white py-16 sm:py-28 pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            About Dresscode Laundry
+            About dresscode laundry
           </h1>
           <p className="text-lg sm:text-xl text-emerald-100 max-w-2xl mx-auto">
             Your trusted partner for professional laundry and dry cleaning
@@ -94,7 +94,7 @@ export default function AboutPage() {
               <div className="space-y-4 text-gray-600 text-sm sm:text-base">
                 <p>
                   Founded with a vision to transform the laundry experience,
-                  Dresscode Laundry has been serving the Kottayam community with
+                  dresscode laundry has been serving the Kottayam community with
                   dedication and excellence. What started as a small local
                   business has grown into a trusted name in professional garment
                   care.
@@ -236,7 +236,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-              Why Choose Dresscode Laundry?
+              Why Choose dresscode laundry?
             </h2>
             <p className="text-base sm:text-lg text-gray-600">
               Experience the difference that sets us apart
@@ -343,7 +343,7 @@ export default function AboutPage() {
       <section className="py-12 sm:py-16 bg-gradient-to-r from-emerald-500 to-emerald-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-            Ready to Experience the Dresscode Difference?
+            Ready to Experience the dresscode Difference?
           </h2>
           <p className="text-lg sm:text-xl mb-8 text-emerald-100">
             Join thousands of satisfied customers who trust us with their

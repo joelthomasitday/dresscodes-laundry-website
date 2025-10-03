@@ -6,6 +6,9 @@
   .text-balance {
     text-wrap: balance;
   }
+  .dresscode-text {
+    @apply text-sm lowercase;
+  }
 }
 
 @layer base {

@@ -211,7 +211,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Dresscode???
+              Why Choose dresscode???
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We combine traditional care with modern convenience to deliver
@@ -395,7 +395,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold mb-4">DRESSCODE</h3>
+              <h3 className="text-2xl font-bold mb-4 dresscode-text">dresscode</h3>
               <p className="text-gray-300 mb-4 max-w-md">
                 Premium laundry and dry cleaning services in Kottayam.
                 Professional care for your garments with convenient pickup and
@@ -493,7 +493,7 @@ export default function HomePage() {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Dresscode Laundry. All rights reserved.</p>
+            <p>&copy; 2025 dresscode laundry. All rights reserved.</p>
           </div>
         </div>
       </footer>
