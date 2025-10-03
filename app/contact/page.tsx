@@ -357,7 +357,7 @@ export default function ContactPage() {
           <p className="text-xl text-emerald-100 mb-8">Experience the convenience of professional laundry care</p>
 
           <Button asChild size="lg" className="bg-white text-emerald-600 hover:bg-gray-100 rounded-full">
-            <Link href="/booking">Schedule Free Pickup</Link>
+            <Link href="/pricing">Schedule Free Pickup</Link>
           </Button>
         </div>
       </section>

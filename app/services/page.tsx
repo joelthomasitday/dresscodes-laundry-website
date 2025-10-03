@@ -147,7 +147,7 @@ export default function ServicesPage() {
                         asChild
                         className="w-full bg-gradient-to-r from-emerald-500 to-emerald-900 hover:from-emerald-600 hover:to-emerald-800 transition-all duration-300 rounded-full"
                       >
-                        <Link href="/booking">Book This Service</Link>
+                        <Link href="/pricing">Book This Service</Link>
                       </Button>
                     </CardContent>
                   </div>
@@ -505,7 +505,7 @@ export default function ServicesPage() {
                   size="lg"
                   className="rounded-full"
                 >
-                  <Link href="/booking">Schedule Pickup</Link>
+                  <Link href="/pricing">Schedule Pickup</Link>
                 </Button>
               </div>
             </div>
@@ -527,7 +527,7 @@ export default function ServicesPage() {
             asChild
             className="bg-white text-emerald-600 hover:bg-gray-100 transition-colors rounded-full"
           >
-            <Link href="/booking">Schedule Your First Pickup</Link>
+            <Link href="/pricing">Schedule Your First Pickup</Link>
           </Button>
         </div>
       </section>

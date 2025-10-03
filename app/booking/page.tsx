@@ -132,7 +132,7 @@ export default function BookingPage() {
       };
 
       // Send to API route
-      const response = await fetch("/api/booking", {
+      const response = await fetch("/api/pricing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

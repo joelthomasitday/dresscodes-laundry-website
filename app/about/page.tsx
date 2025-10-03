@@ -355,7 +355,7 @@ export default function AboutPage() {
               asChild
               className="bg-white text-emerald-600 hover:bg-gray-100 transition-colors rounded-full"
             >
-              <Link href="/booking">Schedule Your First Pickup</Link>
+              <Link href="/pricing">Schedule Your First Pickup</Link>
             </Button>
             <Button
               size="lg"

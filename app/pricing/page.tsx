@@ -914,7 +914,7 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
                 size="lg"
                 className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300"
               >
-                <Link href="/booking">Schedule Pickup</Link>
+                <Link href="/pricing">Schedule Pickup</Link>
               </Button>
               <Button
                 asChild

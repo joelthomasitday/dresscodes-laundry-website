@@ -146,7 +146,7 @@ export default function HomePage() {
                   size="lg"
                   className="bg-[#008c5b] hover:bg-green-700 rounded-full"
                 >
-                  <Link href="/booking">Schedule Free Pickup</Link>
+                  <Link href="/pricing">Schedule Free Pickup</Link>
                 </Button>
                 <Button
                   asChild
@@ -303,7 +303,7 @@ export default function HomePage() {
                     asChild
                     className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-full"
                   >
-                    <Link href="/booking">Book This Service</Link>
+                    <Link href="/pricing">Book This Service</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -375,7 +375,7 @@ export default function HomePage() {
               size="lg"
               className="bg-white text-emerald-600 hover:bg-gray-100 shadow-lg text-lg px-8 py-6 rounded-full"
             >
-              <Link href="/booking">Schedule Free Pickup</Link>
+              <Link href="/pricing">Schedule Free Pickup</Link>
             </Button>
 
             <Button
@@ -452,7 +452,7 @@ export default function HomePage() {
                 </li>
                 <li>
                   <Link
-                    href="/booking"
+                    href="/pricing"
                     className="text-gray-300 hover:text-white transition-colors"
                   >
                     Book Now

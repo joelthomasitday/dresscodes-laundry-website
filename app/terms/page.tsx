@@ -476,7 +476,7 @@ export default function TermsPage() {
               size="lg"
               className="bg-gradient-to-r from-emerald-500 to-emerald-900 hover:from-emerald-600 hover:to-emerald-800 rounded-full"
             >
-              <Link href="/booking">Schedule Pickup</Link>
+              <Link href="/pricing">Schedule Pickup</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
               <Link href="/privacy">View Privacy Policy</Link>
