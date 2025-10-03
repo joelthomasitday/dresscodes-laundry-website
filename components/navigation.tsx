@@ -52,7 +52,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-green-600 dresscode-text" aria-label="Dresscode Laundry Home">
+            <Link href="/" className="text-2xl font-bold text-green-600" aria-label="Dresscode Laundry Home">
                dresscode
             </Link>
           </div>
@@ -445,7 +445,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
             <div className="flex items-center">
               <Link
                 href="/"
-                className="text-2xl font-bold bg-gradient-to-r from-emerald-500 to-emerald-900 bg-clip-text text-transparent dresscode-text"
+                className="text-2xl font-bold text-green-600"
                 aria-label="Dresscode Laundry Home"
               >
                 dresscode

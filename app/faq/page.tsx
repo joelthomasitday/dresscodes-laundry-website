@@ -43,7 +43,7 @@ export default function FAQPage() {
         {
           question: "What services do you offer?",
           answer:
-            "We offer wash & fold (₹140/kg), dry cleaning (coming soon), ironing & pressing (₹20/piece), and wash & iron (₹30/piece). We also handle bedding, curtains, and other household textiles.",
+            "We offer wash & fold (₹140/kg), dry cleaning, ironing & pressing (₹20/piece), and wash & iron (₹30/piece). We also handle bedding, curtains, and other household textiles.",
         },
         {
           question: "How is pricing calculated?",

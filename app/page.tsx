@@ -70,7 +70,7 @@ export default function HomePage() {
       icon: Sparkles,
       title: "Dry Cleaning",
       description: "Expert dry cleaning for delicate fabrics",
-      price: "Coming soon",
+      price: "₹50/piece",
       features: [
         "Stain removal",
         "Professional pressing",
@@ -395,7 +395,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold mb-4 dresscode-text">dresscode</h3>
+              <h3 className="text-2xl font-bold mb-4">dresscode</h3>
               <p className="text-gray-300 mb-4 max-w-md">
                 Premium laundry and dry cleaning services in Kottayam.
                 Professional care for your garments with convenient pickup and
