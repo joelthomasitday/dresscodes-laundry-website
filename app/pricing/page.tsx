@@ -381,10 +381,6 @@ export default function PricingPage() {
 • Total Items: ${totalItems}
 • Total Amount: ₹${formatPrice(totalPrice)}
 
-*Payment Details:*
-• UPI ID: dresscode@upi
-• Account Holder: Dresscode Laundry Services
-• Bank: HDFC Bank
 *Thank you for choosing Dresscode Laundry!*`
 
       const whatsappUrl = getWhatsAppHref(message)
@@ -392,7 +388,7 @@ export default function PricingPage() {
 
       toast({
         title: "Order Sent",
-        description: "Your order with payment details has been sent to WhatsApp!",
+        description: "Your order has been sent to WhatsApp!",
         duration: 3000,
       })
     } catch (error: unknown) {
@@ -511,11 +507,6 @@ Location: https://www.google.com/maps?q=${locationCoords.lat},${locationCoords.l
     message += `*Order Summary:*
 • Total Items: ${totalItems}
 • Total Amount: ₹${formatPrice(totalPrice)}
-
-*Payment Details:*
-• UPI ID: dresscode@upi
-• Account Holder: Dresscode Laundry Services
-• Bank: HDFC Bank
 
 *Pickup Schedule:*
 • Date: ${pickupDate.toLocaleDateString()}
