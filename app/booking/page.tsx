@@ -587,15 +587,7 @@ export default function BookingPage() {
                             </div>
                           </div>
 
-                          {/* Payment Details */}
-                          <div>
-                            <h4 className="font-bold text-gray-800 mb-2">Payment Details</h4>
-                            <div className="space-y-1 text-gray-700">
-                              <p><strong>UPI ID:</strong> dresscode@upi</p>
-                              <p><strong>Account Holder:</strong> Dresscode Laundry Services</p>
-                              <p><strong>Bank:</strong> HDFC Bank</p>
-                            </div>
-                          </div>
+                        
 
                           {/* Thank you message */}
                           <div className="text-center pt-2 border-t">
