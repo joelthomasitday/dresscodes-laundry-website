@@ -26,7 +26,7 @@ const cardData = [
     icon: <MessageCircle className="h-8 w-8 text-green-600" />,
     title: "Free Pickup & Delivery",
     description:
-      "Doorstep service across Kottayam. Schedule a pickup with just one call. It's fast, easy, and hassle-free.",
+      "Doorstep service across Kottayam. Schedule a pickup with just one click. It's fast, easy, and hassle-free.",
   },
   {
     icon: <Clock className="h-8 w-8 text-green-600" />,
@@ -57,20 +57,20 @@ export default function HomePage() {
   const services = [
     {
       icon: WashingMachine ,
-      title: "Wash & Fold",
-      description: "Professional washing and folding service",
-      price: "₹140/kg",
+      title: "Wash & Iron",
+      description: "Professional washing and ironing service",
+      price: "₹160/kg",
       features: [
         "Eco-friendly detergents",
         "Fabric softener included",
-        "24-hour service",
+        "Fabric fragrance included",
       ],
     },
     {
       icon: Sparkles,
       title: "Dry Cleaning",
       description: "Expert dry cleaning for delicate fabrics",
-      price: "₹50/piece",
+      price: "₹100/piece",
       features: [
         "Stain removal",
         "Professional pressing",
@@ -81,15 +81,15 @@ export default function HomePage() {
       icon: Iron,
       title: "Ironing",
       description: "Crisp and professional ironing service",
-      price: "₹20/piece",
+      price: "₹15/piece",
       features: ["Steam pressing", "Crease-free finish", "Same-day service"],
     },
     {
       icon: Crown,
       title: "Premium Care",
       description: "Luxury treatment for premium garments",
-      price: "Custom",
-      features: ["Hand washing", "Special care", "Premium packaging"],
+      price: "₹220/kg",
+      features: ["Hand washing for special garments", "starching included", "individual washing"],
     },
   ];
 
@@ -245,7 +245,7 @@ export default function HomePage() {
                   size="lg"
                   className="border-gray-300 text-gray-800 hover:text-[#008c5d] hover:border-[#008c5d] bg-transparent rounded-full transition-colors duration-200"
                 >
-                  <Link href="/about">Read More</Link>
+                  <Link href="/pricing">Book Now</Link>
                 </Button>
               </div>
             ))}

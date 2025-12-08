@@ -15,69 +15,68 @@ import {
 } from "lucide-react";
 
 export default function ServicesPage() {
-  const services = [
-    {
-      id: "wash-fold",
-      title: "Wash & Fold",
-      icon: Shirt,
-      description:
-        "Professional washing, drying, and folding of your everyday clothes with premium detergents.",
-      price: "₹140/kg",
-      features: [
-        "Premium detergents and fabric softeners",
-        "Gentle wash cycles for fabric care",
-        "Professional folding and packaging",
-        "Same-day service available",
-      ],
-      image: "/Gemini_Generated_Image_qxapelqxapelqxap (1).png",
-    },
-    {
-      id: "dry-cleaning",
-      title: "Dry Cleaning",
-      icon: Sparkles,
-      description:
-        "Expert dry cleaning for delicate fabrics, formal wear, and specialty garments.",
-      price: "₹250/garment",
-      features: [
-        "Eco-friendly dry cleaning solvents",
-        "Expert stain removal",
-        "Delicate fabric care",
-        "Professional pressing included",
-      ],
-      image: "/Gemini_Generated_Image_qxapelqxapelqxap.png",
-    },
-    {
-      id: "ironing",
-      title: "Ironing & Pressing",
-      icon: Iron,
-      description:
-        "Professional ironing and pressing services for a crisp, fresh appearance.",
-      price: "₹20/piece",
-      features: [
-        "Professional steam pressing",
-        "Wrinkle-free guarantee",
-        "Proper hanging and packaging",
-        "Quick turnaround time",
-      ],
-      image: "/Gemini_Generated_Image_qxapelqxapelqxap (4).png",
-    },
-    {
-      id: "premium",
-      title: "Premium Care",
-      icon: Crown,
-      description:
-        "Specialized care for luxury items, leather, suede, and designer clothing.",
-      price: "Custom pricing",
-      features: [
-        "Hand-cleaning for delicate items",
-        "Leather and suede cleaning",
-        "Designer garment care",
-        "Custom packaging",
-      ],
-      image: "/Gemini_Generated_Image_qxapelqxapelqxap (3).png",
-    },
-  ];
-
+ const services = [
+  {
+    id: "wash-fold",
+    title: "Wash & Fold",
+    icon: Shirt,
+    description:
+      "Professional washing, drying, and folding of your everyday clothes with premium detergents.",
+    price: "₹160/kg",
+    features: [
+      "Premium detergents and fabric softeners",
+      "Gentle wash cycles for fabric care",
+      "Professional folding and packaging",
+      "Same-day service available",
+    ],
+    image: "/Gemini_Generated_Image_qxapelqxapelqxap (1).png",
+  },
+  {
+    id: "dry-cleaning",
+    title: "Dry Cleaning",
+    icon: Sparkles,
+    description:
+      "Expert dry cleaning for delicate fabrics, formal wear, and specialty garments.",
+    price: "₹100/piece",
+    features: [
+      "Eco-friendly dry cleaning solvents",
+      "Expert stain removal",
+      "Delicate fabric care",
+      "Professional pressing included",
+    ],
+    image: "/Gemini_Generated_Image_qxapelqxapelqxap.png",
+  },
+  {
+    id: "ironing",
+    title: "Ironing & Pressing",
+    icon: Iron,
+    description:
+      "Professional ironing and pressing services for a crisp, fresh appearance.",
+    price: "₹15/piece",
+    features: [
+      "Professional steam pressing",
+      "Wrinkle-free guarantee",
+      "Proper hanging and packaging",
+      "Quick turnaround time",
+    ],
+    image: "/Gemini_Generated_Image_qxapelqxapelqxap (4).png",
+  },
+  {
+    id: "premium",
+    title: "Premium Care",
+    icon: Crown,
+    description:
+      "Specialized care for luxury items, leather, suede, and designer clothing.",
+    price: "₹220/kg",
+    features: [
+      "Hand-cleaning for delicate items",
+      "Leather and suede cleaning",
+      "Designer garment care",
+      "Custom packaging",
+    ],
+    image: "/Gemini_Generated_Image_qxapelqxapelqxap (3).png",
+  },
+];
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation with solid background */}
