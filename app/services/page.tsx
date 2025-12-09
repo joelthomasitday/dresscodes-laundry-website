@@ -76,7 +76,7 @@ export default function ServicesPage() {
     ],
     image: "/Gemini_Generated_Image_qxapelqxapelqxap (3).png",
   },
-];
+];        
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation with solid background */}
