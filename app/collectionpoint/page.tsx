@@ -424,7 +424,6 @@ Be part of an expanding, reliable partner ecosystem.
                   "Extremely low entry cost (₹10,000)",
                   "Monetize your existing real estate",
                   "No processing equipment needed",
-                  "We handle all cleaning & logistics",
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-emerald-500 mr-3 flex-shrink-0" />
