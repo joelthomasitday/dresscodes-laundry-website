@@ -75,8 +75,7 @@ export async function POST(req: NextRequest) {
       isActive: true,
     });
 
-    const userResponse = newUser.toObject();
-    delete userResponse.passwordHash;
+    const { passwordHash: _, ...userResponse } = newUser.toObject();
 
     return NextResponse.json({ success: true, user: userResponse }, { status: 201 });
   } catch (error: any) {
