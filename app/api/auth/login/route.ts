@@ -38,7 +38,9 @@ export async function POST(req: NextRequest) {
     }
 
     const isMatch = await bcrypt.compare(password, user.passwordHash);
+    console.log("Password match result:", isMatch);
     if (!isMatch) {
+      console.log("Password mismatch");
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }
@@ -46,15 +48,27 @@ export async function POST(req: NextRequest) {
     }
 
     // Create JWT token
-    const token = await createToken({
-      userId: user._id.toString(),
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    });
+    console.log("Creating token...");
+    try {
+      const token = await createToken({
+        userId: user._id.toString(),
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      });
+      console.log("Token created successfully");
 
-    // Set HttpOnly cookie
-    await setAuthCookie(token);
+      // Set HttpOnly cookie
+      console.log("Setting cookie...");
+      await setAuthCookie(token);
+      console.log("Cookie set successfully");
+    } catch (tokenError: any) {
+      console.error("Token/Cookie error:", tokenError);
+      return NextResponse.json(
+        { error: "Token generation failed", details: tokenError.message },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
