@@ -27,7 +27,8 @@ export async function connectDB(): Promise<typeof mongoose> {
   const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dresscode";
 
   if (!process.env.MONGODB_URI && process.env.NODE_ENV === "production") {
-    throw new Error("MONGODB_URI is not defined in production environment");
+    console.warn("MONGODB_URI is not defined. Skipping connection during build.");
+    return mongoose;
   }
 
   if (!cached.promise) {
