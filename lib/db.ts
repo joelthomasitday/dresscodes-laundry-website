@@ -42,6 +42,8 @@ export async function connectDB(): Promise<typeof mongoose> {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       maxPoolSize: 10,
+      retryWrites: true,
+      w: "majority",
     }).then((mongoose) => {
         console.log("✅ MongoDB Connected!");
         return mongoose;
