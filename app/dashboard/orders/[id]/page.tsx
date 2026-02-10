@@ -18,6 +18,7 @@ import {
   ChevronRight,
   Loader2,
   Truck,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -65,6 +66,7 @@ export default function OrderDetailPage({
   const [updating, setUpdating] = useState(false);
   const [riders, setRiders] = useState<{ _id: string; name: string }[]>([]);
   const [assigning, setAssigning] = useState(false);
+  const [generatingInvoice, setGeneratingInvoice] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -168,6 +170,52 @@ export default function OrderDetailPage({
     }
   };
 
+  const handleGenerateInvoice = async () => {
+    if (!order) return;
+    setGeneratingInvoice(true);
+    try {
+      // Map order items to invoice items
+      const items = order.services.map(s => ({
+        name: s.name,
+        qty: s.quantity,
+        price: s.price,
+        total: s.quantity * s.price
+      }));
+
+      // Calculate totals (simple logic for now, can be aligned with order totals)
+      const subtotal = items.reduce((sum, item) => sum + item.total, 0);
+      const tax = 0; // Assuming tax is included or calculated differently
+      const total = order.totalAmount; 
+
+      const res = await fetch("/api/invoices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer: order.customer,
+          items,
+          subtotal,
+          tax,
+          discount: 0,
+          total,
+          orderId: order._id
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Invoice generated successfully");
+        router.push("/dashboard/invoices");
+      } else {
+        const error = await res.json();
+        toast.error(error.error || "Failed to generate invoice");
+      }
+    } catch (err) {
+      console.error("Failed to generate invoice:", err);
+      toast.error("An error occurred");
+    } finally {
+      setGeneratingInvoice(false);
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-950">
@@ -233,11 +281,25 @@ export default function OrderDetailPage({
                     })}
                   </p>
                 </div>
-                <Badge
-                  className={`${ORDER_STATUS_COLORS[order.status]} text-xs px-3 py-1`}
-                >
-                  {ORDER_STATUS_LABELS[order.status]}
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <Badge
+                    className={`${ORDER_STATUS_COLORS[order.status]} text-xs px-3 py-1`}
+                  >
+                    {ORDER_STATUS_LABELS[order.status]}
+                  </Badge>
+                  {user?.role === "admin" && (
+                    <Button 
+                      onClick={handleGenerateInvoice}
+                      disabled={generatingInvoice}
+                      variant="outline" 
+                      size="sm" 
+                      className="bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+                    >
+                      {generatingInvoice ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4 mr-2" />}
+                      Generate Invoice
+                    </Button>
+                  )}
+                </div>
               </div>
 
               {/* Progress bar */}

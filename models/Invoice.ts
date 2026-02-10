@@ -40,7 +40,7 @@ const InvoiceItemSchema = new Schema<IInvoiceItem>(
 
 const InvoiceSchema = new Schema<IInvoice>(
   {
-    invoiceNumber: { type: String, required: true, unique: true },
+    invoiceNumber: { type: String, unique: true },
     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
     customer: {
       name: { type: String, required: true, trim: true },
@@ -60,12 +60,18 @@ const InvoiceSchema = new Schema<IInvoice>(
 );
 
 // Auto-generate invoice number
-InvoiceSchema.pre("save", async function (next) {
+InvoiceSchema.pre("save", async function () {
   if (this.isNew && !this.invoiceNumber) {
-    const count = await mongoose.models.Invoice.countDocuments();
-    this.invoiceNumber = `INV-${String(count + 1001).padStart(6, "0")}`;
+    try {
+      const InvoiceModel = this.constructor as Model<IInvoice>;
+      const count = await InvoiceModel.countDocuments();
+      this.invoiceNumber = `INV-${String(count + 1001).padStart(6, "0")}`;
+    } catch (err) {
+      console.error("Invoice number generation error:", err);
+      // Fallback
+      this.invoiceNumber = `INV-${Date.now()}`;
+    }
   }
-  next();
 });
 
 export const Invoice: Model<IInvoice> =

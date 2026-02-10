@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Order } from "@/models/Order";
+import { Invoice } from "@/models/Invoice";
 import { getCurrentUser } from "@/lib/auth";
 
 /**
@@ -79,6 +80,35 @@ export async function PATCH(
         updatedBy: user.name,
         note: body.statusNote || `Status updated to ${body.status}`,
       });
+
+      if (body.status === "DELIVERED") {
+        try {
+          const existingInvoice = await Invoice.findOne({ orderId: order._id });
+          if (!existingInvoice) {
+            const items = order.services.map((s: any) => ({
+              name: s.name,
+              qty: s.quantity,
+              price: s.price,
+              total: s.quantity * s.price,
+            }));
+            const subtotal = items.reduce((sum: number, item: any) => sum + item.total, 0);
+
+            await Invoice.create({
+              orderId: order._id,
+              customer: order.customer,
+              items,
+              subtotal,
+              tax: 0,
+              discount: 0,
+              total: order.totalAmount,
+              status: "sent",
+            });
+            console.log("Auto-generated invoice for order:", order.orderNumber);
+          }
+        } catch (invError) {
+          console.error("Failed to auto-generate invoice:", invError);
+        }
+      }
     }
 
     // Update other fields

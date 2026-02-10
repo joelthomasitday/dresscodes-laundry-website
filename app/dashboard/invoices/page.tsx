@@ -17,13 +17,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Printer,
+  AlertCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import jsPDF from "jspdf";
 
 interface InvoiceItem {
-  id: string;
+  _id: string;
   invoiceNumber: string;
   customer: { name: string; phone: string };
   total: number;
@@ -37,6 +38,7 @@ export default function InvoicesPage() {
   const router = useRouter();
   const [invoices, setInvoices] = useState<InvoiceItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -55,15 +57,22 @@ export default function InvoicesPage() {
 
   const fetchInvoices = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch(`/api/invoices?page=${page}&limit=10`);
+      const data = await res.json();
+      
       if (res.ok) {
-        const data = await res.json();
         setInvoices(data.invoices);
         setTotalPages(data.pagination.totalPages);
+      } else {
+        setError(data.error || "Failed to fetch invoices");
+        setInvoices([]);
       }
     } catch (err) {
       console.error("Failed to fetch invoices:", err);
+      setError("An unexpected error occurred while fetching invoices.");
+      setInvoices([]);
     } finally {
       setLoading(false);
     }
@@ -118,7 +127,7 @@ export default function InvoicesPage() {
     // Items
     doc.setFont("helvetica", "normal");
     y += 10;
-    invoice.items.forEach((item) => {
+    invoice.items?.forEach((item) => {
       doc.text(item.name, 25, y);
       doc.text(item.qty.toString(), 100, y);
       doc.text(`₹${item.price}`, 130, y);
@@ -179,6 +188,18 @@ export default function InvoicesPage() {
                 <Skeleton key={i} className="h-24 bg-gray-900 rounded-xl" />
               ))}
             </div>
+          ) : error ? (
+            <div className="text-center py-20 bg-gray-900 rounded-2xl border border-red-900/50">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <p className="text-red-400 text-lg font-medium">{error}</p>
+              <Button 
+                variant="outline" 
+                className="mt-4 border-red-900/50 text-red-400 hover:bg-red-950"
+                onClick={fetchInvoices}
+              >
+                Try Again
+              </Button>
+            </div>
           ) : invoices.length === 0 ? (
             <div className="text-center py-20 bg-gray-900 rounded-2xl border border-gray-800">
               <FileText className="h-12 w-12 text-gray-700 mx-auto mb-4" />
@@ -187,7 +208,7 @@ export default function InvoicesPage() {
           ) : (
             <div className="space-y-3">
               {invoices.map((invoice) => (
-                <Card key={invoice.id} className="bg-gray-900 border-gray-800 group hover:border-gray-700 transition-all">
+                <Card key={invoice._id} className="bg-gray-900 border-gray-800 group hover:border-gray-700 transition-all">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
@@ -231,7 +252,7 @@ export default function InvoicesPage() {
             </div>
           )}
 
-          {totalPages > 1 && (
+          {totalPages > 1 && !loading && !error && (
             <div className="flex justify-center gap-2 pt-4">
               <Button
                 variant="outline"
