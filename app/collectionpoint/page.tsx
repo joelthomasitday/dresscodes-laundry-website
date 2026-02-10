@@ -843,6 +843,11 @@ Be part of an expanding, reliable partner ecosystem.
                     Contact
                   </Link>
                 </li>
+                <li>
+                  <Link href="/dashboard/login" className="text-gray-300 hover:text-white transition-colors">
+                    Dashboard Login
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
