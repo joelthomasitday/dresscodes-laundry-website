@@ -29,13 +29,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await User.findOne({ email: email.toLowerCase(), isActive: true });
+    console.log(`🔍 Looking for user: ${email}`);
+    let user = await User.findOne({ email: email.toLowerCase(), isActive: true });
+    
+    // AUTO-HEALING: If admin user is missing, but they are trying to login with default credentials, create it.
+    if (!user && email === "admin@dresscodes.in" && password === "admin123") {
+        console.log("⚠️ Admin user not found, but default credentials provided. Auto-creating admin...");
+        try {
+            const hashedPassword = await bcrypt.hash("admin123", 12);
+            user = await User.create({
+                name: "Admin",
+                email: "admin@dresscodes.in",
+                phone: "8943437272",
+                passwordHash: hashedPassword,
+                role: "admin",
+                isActive: true
+            });
+            console.log("✅ Admin user auto-created successfully.");
+        } catch (createError) {
+            console.error("❌ Failed to auto-create admin:", createError);
+            // Fall through to normal failure
+        }
+    }
+
     if (!user) {
+      console.log("❌ User not found in DB");
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }
       );
     }
+    console.log("✅ User found:", user._id);
 
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     console.log("Password match result:", isMatch);
@@ -80,9 +104,13 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error("Login error:", error);
+    console.error("Login fatal error:", error);
     return NextResponse.json(
-      { error: "Internal server error", details: error.message, stack: error.stack },
+      { 
+        error: "Internal server error", 
+        details: error.message,
+        stack: process.env.NODE_ENV === "development" ? error.stack : undefined 
+      },
       { status: 500 }
     );
   }
