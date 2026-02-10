@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function BookingPage() {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -125,14 +127,33 @@ export default function BookingPage() {
 
     try {
       const bookingData = {
-        ...formData,
-        selectedDate: selectedDate?.toISOString(),
-        selectedServices,
-        timestamp: new Date().toISOString(),
+        customer: {
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          address: formData.address,
+        },
+        services: selectedServices.map(id => {
+          const s = services.find(item => item.id === id);
+          // Simplified pricing for demo since real services might not be in DB yet
+          let price = 0;
+          if (id === "wash-fold") price = 140;
+          if (id === "ironing") price = 20;
+          if (id === "premium") price = 500;
+          
+          return {
+            name: s?.name || id,
+            price,
+            quantity: id === "wash-fold" ? 5 : 1, // default 5kg for wash-fold
+          };
+        }),
+        pickupDate: selectedDate?.toISOString(),
+        pickupTimeSlot: formData.timeSlot,
+        notes: formData.specialInstructions,
       };
 
       // Send to API route
-      const response = await fetch("/api/pricing", {
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,22 +168,13 @@ export default function BookingPage() {
       }
 
       toast({
-        title: "Booking request submitted!",
-        description: "We will contact you shortly to confirm your pickup.",
+        title: "Booking Successful!",
+        description: `Your order ${result.order.orderNumber} has been scheduled.`,
       });
 
-      // Reset form
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        address: "",
-        timeSlot: "",
-        specialInstructions: "",
-      });
-      setSelectedDate(undefined);
-      setSelectedServices([]);
-      setErrors({});
+      // Redirect to tracking page
+      router.push(`/track/${result.order.orderNumber}`);
+
     } catch (error) {
       console.error("Error submitting booking:", error);
       toast({

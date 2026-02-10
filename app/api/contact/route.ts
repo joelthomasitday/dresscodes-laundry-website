@@ -2,12 +2,14 @@ import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import { PHONE_DISPLAY } from "@/lib/phone"
 
-const resend = new Resend("re_VwnagQ1G_PbZ3fh6uujZ5py4cDzGtr3FX")
+
 
 export async function POST(request: NextRequest) {
   try {
     const contactData = await request.json()
     const { name, email, phone, subject, message } = contactData
+
+    const resend = new Resend(process.env.RESEND_API_KEY || "re_123");
 
     // Send email to business owner
     await resend.emails.send({

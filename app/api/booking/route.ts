@@ -2,13 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import { PHONE_DISPLAY } from "@/lib/phone"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-async function logApiKeys() {
-  const apiKeys = await resend.apiKeys.list();
-  console.log('Available API Keys:', apiKeys);
-}
 
-logApiKeys();
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,6 +10,8 @@ export async function POST(request: NextRequest) {
     const { name, phone, email, address, selectedDate, timeSlot, selectedServices, specialInstructions } = bookingData
     const servicesText = selectedServices.join(", ")
     const bookingId = `BK${Date.now()}`
+    
+    const resend = new Resend(process.env.RESEND_API_KEY || "re_123");
 
     // Send email to business owner
     await resend.emails.send({

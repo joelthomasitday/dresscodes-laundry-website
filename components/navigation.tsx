@@ -36,6 +36,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
     { href: "/pricing", label: "Pricing" },
+    { href: "/track", label: "Track Order" },
     { href: "/collectionpoint", label: "Collection Point" },
     { href: "/about", label: "About" },
     { href: "/blog", label: "Blog" },

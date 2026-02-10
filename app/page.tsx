@@ -128,13 +128,13 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-16 lg:gap-24">
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2 text-center lg:text-left space-y-8">
-            <h1 className="text-5xl sm:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight tracking-tight">
               Drop the laundry
               <br />
               <span className="text-[#008c5b]">Not your plans</span>
             </h1>
 
-            <p className="text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
               A convenient laundry solution that helps protect the environment.
             </p>
 
@@ -219,7 +219,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
             {cardData.map((card, index) => (
               <div
                 key={index}
