@@ -2,61 +2,37 @@ import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Global cache for MongoDB connection (avoids reconnecting on every API call in dev)
-interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-}
-
-declare global {
-  // eslint-disable-next-line no-var
-  var mongooseCache: MongooseCache | undefined;
-}
-
-const cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
-if (!global.mongooseCache) {
-  global.mongooseCache = cached;
-}
-
-/**
- * Connect to MongoDB. Returns cached connection if already connected.
- */
 export async function connectDB(): Promise<typeof mongoose> {
-  if (cached.conn) {
-    return cached.conn;
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  if (mongoose.connection.readyState === 1) {
+    return mongoose;
   }
 
-  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dresscode";
-
-  if (!process.env.MONGODB_URI && process.env.NODE_ENV === "production") {
-    console.error("❌ CRITICAL: MONGODB_URI environment variable is missing!");
-  } else {
-    // Log masked URI for debugging (safe to log)
-    const maskedUri = (process.env.MONGODB_URI || "mongodb://local").replace(/:([^@]+)@/, ":****@");
-    console.log(`🔌 Attempting MongoDB connection to: ${maskedUri}`);
+  if (mongoose.connection.readyState === 2) {
+    // Already connecting, wait for it
+    console.log("⏳ MongoDB is connecting...");
+    // We can just return the promise of connect? 
+    // Actually, if we just call connect again, Mongoose handles buffering.
   }
 
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(uri, {
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is missing in environment variables.");
+  }
+
+  try {
+    console.log("🔌 Connecting to MongoDB (fresh connection)...");
+    const conn = await mongoose.connect(MONGODB_URI, {
       bufferCommands: true,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       maxPoolSize: 10,
       retryWrites: true,
       w: "majority",
-    }).then((mongoose) => {
-        console.log("✅ MongoDB Connected!");
-        return mongoose;
     });
+    console.log("✅ MongoDB Connected!");
+    return conn;
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    throw error;
   }
-
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    console.error("❌ MongoDB connection error:", e);
-    throw e;
-  }
-
-  return cached.conn;
 }
