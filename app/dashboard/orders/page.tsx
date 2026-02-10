@@ -1,30 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDashboardAuth } from "@/contexts/dashboard-auth-context";
-import { DashboardNav } from "@/components/dashboard-nav";
-import { Card, CardContent } from "@/components/ui/card";
+import { DashboardNav, MobilePageHeader } from "@/components/dashboard-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Search,
-  Filter,
   ArrowRight,
-  Plus,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
   Phone,
+  CheckCircle2,
+  Circle,
+  Shirt,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -44,6 +36,7 @@ interface OrderListItem {
   pickupTimeSlot: string;
   createdAt: string;
   services: { name: string; quantity: number }[];
+  deliveryDate?: string;
 }
 
 interface Pagination {
@@ -53,14 +46,21 @@ interface Pagination {
   totalPages: number;
 }
 
-export default function OrdersPage() {
+/** Simplified status step indicators for order cards */
+const STATUS_STEPS = ["CREATED", "PICKED_UP", "IN_LAUNDRY", "DELIVERED"] as const;
+const STATUS_STEP_LABELS = ["Ordered", "Picked Up", "Handover", "Delivered"];
+
+function OrdersPageContent() {
   const { isAuthenticated, isLoading: authLoading } = useDashboardAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [orders, setOrders] = useState<OrderListItem[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
-    page: 1, limit: 20, total: 0, totalPages: 0,
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 0,
   });
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -109,174 +109,223 @@ export default function OrdersPage() {
     fetchOrders();
   };
 
+  /** Check if a status step is completed for a given order status */
+  const isStepCompleted = (orderStatus: OrderStatus, stepStatus: string) => {
+    const orderIdx = ORDER_STATUSES.indexOf(orderStatus);
+    const stepIdx = ORDER_STATUSES.indexOf(stepStatus as OrderStatus);
+    return orderIdx >= stepIdx;
+  };
+
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-950">
-        <div className="md:ml-64 p-4 md:p-6 lg:p-8 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <Skeleton className="h-8 w-48 bg-gray-900" />
-              <Skeleton className="h-4 w-32 bg-gray-900" />
-            </div>
-          </div>
-          <div className="space-y-4">
-            <Skeleton className="h-10 w-full bg-gray-900 rounded-xl" />
-            <div className="flex gap-2 overflow-hidden">
-               {[1,2,3,4,5].map(i => <Skeleton key={i} className="h-8 w-20 flex-shrink-0 bg-gray-900 rounded-full" />)}
-            </div>
-          </div>
-          <div className="space-y-3">
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white">
+        <div className="p-5 pt-20 space-y-4 max-w-lg mx-auto">
+          <Skeleton className="h-6 w-40 bg-emerald-100/50 rounded-xl" />
+          <Skeleton className="h-11 w-full bg-gray-100 rounded-2xl" />
+          <div className="flex gap-2">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-28 bg-gray-900 rounded-xl" />
+              <Skeleton
+                key={i}
+                className="h-9 w-24 bg-gray-100 rounded-full flex-shrink-0"
+              />
             ))}
           </div>
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-40 bg-gray-100 rounded-2xl" />
+          ))}
         </div>
       </div>
     );
   }
   if (!isAuthenticated) return null;
 
+  // Filter pills config
+  const filterPills = [
+    { value: "all", label: "All orders" },
+    { value: "IN_LAUNDRY", label: "Processing" },
+    { value: "DELIVERED", label: "Completed" },
+    { value: "CREATED", label: "New" },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white">
+      {/* Custom header for Orders page */}
+      <MobilePageHeader title="Order History" backHref="/dashboard" />
       <DashboardNav />
 
-      <main className="pt-14 md:pt-0 md:ml-64">
-        <div className="p-4 md:p-6 lg:p-8 space-y-4">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold text-white">Orders</h1>
-              <p className="text-sm text-gray-400 mt-0.5">
-                {pagination.total} total orders
-              </p>
-            </div>
+      <main className="pt-16 pb-24 md:pt-0 md:ml-64 md:pb-8">
+        <div className="p-5 pt-3 md:p-6 lg:p-8 space-y-4 max-w-lg mx-auto md:max-w-none">
+          {/* Desktop header */}
+          <div className="hidden md:block">
+            <h1 className="text-xl font-bold text-gray-800">Order History</h1>
+            <p className="text-sm text-gray-400 mt-0.5">
+              {pagination.total} total orders
+            </p>
           </div>
 
-          {/* Filters — horizontal scroll on mobile */}
-          <div className="space-y-3">
-            {/* Search bar */}
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name, phone, or order #"
-                className="pl-10 bg-gray-900 border-gray-800 text-white h-11 rounded-xl placeholder:text-gray-600"
-              />
-            </form>
+          {/* Search bar */}
+          <form onSubmit={handleSearch} className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-emerald-500 transition-colors" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by order ID or customer..."
+              className="w-full pl-11 pr-4 h-14 bg-white/70 backdrop-blur-md border border-gray-100 text-gray-800 rounded-3xl placeholder:text-gray-400 text-sm focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-400 transition-all shadow-sm"
+            />
+          </form>
 
-            {/* Status filter — scrollable pills */}
-            <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+          {/* Filter pills */}
+          <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 scrollbar-hide">
+            {filterPills.map((pill) => (
               <button
+                key={pill.value}
                 onClick={() => {
-                  setStatusFilter("all");
+                  setStatusFilter(pill.value);
                   setPagination((p) => ({ ...p, page: 1 }));
                 }}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all ${
-                  statusFilter === "all"
-                    ? "bg-emerald-600 text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ${
+                  statusFilter === pill.value
+                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-105"
+                    : "bg-white/80 text-gray-500 border border-gray-100 hover:bg-white hover:border-emerald-200"
                 }`}
               >
-                All
+                {pill.label}
               </button>
-              {ORDER_STATUSES.map((status) => (
-                <button
-                  key={status}
-                  onClick={() => {
-                    setStatusFilter(status);
-                    setPagination((p) => ({ ...p, page: 1 }));
-                  }}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
-                    statusFilter === status
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                  }`}
-                >
-                  {ORDER_STATUS_LABELS[status]}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
 
-          {/* Order List — Card-based for mobile */}
+          {/* Order Cards */}
           {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3, 4].map((i) => (
-                <Skeleton key={i} className="h-28 bg-gray-900 rounded-xl" />
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-48 bg-gray-100/50 rounded-3xl" />
               ))}
             </div>
           ) : orders.length === 0 ? (
-            <div className="text-center py-16">
-              <ClipboardList className="h-16 w-16 text-gray-700 mx-auto mb-4" />
-              <p className="text-gray-400 font-medium">No orders found</p>
-              <p className="text-gray-600 text-sm mt-1">
+            <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ClipboardList className="h-8 w-8 text-gray-300" />
+              </div>
+              <p className="text-gray-500 font-medium">No orders found</p>
+              <p className="text-gray-400 text-xs mt-1">
                 {statusFilter !== "all"
-                  ? "Try changing the status filter"
-                  : "Orders placed by customers will appear here"}
+                  ? "Try changing the filter"
+                  : "Orders placed will appear here"}
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {orders.map((order) => (
-                <Link
+                <div
                   key={order._id}
-                  href={`/dashboard/orders/${order._id}`}
+                  className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden p-5 md:p-6"
                 >
-                  <Card className="bg-gray-900 border-gray-800 hover:bg-gray-800/70 transition-all cursor-pointer active:scale-[0.99]">
-                    <CardContent className="p-4">
-                      {/* Row 1: Order # and Status */}
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-white">
-                          {order.orderNumber}
-                        </span>
-                        <Badge
-                          className={`${ORDER_STATUS_COLORS[order.status]} text-[10px]`}
-                        >
-                          {ORDER_STATUS_LABELS[order.status]}
-                        </Badge>
-                      </div>
-
-                      {/* Row 2: Customer name and amount */}
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-sm text-gray-300 font-medium truncate pr-4">
-                          {order.customer.name}
-                        </p>
-                        <span className="text-sm font-semibold text-emerald-400 flex-shrink-0">
-                          ₹{order.totalAmount}
-                        </span>
-                      </div>
-
-                      {/* Row 3: Services & Date */}
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span className="truncate pr-4">
-                          {order.services
-                            .map((s) => `${s.name}${s.quantity > 1 ? ` ×${s.quantity}` : ""}`)
-                            .join(", ")}
-                        </span>
-                        <span className="flex-shrink-0">
-                          {new Date(order.pickupDate).toLocaleDateString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
+                  {/* Card header */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="text-lg font-bold text-gray-900 leading-none">
+                            Order {order.orderNumber}
+                          </h3>
+                          <Badge
+                            className={`${
+                              ORDER_STATUS_COLORS[order.status]
+                            } text-[10px] rounded-full px-2.5 py-0.5 font-bold uppercase tracking-wider border-none shadow-sm`}
+                          >
+                            {ORDER_STATUS_LABELS[order.status]}
+                          </Badge>
+                        </div>
+                        <p className="text-xs font-medium text-gray-400 italic">
+                          Placed on{" "}
+                          {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
                           })}
-                        </span>
+                        </p>
                       </div>
+                      
+                      <Link
+                        href={`/dashboard/orders/${order._id}`}
+                        className="flex-shrink-0 text-[11px] font-bold text-emerald-700 bg-emerald-50/50 border border-emerald-100 rounded-2xl px-4 py-2 hover:bg-emerald-100 transition-all active:scale-95 shadow-sm"
+                      >
+                        Track Order
+                      </Link>
+                    </div>
 
-                      {/* Row 4: Phone (tap to call) */}
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-800">
-                        <a
-                          href={`tel:${order.customer.phone}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300"
-                        >
-                          <Phone className="h-3 w-3" />
-                          {order.customer.phone}
-                        </a>
-                        <ArrowRight className="h-4 w-4 text-gray-600" />
+                    {/* Service info */}
+                    <div className="flex items-center gap-4 bg-gray-50/50 p-3 rounded-2xl">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Shirt className="h-6 w-6 text-emerald-500" />
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-gray-800 truncate">
+                          {order.services?.[0]?.name || "Laundry Service"}
+                        </p>
+                        <p className="text-xs text-gray-500 font-medium">
+                          {order.services.reduce((acc, s) => acc + s.quantity, 0)}{" "}
+                          items • ₹{order.totalAmount}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Step indicator */}
+                    <div className="pt-2">
+                      <div className="flex items-center w-full">
+                        {STATUS_STEPS.map((step, idx) => {
+                          const completed = isStepCompleted(order.status, step);
+                          return (
+                            <div
+                              key={step}
+                              className="flex flex-col items-center flex-1"
+                            >
+                              <div className="flex items-center w-full">
+                                {idx > 0 && (
+                                  <div
+                                    className={`flex-1 h-[3px] rounded-full ${
+                                      completed
+                                        ? "bg-emerald-500"
+                                        : "bg-gray-100"
+                                    } transition-colors mx-0.5`}
+                                  />
+                                )}
+                                <div
+                                  className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                    completed
+                                      ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20"
+                                      : "bg-gray-100 text-gray-300"
+                                  } transition-all duration-500`}
+                                >
+                                  {completed ? (
+                                    <CheckCircle2 className="h-4 w-4" />
+                                  ) : (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-current" />
+                                  )}
+                                </div>
+                                {idx < STATUS_STEPS.length - 1 && (
+                                  <div
+                                    className={`flex-1 h-[3px] rounded-full ${
+                                      isStepCompleted(
+                                        order.status,
+                                        STATUS_STEPS[idx + 1]
+                                      )
+                                        ? "bg-emerald-500"
+                                        : "bg-gray-100"
+                                    } transition-colors mx-0.5`}
+                                  />
+                                )}
+                              </div>
+                              <span className={`text-[10px] mt-2 font-bold ${completed ? 'text-gray-600' : 'text-gray-300'}`}>
+                                {STATUS_STEP_LABELS[idx]}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -291,12 +340,12 @@ export default function OrdersPage() {
                 onClick={() =>
                   setPagination((p) => ({ ...p, page: p.page - 1 }))
                 }
-                className="bg-gray-900 border-gray-800 text-gray-300 hover:bg-gray-800 rounded-xl"
+                className="bg-white border-gray-200 text-gray-600 hover:bg-gray-50 rounded-full h-10 w-10 p-0"
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <span className="text-sm text-gray-400">
-                Page {pagination.page} of {pagination.totalPages}
+              <span className="text-sm text-gray-400 font-medium">
+                {pagination.page} of {pagination.totalPages}
               </span>
               <Button
                 variant="outline"
@@ -305,7 +354,7 @@ export default function OrdersPage() {
                 onClick={() =>
                   setPagination((p) => ({ ...p, page: p.page + 1 }))
                 }
-                className="bg-gray-900 border-gray-800 text-gray-300 hover:bg-gray-800 rounded-xl"
+                className="bg-white border-gray-200 text-gray-600 hover:bg-gray-50 rounded-full h-10 w-10 p-0"
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
@@ -314,5 +363,21 @@ export default function OrdersPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white">
+        <div className="p-5 pt-20 space-y-4 max-w-lg mx-auto">
+          <Skeleton className="h-10 w-full rounded-2xl" />
+          <Skeleton className="h-40 w-full rounded-3xl" />
+          <Skeleton className="h-40 w-full rounded-3xl" />
+        </div>
+      </div>
+    }>
+      <OrdersPageContent />
+    </Suspense>
   );
 }

@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDashboardAuth } from "@/contexts/dashboard-auth-context";
-import { DashboardNav } from "@/components/dashboard-nav";
-import { Card, CardContent } from "@/components/ui/card";
+import { DashboardNav, MobilePageHeader } from "@/components/dashboard-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,8 +14,6 @@ import {
   MapPin,
   CheckCircle2,
   Loader2,
-  Camera,
-  Navigation as NavIcon,
 } from "lucide-react";
 import type { TaskType, TaskStatus } from "@/lib/constants";
 
@@ -45,7 +42,11 @@ const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
 };
 
 export default function RiderTasksPage() {
-  const { user, isAuthenticated, isLoading: authLoading } = useDashboardAuth();
+  const {
+    user,
+    isAuthenticated,
+    isLoading: authLoading,
+  } = useDashboardAuth();
   const router = useRouter();
   const [tasks, setTasks] = useState<RiderTaskItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,10 @@ export default function RiderTasksPage() {
     }
   };
 
-  const handleStatusUpdate = async (taskId: string, newStatus: TaskStatus) => {
+  const handleStatusUpdate = async (
+    taskId: string,
+    newStatus: TaskStatus
+  ) => {
     setUpdatingId(taskId);
     try {
       const res = await fetch(`/api/rider-tasks/${taskId}`, {
@@ -99,20 +103,20 @@ export default function RiderTasksPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-950">
-        <div className="md:ml-64 p-4 md:p-6 lg:p-8 space-y-6">
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-48 bg-gray-900" />
-            <Skeleton className="h-4 w-32 bg-gray-900" />
-          </div>
-          <div className="flex gap-2 overflow-hidden">
-             {[1,2,3,4].map(i => <Skeleton key={i} className="h-8 w-24 flex-shrink-0 bg-gray-900 rounded-full" />)}
-          </div>
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-36 bg-gray-900 rounded-xl" />
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white">
+        <div className="p-5 pt-20 space-y-4 max-w-lg mx-auto">
+          <Skeleton className="h-6 w-40 bg-gray-100 rounded-xl" />
+          <div className="flex gap-2">
+            {[1, 2, 3, 4].map((i) => (
+              <Skeleton
+                key={i}
+                className="h-9 w-24 flex-shrink-0 bg-gray-100 rounded-full"
+              />
             ))}
           </div>
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-40 bg-gray-100 rounded-2xl" />
+          ))}
         </div>
       </div>
     );
@@ -123,14 +127,18 @@ export default function RiderTasksPage() {
   const completedTasks = tasks.filter((t) => t.status === "completed");
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white">
+      <MobilePageHeader
+        title={user?.role === "rider" ? "My Tasks" : "Rider Tasks"}
+        backHref="/dashboard"
+      />
       <DashboardNav />
 
-      <main className="pt-14 md:pt-0 md:ml-64">
-        <div className="p-4 md:p-6 lg:p-8 space-y-4">
-          {/* Header */}
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold text-white">
+      <main className="pt-16 pb-24 md:pt-0 md:ml-64 md:pb-8">
+        <div className="p-5 pt-3 md:p-6 lg:p-8 space-y-4 max-w-lg mx-auto md:max-w-none">
+          {/* Desktop header */}
+          <div className="hidden md:block">
+            <h1 className="text-xl font-bold text-gray-800">
               {user?.role === "rider" ? "My Tasks" : "Rider Tasks"}
             </h1>
             <p className="text-sm text-gray-400 mt-0.5">
@@ -139,18 +147,20 @@ export default function RiderTasksPage() {
           </div>
 
           {/* Filter pills */}
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-5 px-5 md:mx-0 md:px-0 scrollbar-hide">
             {["all", "assigned", "in_progress", "completed"].map((s) => (
               <button
                 key={s}
                 onClick={() => setFilter(s)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all capitalize ${
+                className={`flex-shrink-0 px-5 py-2.5 rounded-full text-xs font-semibold transition-all capitalize ${
                   filter === s
-                    ? "bg-emerald-600 text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                    ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+                    : "bg-white text-gray-500 border border-gray-200 hover:bg-gray-50"
                 }`}
               >
-                {s === "all" ? "All" : TASK_STATUS_LABELS[s as TaskStatus]}
+                {s === "all"
+                  ? "All"
+                  : TASK_STATUS_LABELS[s as TaskStatus]}
               </button>
             ))}
           </div>
@@ -159,35 +169,40 @@ export default function RiderTasksPage() {
           {loading ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-36 bg-gray-900 rounded-xl" />
+                <Skeleton
+                  key={i}
+                  className="h-40 bg-gray-100/50 rounded-2xl"
+                />
               ))}
             </div>
           ) : tasks.length === 0 ? (
             <div className="text-center py-16">
-              <Truck className="h-16 w-16 text-gray-700 mx-auto mb-4" />
-              <p className="text-gray-400 font-medium">No tasks found</p>
-              <p className="text-gray-600 text-sm mt-1">
+              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="h-8 w-8 text-gray-300" />
+              </div>
+              <p className="text-gray-500 font-medium">No tasks found</p>
+              <p className="text-gray-400 text-xs mt-1">
                 {user?.role === "rider"
-                  ? "You'll see tasks once they're assigned to you"
-                  : "Create tasks by assigning riders to orders"}
+                  ? "You'll see tasks once assigned"
+                  : "Assign riders to orders to create tasks"}
               </p>
             </div>
           ) : (
             <div className="space-y-3">
               {tasks.map((task) => (
-                <Card
+                <div
                   key={task._id}
-                  className="bg-gray-900 border-gray-800 overflow-hidden"
+                  className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
                 >
-                  <CardContent className="p-4 space-y-3">
-                    {/* Header row */}
+                  <div className="p-4 space-y-3">
+                    {/* Header */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <div
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                             task.type === "pickup"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-orange-500/20 text-orange-400"
+                              ? "bg-blue-50 text-blue-600"
+                              : "bg-orange-50 text-orange-600"
                           }`}
                         >
                           {task.type === "pickup" ? (
@@ -197,24 +212,26 @@ export default function RiderTasksPage() {
                           )}
                         </div>
                         <div>
-                          <span className="text-sm font-semibold text-white capitalize">
+                          <span className="text-sm font-semibold text-gray-800 capitalize">
                             {task.type}
                           </span>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-400">
                             {task.orderNumber}
                           </p>
                         </div>
                       </div>
                       <Badge
-                        className={`${TASK_STATUS_COLORS[task.status]} text-[10px]`}
+                        className={`${
+                          TASK_STATUS_COLORS[task.status]
+                        } text-[10px] rounded-full px-2.5`}
                       >
                         {TASK_STATUS_LABELS[task.status]}
                       </Badge>
                     </div>
 
                     {/* Customer info */}
-                    <div className="bg-gray-800/50 rounded-xl p-3 space-y-2">
-                      <p className="text-sm font-medium text-white">
+                    <div className="bg-gray-50/80 rounded-xl p-3 space-y-2">
+                      <p className="text-sm font-medium text-gray-800">
                         {task.customer.name}
                       </p>
                       <div className="flex items-start gap-2 text-xs text-gray-400">
@@ -224,27 +241,25 @@ export default function RiderTasksPage() {
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      {/* Call button */}
+                    <div className="flex flex-col sm:flex-row gap-2.5">
                       <a
                         href={`tel:${task.customer.phone}`}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-gray-800 rounded-2xl text-base text-emerald-400 font-bold hover:bg-gray-700 active:scale-[0.98] transition-all"
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-2xl text-sm text-emerald-600 font-semibold hover:bg-emerald-50 active:scale-[0.98] transition-all"
                       >
-                        <Phone className="h-5 w-5" />
+                        <Phone className="h-4 w-4" />
                         Call Customer
                       </a>
 
-                      {/* Status update */}
                       {task.status === "assigned" && (
                         <Button
                           onClick={() =>
                             handleStatusUpdate(task._id, "in_progress")
                           }
                           disabled={updatingId === task._id}
-                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl h-auto py-4 text-base font-bold shadow-lg shadow-emerald-500/20 active:scale-[0.98]"
+                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl h-auto py-3 text-sm font-semibold shadow-md shadow-emerald-500/20 active:scale-[0.98]"
                         >
                           {updatingId === task._id ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                           ) : (
                             <>Start Pickup</>
                           )}
@@ -257,28 +272,28 @@ export default function RiderTasksPage() {
                             handleStatusUpdate(task._id, "completed")
                           }
                           disabled={updatingId === task._id}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl h-auto py-4 text-base font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98]"
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl h-auto py-3 text-sm font-semibold shadow-md shadow-blue-500/20 active:scale-[0.98]"
                         >
                           {updatingId === task._id ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                           ) : (
                             <>
-                              <CheckCircle2 className="h-5 w-5 mr-2" />
-                              Mark as Completed
+                              <CheckCircle2 className="h-4 w-4 mr-1.5" />
+                              Complete
                             </>
                           )}
                         </Button>
                       )}
 
                       {task.status === "completed" && (
-                        <div className="flex-1 flex items-center justify-center gap-2 py-4 bg-emerald-500/10 rounded-2xl text-base text-emerald-400 font-bold border border-emerald-500/20">
-                          <CheckCircle2 className="h-5 w-5" />
-                          Task Completed
+                        <div className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-50 rounded-2xl text-sm text-emerald-600 font-semibold border border-emerald-100">
+                          <CheckCircle2 className="h-4 w-4" />
+                          Completed
                         </div>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}

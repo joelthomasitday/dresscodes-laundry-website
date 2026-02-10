@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Order } from "@/models/Order";
+import { Notification } from "@/models/Notification";
 import { getCurrentUser } from "@/lib/auth";
 
 /**
@@ -131,6 +132,19 @@ export async function POST(req: NextRequest) {
         },
       ],
     });
+
+    // Create in-app notification for admin
+    try {
+      await Notification.create({
+        type: "NEW_ORDER",
+        title: "New Order Received",
+        message: `Order #${order.orderNumber} has been placed by ${order.customer.name}`,
+        orderId: order._id,
+        channel: "in_app",
+      });
+    } catch (notifErr) {
+      console.error("Failed to create notification:", notifErr);
+    }
 
     return NextResponse.json(
       { success: true, order: { orderNumber: order.orderNumber, id: order._id } },

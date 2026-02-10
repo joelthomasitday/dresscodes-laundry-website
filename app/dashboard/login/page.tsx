@@ -6,7 +6,6 @@ import { useDashboardAuth } from "@/contexts/dashboard-auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
 export default function DashboardLoginPage() {
@@ -39,36 +38,31 @@ export default function DashboardLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      {/* Subtle gradient background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-emerald-950/30" />
-
-      <Card className="w-full max-w-sm bg-gray-900/80 backdrop-blur-xl border-gray-800 relative z-10 shadow-2xl">
-        <CardHeader className="text-center space-y-4 pb-2">
-          {/* Logo */}
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/20">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50/80 via-white to-white flex items-center justify-center p-5">
+      <div className="w-full max-w-sm">
+        {/* Logo + Title */}
+        <div className="text-center mb-8">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-5">
             <ShieldCheck className="h-8 w-8 text-white" />
           </div>
-          <div>
-            <CardTitle className="text-white text-2xl font-bold">
-              dresscode
-            </CardTitle>
-            <p className="text-gray-400 text-sm mt-1">
-              Management Dashboard
-            </p>
-          </div>
-        </CardHeader>
+          <h1 className="text-2xl font-bold text-gray-800">dresscode</h1>
+          <p className="text-gray-400 text-sm mt-1">Management Dashboard</p>
+        </div>
 
-        <CardContent>
+        {/* Card */}
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl text-center">
+              <div className="bg-red-50 border border-red-100 text-red-500 text-sm px-4 py-3 rounded-2xl text-center">
                 {error}
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-300 text-sm">
+              <Label
+                htmlFor="email"
+                className="text-gray-500 text-xs font-medium"
+              >
                 Email Address
               </Label>
               <Input
@@ -76,7 +70,7 @@ export default function DashboardLoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white h-12 rounded-xl focus:border-emerald-500 focus:ring-emerald-500/20 placeholder:text-gray-500"
+                className="bg-gray-50 border-gray-200 text-gray-800 h-12 rounded-xl focus:border-emerald-400 focus:ring-emerald-500/20 placeholder:text-gray-400"
                 placeholder="admin@dresscodes.in"
                 required
                 disabled={isLoading}
@@ -85,7 +79,10 @@ export default function DashboardLoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300 text-sm">
+              <Label
+                htmlFor="password"
+                className="text-gray-500 text-xs font-medium"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -94,7 +91,7 @@ export default function DashboardLoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-gray-800/50 border-gray-700 text-white h-12 rounded-xl focus:border-emerald-500 focus:ring-emerald-500/20 pr-12 placeholder:text-gray-500"
+                  className="bg-gray-50 border-gray-200 text-gray-800 h-12 rounded-xl focus:border-emerald-400 focus:ring-emerald-500/20 pr-12 placeholder:text-gray-400"
                   placeholder="Enter your password"
                   required
                   disabled={isLoading}
@@ -103,7 +100,7 @@ export default function DashboardLoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
                   tabIndex={-1}
                 >
                   {showPassword ? (
@@ -117,7 +114,7 @@ export default function DashboardLoginPage() {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-emerald-600/20"
+              className="w-full h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-500/20 active:scale-[0.98]"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -131,11 +128,11 @@ export default function DashboardLoginPage() {
             </Button>
           </form>
 
-          <p className="text-gray-600 text-xs text-center mt-6">
+          <p className="text-gray-400 text-xs text-center mt-6">
             Protected area — authorized personnel only
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
