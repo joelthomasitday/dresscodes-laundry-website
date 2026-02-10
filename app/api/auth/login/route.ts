@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
@@ -18,6 +19,15 @@ export async function POST(req: NextRequest) {
     }
 
     await connectDB();
+
+    // Ensure connection is established
+    if (mongoose.connection.readyState !== 1) {
+      console.error("Database connection failed or not established.");
+      return NextResponse.json(
+        { error: "Database connection unavailable in production environment" },
+        { status: 503 }
+      );
+    }
 
     const user = await User.findOne({ email: email.toLowerCase(), isActive: true });
     if (!user) {

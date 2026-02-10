@@ -21,7 +21,7 @@ interface DashboardAuthContextType {
   user: DashboardUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
 }
 
@@ -63,7 +63,7 @@ export function DashboardAuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, [checkAuth]);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -71,19 +71,20 @@ export function DashboardAuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
         setUser({
           userId: data.user.id,
           email: data.user.email,
           role: data.user.role,
           name: data.user.name,
         });
-        return true;
+        return { success: true };
       }
-      return false;
-    } catch {
-      return false;
+      return { success: false, error: data.error || "Login failed" };
+    } catch (err: any) {
+      return { success: false, error: err.message || "Network error" };
     }
   };
 

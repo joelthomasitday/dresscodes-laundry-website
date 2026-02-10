@@ -22,18 +22,29 @@ if (!global.mongooseCache) {
  * Connect to MongoDB. Returns cached connection if already connected.
  */
 export async function connectDB(): Promise<typeof mongoose> {
-  if (cached.conn) return cached.conn;
+  if (cached.conn) {
+    return cached.conn;
+  }
 
   const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dresscode";
 
   if (!process.env.MONGODB_URI && process.env.NODE_ENV === "production") {
-    console.warn("MONGODB_URI is not defined. Skipping connection during build.");
-    return mongoose;
+    console.error("❌ CRITICAL: MONGODB_URI environment variable is missing!");
+  } else {
+    // Log masked URI for debugging (safe to log)
+    const maskedUri = (process.env.MONGODB_URI || "mongodb://local").replace(/:([^@]+)@/, ":****@");
+    console.log(`🔌 Attempting MongoDB connection to: ${maskedUri}`);
   }
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(uri, {
       bufferCommands: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+    }).then((mongoose) => {
+        console.log("✅ MongoDB Connected!");
+        return mongoose;
     });
   }
 
@@ -41,6 +52,7 @@ export async function connectDB(): Promise<typeof mongoose> {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
+    console.error("❌ MongoDB connection error:", e);
     throw e;
   }
 
