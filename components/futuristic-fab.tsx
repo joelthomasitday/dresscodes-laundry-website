@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
 
 interface FuturisticFabProps {
   onClick: () => void;
@@ -51,26 +52,24 @@ export function FuturisticFab({ onClick, isOpen }: FuturisticFabProps) {
           transform: `translate(${mousePos.x}px, ${mousePos.y}px) scale(${isHovered ? 1.05 : 1})`,
         }}
         className={cn(
-          "relative h-[70px] w-[70px] rounded-full flex items-center justify-center transition-transform duration-200 ease-out",
-          "group overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.2)]",
-          "bg-gradient-to-br from-[#134e43] via-[#0F3F36] to-[#0a2e28] border border-white/10"
+          "relative h-16 w-16 rounded-full flex items-center justify-center transition-all duration-300",
+          "group overflow-hidden shadow-lg hover:shadow-xl",
+          "bg-[#0F3F36] border border-white/10"
         )}
       >
-        {/* Glass Effect Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-40" />
+        {/* Subtle Shimmer */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent" />
         
         {/* Minimal Content: Sparkle Icon + AI Label */}
-        <div className="relative z-10 flex flex-col items-center justify-center -gap-0.5">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">
-            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-          </svg>
-          <span className="text-[11px] font-black uppercase tracking-[0.25em] text-emerald-50 drop-shadow-sm ml-0.5">
+        <div className="relative z-10 flex flex-col items-center justify-center">
+          <Sparkles className="h-6 w-6 text-white" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/90 -mt-0.5">
             AI
           </span>
         </div>
 
-        {/* High-end Shimmer */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-150%] skew-x-[-25deg] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
+        {/* Shimmer effect on hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       </button>
 
       <style jsx>{`
