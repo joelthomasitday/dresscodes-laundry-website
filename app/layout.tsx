@@ -79,7 +79,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
-        <WhatsAppFloat />
+
         <AiSuperChatbot />
         <Toaster />
       </body>

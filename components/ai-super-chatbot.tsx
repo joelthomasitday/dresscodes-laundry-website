@@ -35,6 +35,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { getWhatsAppHref } from "@/lib/phone";
+import { FuturisticFab } from "./futuristic-fab";
 
 // ── Types (new multi-garment schema) ───────────────────────────
 interface GarmentDetail {
@@ -81,31 +83,37 @@ interface ChatMessage {
 
 // ── Intent Config ──────────────────────────────────────────────
 const INTENT_CONFIG: Record<string, { icon: React.ElementType; color: string; bgColor: string; label: string }> = {
-  cloth_analysis: { icon: Shirt, color: "text-violet-600", bgColor: "bg-violet-50 border-violet-100", label: "Garment Analysis" },
-  price_estimate: { icon: DollarSign, color: "text-emerald-600", bgColor: "bg-emerald-50 border-emerald-100", label: "Price Estimate" },
-  create_booking: { icon: CalendarCheck, color: "text-blue-600", bgColor: "bg-blue-50 border-blue-100", label: "Booking Assistant" },
-  track_order: { icon: Package, color: "text-amber-600", bgColor: "bg-amber-50 border-amber-100", label: "Order Tracking" },
-  faq: { icon: HelpCircle, color: "text-cyan-600", bgColor: "bg-cyan-50 border-cyan-100", label: "FAQ" },
-  general_chat: { icon: MessageSquare, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "General" },
+  cloth_analysis: { icon: Shirt, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "Analysis" },
+  price_estimate: { icon: DollarSign, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "Quote" },
+  create_booking: { icon: CalendarCheck, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "Booking" },
+  track_order: { icon: Package, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "Tracking" },
+  faq: { icon: HelpCircle, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "FAQ" },
+  general_chat: { icon: MessageSquare, color: "text-slate-600", bgColor: "bg-slate-50 border-slate-100", label: "Assistant" },
 };
 
-// ── Quick action suggestions ──────────────────────────────────
-const QUICK_ACTIONS = [
-  { label: "📷 Analyze Garment", message: "", isImageTrigger: true },
-  { label: "💰 Get Price Quote", message: "What are your pricing options?" },
-  { label: "📅 Book Pickup", message: "I want to book a laundry pickup" },
-  { label: "📦 Track Order", message: "I want to track my order" },
-  { label: "❓ Services Info", message: "What services do you offer?" },
-];
+// Quick actions removed for premium minimal UI
 
 // ── Missing field icon map ────────────────────────────────────
-const MISSING_FIELD_ICON: Record<string, React.ElementType> = {
+const WhatsAppIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488" />
+  </svg>
+);
+
+const MISSING_FIELD_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
   name: UserCircle,
-  phone: Phone,
+  phone: WhatsAppIcon,
   address: MapPin,
   cloth_type: Shirt,
   service: Sparkles,
 };
+
+const QUICK_ACTIONS = [
+  { label: "Book Pickup", icon: CalendarCheck, message: "I want to book a pickup" },
+  { label: "Price List", icon: DollarSign, message: "Show me the price list" },
+  { label: "Track Order", icon: Package, message: "Track my order" },
+  { label: "Analyze Cloth", icon: Camera, message: "Analyze my garment" },
+];
 
 // ── ID Generator ───────────────────────────────────────────────
 let idCounter = 0;
@@ -133,7 +141,7 @@ export function AiSuperChatbot() {
       {
         id: generateId(),
         role: "assistant",
-        content: "Welcome to DressCodes! 👕✨ I'm your AI laundry assistant. I can analyze garments from photos, estimate prices, help book pickups, track orders, and answer any questions. What can I help you with?",
+        content: "Hi there! I'm your DressCodes AI. How can I help you today?",
         timestamp: new Date(),
       },
     ]);
@@ -213,7 +221,6 @@ export function AiSuperChatbot() {
     setInput("");
     setPendingImages([]);
     setIsLoading(true);
-    setShowQuickActions(false);
 
     try {
       const apiMessages = messages
@@ -265,12 +272,8 @@ export function AiSuperChatbot() {
     sendMessage();
   };
 
-  const handleQuickAction = (action: typeof QUICK_ACTIONS[0]) => {
-    if (action.isImageTrigger) {
-      fileInputRef.current?.click();
-    } else {
-      sendMessage(action.message);
-    }
+  const handleQuickAction = (message: string) => {
+    sendMessage(message);
   };
 
   // ── Render Helpers ─────────────────────────────────────────
@@ -288,68 +291,69 @@ export function AiSuperChatbot() {
   // ── NEW: Render multiple garments ───────────────────────────
   const renderGarments = (data: StructuredResponse) => {
     if (!data.garments || data.garments.length === 0) return null;
-    // Filter out garments with no meaningful data
     const validGarments = data.garments.filter((g) => g.cloth_type);
     if (validGarments.length === 0) return null;
 
     return (
-      <div className="mt-2.5 space-y-2">
+      <div className="mt-4 space-y-4">
         {validGarments.map((garment, index) => (
-          <div key={index} className="p-3 rounded-xl bg-white border border-slate-100 space-y-2 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                <Shirt className="h-3 w-3" />
+          <div key={index} className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 ring-1 ring-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-50 pb-2.5">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-500">
+                <Shirt className="h-4 w-4 text-[#0F3F36]" />
                 {validGarments.length > 1 ? `Garment ${index + 1}` : "Garment Details"}
               </div>
               {validGarments.length > 1 && (
-                <Badge variant="outline" className="text-[9px] bg-violet-50 border-violet-100 text-violet-600">
+                <Badge className="bg-[#0F3F36] text-white border-none text-[10px] px-2 py-0.5">
                   {index + 1}/{validGarments.length}
                 </Badge>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <span className="text-slate-400 font-medium">Type:</span>
-                <span className="ml-1 font-bold text-slate-700 capitalize">{garment.cloth_type}</span>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Type</span>
+                <span className="text-sm font-bold text-slate-900 capitalize leading-none">{garment.cloth_type}</span>
               </div>
-              <div>
-                <span className="text-slate-400 font-medium">Category:</span>
-                <Badge variant="outline" className="ml-1 text-[10px] capitalize bg-teal-50 border-teal-100 text-teal-700">{garment.category || "unknown"}</Badge>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Category</span>
+                <span className="text-[11px] font-black text-[#0F3F36] uppercase tracking-wider">{garment.category || "General"}</span>
               </div>
-              <div>
-                <span className="text-slate-400 font-medium">Fabric:</span>
-                <span className="ml-1 font-semibold text-slate-600 capitalize">{garment.fabric_type}</span>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Fabric</span>
+                <span className="text-sm font-semibold text-slate-700 capitalize leading-none">{garment.fabric_type}</span>
               </div>
-              <div>
-                <span className="text-slate-400 font-medium">Complexity:</span>
-                <Badge variant="outline" className={cn("ml-1 text-[10px] capitalize",
-                  garment.complexity_level === "high" ? "bg-red-50 border-red-100 text-red-600" :
-                  garment.complexity_level === "medium" ? "bg-amber-50 border-amber-100 text-amber-600" :
-                  "bg-green-50 border-green-100 text-green-600"
-                )}>{garment.complexity_level || "N/A"}</Badge>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Complexity</span>
+                <div className="mt-0.5">
+                  <Badge variant="outline" className="text-[10px] h-5 bg-slate-50 border-slate-200 text-slate-600 px-2">
+                    {garment.complexity_level || "Standard"}
+                  </Badge>
+                </div>
               </div>
             </div>
+
             {garment.stain_detected && (
-              <div className="flex items-center gap-2 mt-1 px-2.5 py-1.5 bg-orange-50 border border-orange-100 rounded-lg">
-                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-                <span className="text-xs font-bold text-orange-700">
-                  Stain Detected: {garment.stain_type !== "none" ? garment.stain_type : "Unknown type"}
+              <div className="flex items-center gap-2.5 px-3 py-2.5 bg-red-50/50 border border-red-100 rounded-xl">
+                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-xs font-bold text-red-700">
+                  Stain: {garment.stain_type !== "none" ? garment.stain_type : "Detected"}
                 </span>
               </div>
             )}
+            
             {garment.stain_detected === false && (
-              <div className="flex items-center gap-2 mt-1 px-2.5 py-1.5 bg-emerald-50 border border-emerald-100 rounded-lg">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-xs font-semibold text-emerald-700">No stains detected</span>
+              <div className="flex items-center gap-2.5 px-3 py-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-bold text-emerald-700">Pristine - No stains</span>
               </div>
             )}
           </div>
         ))}
-        {/* Quantity summary */}
         {data.total_quantity_estimate && data.total_quantity_estimate > 1 && (
-          <div className="flex items-center justify-between px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-100 text-xs">
-            <span className="text-slate-500 font-medium">Total garments:</span>
-            <span className="font-bold text-slate-700">{data.total_quantity_estimate} items</span>
+          <div className="flex items-center justify-between px-4 py-3 bg-slate-900 rounded-xl text-white shadow-lg">
+            <span className="text-[11px] font-bold uppercase tracking-widest opacity-70">Bag Total</span>
+            <span className="text-sm font-black">{data.total_quantity_estimate} Items</span>
           </div>
         )}
       </div>
@@ -359,18 +363,18 @@ export function AiSuperChatbot() {
   const renderServiceRecommendation = (data: StructuredResponse) => {
     if (!data.service_recommendation?.recommended_service) return null;
     return (
-      <div className="mt-2 p-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-md">
+      <div className="mt-2 p-3 rounded-xl bg-[#0F3F36] text-white shadow-md">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-teal-200 flex items-center gap-1">
+            <div className="text-[10px] font-black uppercase tracking-widest opacity-60 flex items-center gap-1">
               <Sparkles className="h-3 w-3" /> Recommended Service
             </div>
-            <p className="text-base font-black capitalize mt-0.5 tracking-tight">
+            <p className="text-base font-bold capitalize mt-0.5 tracking-tight">
               {data.service_recommendation.recommended_service.replace(/_/g, " ")}
             </p>
           </div>
           {data.service_recommendation.express_recommended && (
-            <Badge className="bg-yellow-400 text-yellow-900 border-none text-[10px] font-black gap-1">
+            <Badge className="bg-white/20 text-white border-none text-[10px] font-bold gap-1">
               <Zap className="h-3 w-3" /> Express
             </Badge>
           )}
@@ -408,76 +412,50 @@ export function AiSuperChatbot() {
     // ── Booking Created Successfully ──
     if (data.booking_status === "created") {
       return (
-        <div className="mt-2 p-3 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 shadow-md space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          {/* Success header */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-md">
-              <CheckCircle2 className="h-5 w-5 text-white" />
+        <div className="mt-2 p-4 rounded-xl bg-white border border-[#0F3F36]/10 shadow-md space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#0F3F36] flex items-center justify-center shadow-md">
+              <CheckCircle2 className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-xs font-black text-green-800 uppercase tracking-wider">Booking Confirmed!</p>
+              <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Booking Confirmed!</p>
               {data.booking_id && (
-                <p className="text-[11px] font-mono font-bold text-green-600">{data.booking_id}</p>
+                <p className="text-[11px] font-mono text-slate-400">{data.booking_id}</p>
               )}
             </div>
           </div>
 
-          {/* Booking details card */}
-          <div className="space-y-1.5 text-xs">
+          <div className="space-y-1.5 text-xs text-slate-600 pt-1">
             {data.customer_details?.name && (
-              <div className="flex items-center gap-2 text-green-800">
-                <UserCircle className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-semibold">{data.customer_details.name}</span>
-              </div>
-            )}
-            {data.customer_details?.address && (
-              <div className="flex items-center gap-2 text-green-800">
-                <MapPin className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-medium">{data.customer_details.address}</span>
+              <div className="flex items-center gap-2">
+                <UserCircle className="h-4 w-4 text-slate-400" />
+                <span className="font-medium text-slate-900">{data.customer_details.name}</span>
               </div>
             )}
             {data.customer_details?.phone && (
-              <div className="flex items-center gap-2 text-green-800">
-                <Phone className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-medium">{data.customer_details.phone}</span>
+              <div className="flex items-center gap-2">
+                <WhatsAppIcon className="h-4 w-4 text-slate-400" />
+                <span className="font-medium text-slate-900">{data.customer_details.phone}</span>
               </div>
             )}
-            {data.service_recommendation?.recommended_service && (
-              <div className="flex items-center gap-2 text-green-800">
-                <Sparkles className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-bold capitalize">{data.service_recommendation.recommended_service.replace(/_/g, " ")}</span>
+            {data.customer_details?.address && (
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-slate-400" />
+                <span className="font-medium text-slate-900 truncate">{data.customer_details.address}</span>
               </div>
             )}
-            {data.garments && data.garments.length > 0 && (
-              <div className="flex items-center gap-2 text-green-800">
-                <Shirt className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-medium capitalize">
-                  {data.garments.filter((g) => g.cloth_type).map((g) => g.cloth_type).join(", ") || "As described"}
-                </span>
-              </div>
-            )}
-            {data.pricing?.estimated_total_price != null && (
-              <div className="flex items-center gap-2 text-green-800">
-                <DollarSign className="h-3.5 w-3.5 text-green-500" />
-                <span className="font-black text-base text-emerald-700">₹{data.pricing.estimated_total_price}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2 font-bold text-[#0F3F36] text-sm mt-2 border-t border-slate-50 pt-2">
+              <DollarSign className="h-4 w-4" />
+              <span>Total: ₹{data.pricing?.estimated_total_price}</span>
+            </div>
           </div>
 
-          {/* Track order button */}
-          <div className="pt-1">
-            <button
-              className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs font-bold hover:from-green-700 hover:to-emerald-700 transition-all shadow-md active:scale-[0.98]"
-              onClick={() => {
-                if (data.booking_id) {
-                  sendMessage(`Track my order ${data.booking_id}`);
-                }
-              }}
-            >
-              <Package className="h-3.5 w-3.5" />
-              Track Your Order
-            </button>
-          </div>
+          <button
+            className="w-full px-4 py-2.5 rounded-lg bg-[#0F3F36] text-white text-[13px] font-bold hover:opacity-90 transition-all shadow-sm"
+            onClick={() => data.booking_id && sendMessage(`Track my order ${data.booking_id}`)}
+          >
+            Track Your Order
+          </button>
         </div>
       );
     }
@@ -485,14 +463,14 @@ export function AiSuperChatbot() {
     // ── Missing Information ──
     if (data.booking_status === "missing_information" && data.missing_fields && data.missing_fields.length > 0) {
       return (
-        <div className="mt-2 p-3 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 shadow-sm space-y-2 animate-in fade-in duration-300">
+        <div className="mt-2 p-3 rounded-xl bg-slate-50 border border-slate-100 shadow-sm space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-sm">
-              <AlertCircle className="h-4 w-4 text-white" />
+            <div className="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center">
+              <AlertCircle className="h-4 w-4 text-slate-500" />
             </div>
             <div>
-              <p className="text-[10px] font-black text-amber-800 uppercase tracking-wider">Information Needed</p>
-              <p className="text-[10px] text-amber-600">Please provide the following to confirm booking</p>
+              <p className="text-[10px] font-bold text-slate-900 uppercase tracking-wider">Information Needed</p>
+              <p className="text-[10px] text-slate-400">Please provide the following</p>
             </div>
           </div>
 
@@ -500,48 +478,17 @@ export function AiSuperChatbot() {
             {data.missing_fields.map((field) => {
               const Icon = MISSING_FIELD_ICON[field] || AlertCircle;
               const labels: Record<string, string> = {
-                name: "Your Name",
-                phone: "Phone Number",
-                address: "Pickup Address",
-                cloth_type: "Garment Type",
-                service: "Preferred Service",
+                name: "Your Name", phone: "Phone Number", address: "Pickup Address",
+                cloth_type: "Garment Type", service: "Preferred Service",
               };
               return (
-                <div
-                  key={field}
-                  className="flex items-center gap-2 px-2.5 py-1.5 bg-white/80 rounded-lg border border-amber-100"
-                >
-                  <Icon className="h-3.5 w-3.5 text-amber-500" />
-                  <span className="text-xs font-semibold text-amber-800">{labels[field] || field}</span>
-                  <span className="ml-auto text-[9px] text-amber-400 font-bold uppercase">Required</span>
+                <div key={field} className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-slate-100">
+                  <Icon className="h-3.5 w-3.5 text-slate-400" />
+                  <span className="text-xs font-medium text-slate-700">{labels[field] || field}</span>
                 </div>
               );
             })}
           </div>
-
-          {/* Show what we already have */}
-          {data.customer_details && (data.customer_details.name || data.customer_details.phone || data.customer_details.address) && (
-            <div className="mt-1.5 pt-1.5 border-t border-amber-200/60">
-              <p className="text-[9px] font-bold text-amber-500 uppercase tracking-wider mb-1">Already Captured</p>
-              <div className="flex flex-wrap gap-1.5">
-                {data.customer_details.name && (
-                  <Badge variant="outline" className="text-[10px] bg-green-50 border-green-200 text-green-700 gap-1">
-                    <CheckCircle2 className="h-2.5 w-2.5" /> {data.customer_details.name}
-                  </Badge>
-                )}
-                {data.customer_details.phone && (
-                  <Badge variant="outline" className="text-[10px] bg-green-50 border-green-200 text-green-700 gap-1">
-                    <CheckCircle2 className="h-2.5 w-2.5" /> {data.customer_details.phone}
-                  </Badge>
-                )}
-                {data.customer_details.address && (
-                  <Badge variant="outline" className="text-[10px] bg-green-50 border-green-200 text-green-700 gap-1">
-                    <CheckCircle2 className="h-2.5 w-2.5" /> {data.customer_details.address}
-                  </Badge>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       );
     }
@@ -570,21 +517,14 @@ export function AiSuperChatbot() {
   };
 
   const renderConfidenceScore = (score: number) => {
-    if (score <= 0) return null;
-    const percentage = Math.round(score * 100);
-    const color = percentage >= 80 ? "text-emerald-500" : percentage >= 50 ? "text-amber-500" : "text-red-400";
-    return (
-      <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-400">
-        <Star className={cn("h-3 w-3", color)} />
-        <span>Confidence: {percentage}%</span>
-      </div>
-    );
+    // Hidden per user request - feels too technical for premium UI
+    return null;
   };
 
   // ── Main Render ────────────────────────────────────────────
   return (
     <>
-      {/* Hidden file input — supports multiple */}
+      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -594,267 +534,242 @@ export function AiSuperChatbot() {
         onChange={handleImageUpload}
       />
 
-      <div className="fixed bottom-24 right-6 z-[60] flex flex-col items-end gap-4 pointer-events-none">
-        {/* Chat Window */}
+      {/* Main UI Wrapper */}
+      <div className="fixed inset-0 pointer-events-none z-[100]">
+        
+        {/* Chat window */}
         <div
           className={cn(
-            "transition-all duration-300 ease-in-out transform origin-bottom-right",
+            "fixed bottom-6 right-6 sm:bottom-10 sm:right-10 z-50 transition-all duration-180 ease-out transform origin-bottom-right",
+            "w-[calc(100vw-32px)] sm:w-[400px] h-[600px] max-h-[calc(100dvh-120px)]",
+            "flex flex-col bg-white overflow-hidden rounded-[24px] border border-black/[0.06] shadow-[0_20px_60px_rgba(0,0,0,0.12)] pointer-events-auto",
             isOpen
-              ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 translate-y-4 pointer-events-none",
+            "max-sm:fixed max-sm:inset-0 max-sm:w-full max-sm:h-full max-sm:max-h-none max-sm:rounded-none"
           )}
         >
-          <div className="w-[370px] sm:w-[400px] shadow-2xl rounded-2xl overflow-hidden flex flex-col h-[560px] border border-slate-200/50 backdrop-blur-sm">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white p-4 flex items-center justify-between shrink-0 relative overflow-hidden">
-              {/* Animated background dots */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute w-32 h-32 rounded-full bg-white/20 -top-16 -left-16 animate-pulse" />
-                <div className="absolute w-24 h-24 rounded-full bg-white/10 -bottom-12 -right-12 animate-pulse" style={{ animationDelay: "1s" }} />
+          {/* Header */}
+          <div className="bg-[#0F3F36] text-white h-[64px] px-5 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-white/10 overflow-hidden p-1.5">
+                <Image src="/dresscodelogo2.png" alt="Logo" width={24} height={24} className="object-contain" />
               </div>
-
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-inner">
-                  <Bot className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold tracking-tight">DressCodes AI</h3>
-                  <p className="text-[11px] text-emerald-100 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse" />
-                    Online • Smart Booking
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 relative z-10">
-                <Badge className="bg-white/15 text-white border-white/20 text-[9px] font-bold backdrop-blur-sm hidden sm:inline-flex">
-                  <Sparkles className="h-2.5 w-2.5 mr-1" /> AI Powered
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white hover:bg-white/20 rounded-full h-8 w-8"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+              <div>
+                <h3 className="text-[14px] font-bold tracking-tight">DressCodes AI</h3>
+                <p className="text-[10px] text-white/60 font-medium">Smart Booking</p>
               </div>
             </div>
+            
+            <div className="flex items-center gap-2">
+              <a 
+                href={getWhatsAppHref("Hello, I need help with my laundry.")} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors opacity-80"
+                title="Chat on WhatsApp"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488" />
+                </svg>
+              </a>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10 rounded-full h-8 w-8 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-hidden relative bg-gradient-to-b from-slate-50 to-white">
-              <ScrollArea className="h-full w-full">
-                <div className="flex flex-col gap-3 p-4 pb-2">
-                  {messages.map((msg) => (
+          {/* Messages Area */}
+          <div className="flex-1 overflow-hidden relative bg-white">
+            <ScrollArea className="h-full w-full">
+              <div className="flex flex-col gap-4 p-5 pb-2">
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={cn(
+                      "flex gap-3 max-w-[85%] animate-in fade-in slide-in-from-bottom-2 duration-300",
+                      msg.role === "user" ? "ml-auto flex-row-reverse" : ""
+                    )}
+                  >
+                    {/* Avatar */}
                     <div
-                      key={msg.id}
                       className={cn(
-                        "flex gap-2.5 max-w-[88%] animate-in fade-in slide-in-from-bottom-2 duration-300",
-                        msg.role === "user" ? "ml-auto flex-row-reverse" : ""
+                        "w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-sm overflow-hidden",
+                        msg.role === "assistant"
+                          ? "bg-white border border-slate-100"
+                          : "bg-slate-100 text-slate-500"
                       )}
                     >
-                      {/* Avatar */}
-                      <div
-                        className={cn(
-                          "w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm",
-                          msg.role === "assistant"
-                            ? "bg-gradient-to-br from-teal-500 to-emerald-600 text-white"
-                            : "bg-gradient-to-br from-slate-600 to-slate-800 text-white"
-                        )}
-                      >
-                        {msg.role === "assistant" ? (
-                          <Bot className="h-3.5 w-3.5" />
-                        ) : (
-                          <User className="h-3.5 w-3.5" />
-                        )}
-                      </div>
+                      {msg.role === "assistant" ? (
+                        <Image src="/dresscodelogo2.png" alt="AI" width={32} height={32} className="object-contain p-1" />
+                      ) : (
+                        <User className="h-4.5 w-4.5" />
+                      )}
+                    </div>
 
-                      {/* Message Content */}
-                      <div className="flex flex-col gap-1 min-w-0">
-                        {/* Multi-image preview for user messages */}
-                        {msg.images && msg.images.length > 0 && (
-                          <div className={cn(
-                            "flex gap-1.5 flex-wrap",
-                            msg.images.length > 2 ? "grid grid-cols-2" : "flex"
-                          )}>
-                            {msg.images.map((imgUrl, imgIdx) => (
-                              <div key={imgIdx} className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 shadow-sm">
-                                <Image src={imgUrl} alt={`Garment ${imgIdx + 1}`} fill className="object-cover" />
-                                {msg.images && msg.images.length > 1 && (
-                                  <div className="absolute top-1 right-1 bg-black/60 rounded-full w-4 h-4 flex items-center justify-center">
-                                    <span className="text-[8px] text-white font-bold">{imgIdx + 1}</span>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {/* Legacy single image fallback */}
-                        {!msg.images && msg.image && (
-                          <div className="relative w-40 h-28 rounded-xl overflow-hidden border-2 border-slate-200 shadow-sm">
-                            <Image src={msg.image} alt="Uploaded garment" fill className="object-cover" />
-                            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/40 to-transparent p-1.5">
-                              <span className="text-[9px] text-white font-bold flex items-center gap-1">
-                                <Camera className="h-2.5 w-2.5" /> Image attached
-                              </span>
+                    {/* Message Content */}
+                    <div className="flex flex-col gap-1 min-w-0">
+                      {/* Multi-image preview */}
+                      {msg.images && msg.images.length > 0 && (
+                        <div className={cn(
+                          "flex gap-2 flex-wrap mb-1",
+                          msg.images.length > 2 ? "grid grid-cols-2" : "flex"
+                        )}>
+                          {msg.images.map((imgUrl, imgIdx) => (
+                            <div key={imgIdx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-black/[0.05] shadow-sm">
+                              <Image src={imgUrl} alt={`Garment ${imgIdx + 1}`} fill className="object-cover" />
                             </div>
-                          </div>
-                        )}
-
-                        {/* Text bubble */}
-                        <div
-                          className={cn(
-                            "rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed shadow-sm",
-                            msg.role === "user"
-                              ? "bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-tr-md"
-                              : "bg-white text-slate-700 border border-slate-100 rounded-tl-md"
-                          )}
-                        >
-                          {msg.content.split("\n").map((line, i) => (
-                            <span key={i}>
-                              {line.replace(/\*\*(.*?)\*\*/g, "$1")}
-                              {i < msg.content.split("\n").length - 1 && <br />}
-                            </span>
                           ))}
                         </div>
+                      )}
 
-                        {/* Structured Data Cards (for assistant messages) */}
-                        {msg.structuredData && (
-                          <div className="space-y-0.5">
-                            {renderIntentBadge(msg.structuredData.intent)}
-                            {renderGarments(msg.structuredData)}
-                            {renderServiceRecommendation(msg.structuredData)}
-                            {renderPricing(msg.structuredData)}
-                            {renderBookingStatus(msg.structuredData)}
-                            {renderBookingAction(msg.structuredData)}
-                            {renderConfidenceScore(msg.structuredData.confidence_score)}
-                          </div>
+                      {/* Text bubble */}
+                      <div
+                        className={cn(
+                          "rounded-[20px] px-4 py-3 text-[14px] leading-relaxed shadow-sm",
+                          msg.role === "user"
+                            ? "bg-[#0F3F36] text-white rounded-tr-md"
+                            : "bg-slate-50 text-slate-800 border border-black/[0.03] rounded-tl-md"
                         )}
-
-                        {/* Timestamp — only render on client to avoid hydration mismatch */}
-                        {mounted && (
-                          <span suppressHydrationWarning className={cn("text-[9px] mt-0.5", msg.role === "user" ? "text-right text-slate-400" : "text-slate-300")}>
-                            {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      >
+                        {msg.content.split("\n").map((line, i) => (
+                          <span key={i}>
+                            {line.replace(/\*\*(.*?)\*\*/g, "$1")}
+                            {i < msg.content.split("\n").length - 1 && <br />}
                           </span>
-                        )}
+                        ))}
                       </div>
-                    </div>
-                  ))}
 
-                  {/* Typing Indicator */}
-                  {isLoading && (
-                    <div className="flex gap-2.5 max-w-[88%] animate-in fade-in duration-200">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-                        <Bot className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="bg-white text-slate-700 border border-slate-100 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="flex gap-1">
-                            <span className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                            <span className="w-2 h-2 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                            <span className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                          </div>
-                          <span className="text-[10px] text-slate-400 font-medium ml-1">Analyzing...</span>
+                      {/* Structured Data & Quick Actions */}
+                      {msg.structuredData && (
+                        <div className="space-y-1">
+                          {renderIntentBadge(msg.structuredData.intent)}
+                          {renderGarments(msg.structuredData)}
+                          {renderServiceRecommendation(msg.structuredData)}
+                          {renderPricing(msg.structuredData)}
+                          {renderBookingStatus(msg.structuredData)}
+                          {renderBookingAction(msg.structuredData)}
+                          {renderConfidenceScore(msg.structuredData.confidence_score)}
+                        </div>
+                      )}
+
+                      {/* Welcome Quick Actions - Only show for the very first message */}
+                      {messages.length === 1 && msg.id === messages[0].id && (
+                        <div className="grid grid-cols-2 gap-2 mt-4 w-full animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+                          {QUICK_ACTIONS.map((action, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => sendMessage(action.message)}
+                              className="flex flex-col items-start gap-2 p-3 bg-white border border-slate-100 rounded-2xl shadow-sm hover:border-[#0F3F36]/20 hover:bg-[#0F3F36]/5 transition-all text-left group active:scale-[0.98]"
+                            >
+                              <div className="p-2 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-[#0F3F36]/10 transition-colors">
+                                <action.icon className="h-4 w-4 text-slate-400 group-hover:text-[#0F3F36] transition-colors" />
+                              </div>
+                              <span className="text-[12px] font-bold text-slate-700 leading-tight">{action.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Timestamp */}
+                      {mounted && (
+                        <span suppressHydrationWarning className={cn("text-[10px] mt-1 px-1", msg.role === "user" ? "text-right text-slate-400" : "text-slate-400")}>
+                          {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Typing Indicator */}
+                {isLoading && (
+                  <div className="flex gap-3 max-w-[85%] animate-in fade-in duration-200">
+                    <div className="w-8 h-8 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                      <Image src="/dresscodelogo2.png" alt="AI" width={32} height={32} className="object-contain p-1" />
+                    </div>
+                    <div className="bg-slate-50 text-slate-800 border border-black/[0.03] rounded-[20px] rounded-tl-md px-4 py-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="flex gap-1">
+                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/80 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                         </div>
                       </div>
                     </div>
-                  )}
-
-                  {/* Quick Actions (shown at start) */}
-                  {showQuickActions && messages.length <= 1 && !isLoading && (
-                    <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-500" style={{ animationDelay: "400ms" }}>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Quick Actions</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {QUICK_ACTIONS.map((action, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleQuickAction(action)}
-                            className="px-3 py-1.5 text-[11px] font-semibold rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-200 hover:text-teal-700 transition-all shadow-sm hover:shadow active:scale-95"
-                          >
-                            {action.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div ref={scrollRef} />
-                </div>
-              </ScrollArea>
-            </div>
-
-            {/* Pending Images Preview (multi-image) */}
-            {pendingImages.length > 0 && (
-              <div className="px-3 pt-2 pb-0 bg-white border-t border-slate-100 shrink-0">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                    {pendingImages.length} image{pendingImages.length > 1 ? "s" : ""} ready
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {pendingImages.length < 5 && (
-                      <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="text-[9px] font-bold text-teal-600 hover:text-teal-700 flex items-center gap-0.5 transition-colors"
-                      >
-                        <Plus className="h-3 w-3" /> Add more
-                      </button>
-                    )}
-                    <button
-                      onClick={clearAllPendingImages}
-                      className="text-[9px] font-bold text-red-400 hover:text-red-500 ml-2 transition-colors"
-                    >
-                      Clear all
-                    </button>
                   </div>
-                </div>
-                <div className="flex gap-2 overflow-x-auto pb-1.5">
+                )}
+
+                <div ref={scrollRef} />
+              </div>
+            </ScrollArea>
+          </div>
+
+          {/* Compose Area (Integrated Input + Previews) */}
+          <div className="px-5 py-6 bg-white border-t border-black/[0.04] shrink-0 max-sm:pb-12">
+            <div className={cn(
+              "flex flex-col bg-white rounded-[28px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-black/[0.03] overflow-hidden transition-all duration-300",
+              pendingImages.length > 0 ? "pt-3" : ""
+            )}>
+              {/* Image Previews (Integrated) */}
+              {pendingImages.length > 0 && (
+                <div className="px-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar scroll-smooth">
                   {pendingImages.map((img, idx) => (
-                    <div key={idx} className="relative shrink-0">
-                      <div className="relative w-14 h-14 rounded-lg overflow-hidden border-2 border-slate-200 shadow-sm">
+                    <div key={idx} className="relative shrink-0 group">
+                      <div className="relative w-16 h-16 rounded-[14px] overflow-hidden border border-black/[0.05] shadow-sm bg-slate-50">
                         <Image src={img.url} alt={img.name} fill className="object-cover" />
-                        {pendingImages.length > 1 && (
-                          <div className="absolute top-0.5 left-0.5 bg-teal-600 rounded-full w-4 h-4 flex items-center justify-center">
-                            <span className="text-[8px] text-white font-bold">{idx + 1}</span>
-                          </div>
-                        )}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                       </div>
                       <button
                         onClick={() => removePendingImage(idx)}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-sm transition-colors"
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white border border-black/[0.08] text-black rounded-full flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-90"
                       >
-                        <X className="h-3 w-3 text-white" />
+                        <X className="h-3 w-3" />
                       </button>
                     </div>
                   ))}
+                  
+                  {/* Quick Add Button */}
+                  {pendingImages.length < 5 && (
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="shrink-0 w-16 h-16 rounded-[14px] border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#0F3F36] hover:border-[#0F3F36]/30 hover:bg-[#0F3F36]/5 transition-all"
+                    >
+                      <Plus className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Input Area */}
-            <div className="p-3 bg-white border-t border-slate-100 shrink-0">
-              <form onSubmit={handleSubmit} className="flex items-center gap-2">
+              {/* Text Input Row */}
+              <form onSubmit={handleSubmit} className="flex items-center h-14 pr-2 pl-1">
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-full text-slate-400 hover:text-teal-600 hover:bg-teal-50 shrink-0 transition-colors"
+                  className="h-10 w-10 rounded-full text-slate-400 hover:text-[#0F3F36] transition-colors shrink-0"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoading}
                 >
-                  <ImagePlus className="h-4.5 w-4.5" />
+                  <Camera className="h-5 w-5" />
                 </Button>
                 <Input
                   ref={inputRef}
-                  placeholder={pendingImages.length > 0 ? "Add a message or just send..." : "Ask about laundry, pricing, or upload photos..."}
+                  placeholder={pendingImages.length > 0 ? "Add a caption..." : "Ask about laundry..."}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  className="rounded-full border-slate-200 focus-visible:ring-teal-500 bg-slate-50 text-sm h-9"
+                  className="!border-none !ring-0 !ring-offset-0 focus-visible:!ring-0 focus-visible:!ring-offset-0 outline-none focus:outline-none bg-transparent text-[15px] h-full shadow-none"
                   disabled={isLoading}
                 />
                 <Button
                   type="submit"
                   size="icon"
                   disabled={(!input.trim() && pendingImages.length === 0) || isLoading}
-                  className="h-9 w-9 rounded-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white shadow-md shrink-0 transition-all active:scale-95 disabled:opacity-40"
+                  className="h-10 w-10 rounded-full bg-[#0F3F36] hover:bg-[#1a5a4e] text-white shadow-sm shrink-0 transition-all active:scale-95 disabled:opacity-20"
                 >
                   {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -863,53 +778,36 @@ export function AiSuperChatbot() {
                   )}
                 </Button>
               </form>
-              <p className="text-center text-[9px] text-slate-300 mt-1.5">
-                Powered by DressCodes AI • Smart Booking
-              </p>
             </div>
+            
+            {pendingImages.length > 0 && (
+              <div className="flex justify-center mt-3">
+                <button
+                  onClick={clearAllPendingImages}
+                  className="text-[10px] font-bold text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors"
+                >
+                  Discard Images
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Floating Action Button — Open */}
-        <Button
-          size="lg"
-          className={cn(
-            "h-14 w-14 rounded-full shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 pointer-events-auto group relative",
-            isOpen
-              ? "bg-slate-800 hover:bg-slate-900 rotate-90 scale-0 opacity-0 absolute"
-              : "bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 rotate-0 scale-100 opacity-100"
-          )}
-          onClick={() => setIsOpen(true)}
-        >
-          <MessageCircle className="h-7 w-7 text-white" />
-          <span className="sr-only">Open AI Chat</span>
+        {/* Futuristic Floating Action Button */}
+        <FuturisticFab 
+          onClick={() => setIsOpen(true)} 
+          isOpen={isOpen} 
+        />
 
-          {/* Animated notification dot */}
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75" />
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-400 border-2 border-white items-center justify-center">
-              <Sparkles className="h-2 w-2 text-white" />
-            </span>
-          </span>
-
-          {/* Tooltip */}
-          <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-semibold px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none shadow-xl">
-            AI Laundry Assistant
-            <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45" />
-          </div>
-        </Button>
-
-        {/* FAB — Close */}
-        <Button
-          size="lg"
-          className={cn(
-            "h-14 w-14 rounded-full shadow-lg bg-slate-800 hover:bg-slate-900 transition-all duration-300 absolute pointer-events-auto",
-            isOpen ? "scale-100 opacity-100 rotate-0" : "scale-0 opacity-0 -rotate-90 pointer-events-none"
-          )}
-          onClick={() => setIsOpen(false)}
-        >
-          <X className="h-7 w-7 text-white" />
-        </Button>
+        {/* Mobile Close Button */}
+        {isOpen && (
+          <button
+            className="fixed bottom-6 right-6 z-[110] h-14 w-14 rounded-full bg-white text-[#0F3F36] flex items-center justify-center shadow-2xl border border-black/[0.06] lg:hidden"
+            onClick={() => setIsOpen(false)}
+          >
+            <X className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </>
   );
