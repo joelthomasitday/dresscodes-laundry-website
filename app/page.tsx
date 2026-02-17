@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
+import { AiChatbot } from "@/components/ai-chatbot";
+
 const cardData = [
   {
     icon: <MessageCircle className="h-8 w-8 text-green-600" />,
@@ -513,6 +515,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+      <AiChatbot />
     </div>
   );
 }
