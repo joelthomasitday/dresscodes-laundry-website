@@ -297,63 +297,79 @@ export function AiSuperChatbot() {
     return (
       <div className="mt-4 space-y-4">
         {validGarments.map((garment, index) => (
-          <div key={index} className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 ring-1 ring-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-50 pb-2.5">
-              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-500">
-                <Shirt className="h-4 w-4 text-[#0F3F36]" />
-                {validGarments.length > 1 ? `Garment ${index + 1}` : "Garment Details"}
+          <div key={index} className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3.5 ring-1 ring-slate-100/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-400">
+                <Shirt className="h-4 w-4 text-[#0F3F36]/40" />
+                {validGarments.length > 1 ? `Garment ${index + 1}` : "Analysis Results"}
               </div>
               {validGarments.length > 1 && (
-                <Badge className="bg-[#0F3F36] text-white border-none text-[10px] px-2 py-0.5">
+                <Badge className="bg-[#0F3F36] text-white border-none text-[10px] px-2.5 py-0.5 rounded-full">
                   {index + 1}/{validGarments.length}
                 </Badge>
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Type</span>
-                <span className="text-sm font-bold text-slate-900 capitalize leading-none">{garment.cloth_type}</span>
+            {/* Simple Vertical List Hierarchy (Zero Overlap Guaranteed) */}
+            <div className="space-y-3 pt-1">
+              <div className="flex flex-col gap-0.5 pb-2 border-b border-slate-50">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Garment Type</span>
+                <span className="text-[15px] font-black text-slate-900 capitalize break-words leading-tight">
+                  {garment.cloth_type}
+                </span>
               </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Category</span>
-                <span className="text-[11px] font-black text-[#0F3F36] uppercase tracking-wider">{garment.category || "General"}</span>
+
+              <div className="flex justify-between items-center gap-4 py-1.5 border-b border-slate-50">
+                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider shrink-0">Fabric</span>
+                <span className="text-[13px] font-bold text-slate-700 text-right break-words">
+                  {(garment.fabric_type || "Standard").replace(/_/g, " ")}
+                </span>
               </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Fabric</span>
-                <span className="text-sm font-semibold text-slate-700 capitalize leading-none">{garment.fabric_type}</span>
+
+              <div className="flex justify-between items-center gap-4 py-1.5 border-b border-slate-50">
+                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider shrink-0">Style</span>
+                <span className="text-[12px] font-black text-[#0F3F36] uppercase tracking-[0.05em] text-right">
+                  {garment.category || "General"}
+                </span>
               </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Complexity</span>
-                <div className="mt-0.5">
-                  <Badge variant="outline" className="text-[10px] h-5 bg-slate-50 border-slate-200 text-slate-600 px-2">
-                    {garment.complexity_level || "Standard"}
-                  </Badge>
-                </div>
+
+              <div className="flex justify-between items-center gap-4 py-1.5">
+                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider shrink-0">Complexity</span>
+                <Badge variant="outline" className="text-[10px] h-5 bg-slate-50 border-slate-200 text-slate-600 px-2 rounded-md font-black">
+                  {garment.complexity_level || "Normal"}
+                </Badge>
               </div>
             </div>
 
             {garment.stain_detected && (
-              <div className="flex items-center gap-2.5 px-3 py-2.5 bg-red-50/50 border border-red-100 rounded-xl">
-                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-xs font-bold text-red-700">
-                  Stain: {garment.stain_type !== "none" ? garment.stain_type : "Detected"}
+              <div className="flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-100 rounded-xl mt-2">
+                <div className="relative">
+                  <div className="p-1 rounded-full bg-red-100">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-600" />
+                  </div>
+                  <div className="absolute inset-0 w-full h-full rounded-full bg-red-400 animate-ping opacity-20" />
+                </div>
+                <span className="text-xs font-bold text-red-800">
+                  Stain Found: {garment.stain_type !== "none" ? (garment.stain_type || "").replace(/_/g, " ") : "Detected"}
                 </span>
               </div>
             )}
             
             {garment.stain_detected === false && (
-              <div className="flex items-center gap-2.5 px-3 py-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-xs font-bold text-emerald-700">Pristine - No stains</span>
+              <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl mt-2">
+                <div className="p-1 rounded-full bg-emerald-100">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+                </div>
+                <span className="text-xs font-bold text-emerald-800">Pristine - No stains found</span>
               </div>
             )}
           </div>
         ))}
         {data.total_quantity_estimate && data.total_quantity_estimate > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 bg-slate-900 rounded-xl text-white shadow-lg">
-            <span className="text-[11px] font-bold uppercase tracking-widest opacity-70">Bag Total</span>
-            <span className="text-sm font-black">{data.total_quantity_estimate} Items</span>
+          <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900 rounded-2xl text-white shadow-lg overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none" />
+            <span className="text-[11px] font-black uppercase tracking-[0.2em] opacity-60">Session Total</span>
+            <span className="text-base font-black tracking-tight">{data.total_quantity_estimate} Items</span>
           </div>
         )}
       </div>
@@ -461,34 +477,43 @@ export function AiSuperChatbot() {
     }
 
     // ── Missing Information ──
-    if (data.booking_status === "missing_information" && data.missing_fields && data.missing_fields.length > 0) {
+    if (data.booking_status === "missing_information" && data.missing_fields) {
+      const allFields = ["name", "phone", "address", "cloth_type", "service"];
+      const providedCount = allFields.length - (data.missing_fields.length || 0);
+      const progress = (providedCount / allFields.length) * 100;
+
       return (
-        <div className="mt-2 p-3 rounded-xl bg-slate-50 border border-slate-100 shadow-sm space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center">
-              <AlertCircle className="h-4 w-4 text-slate-500" />
+        <div className="mt-3 p-4 rounded-2xl bg-[#0F3F36]/5 border border-[#0F3F36]/10 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+               <div className="w-2 h-2 rounded-full bg-[#0F3F36] animate-pulse" />
+               <span className="text-[11px] font-black uppercase tracking-widest text-[#0F3F36]">Smart Booking Progress</span>
             </div>
-            <div>
-              <p className="text-[10px] font-bold text-slate-900 uppercase tracking-wider">Information Needed</p>
-              <p className="text-[10px] text-slate-400">Please provide the following</p>
-            </div>
+            <span className="text-[10px] font-black text-[#0F3F36]">{Math.round(progress)}%</span>
+          </div>
+          
+          <div className="h-2 w-full bg-[#0F3F36]/10 rounded-full overflow-hidden">
+             <div 
+               className="h-full bg-[#0F3F36] transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(15,63,54,0.3)]" 
+               style={{ width: `${progress}%` }} 
+             />
           </div>
 
-          <div className="space-y-1">
-            {data.missing_fields.map((field) => {
-              const Icon = MISSING_FIELD_ICON[field] || AlertCircle;
-              const labels: Record<string, string> = {
-                name: "Your Name", phone: "Phone Number", address: "Pickup Address",
-                cloth_type: "Garment Type", service: "Preferred Service",
-              };
-              return (
-                <div key={field} className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-slate-100">
-                  <Icon className="h-3.5 w-3.5 text-slate-400" />
-                  <span className="text-xs font-medium text-slate-700">{labels[field] || field}</span>
-                </div>
-              );
-            })}
-          </div>
+          {data.missing_fields.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {data.missing_fields.map((field) => {
+                const labels: Record<string, string> = {
+                  name: "Name", phone: "Phone", address: "Location",
+                  cloth_type: "Garment Type", service: "Service Mode",
+                };
+                return (
+                  <Badge key={field} variant="outline" className="text-[9px] bg-white/50 border-emerald-100 text-[#0F3F36] font-bold uppercase px-2 py-0.5">
+                    + Need {labels[field] || field}
+                  </Badge>
+                );
+              })}
+            </div>
+          )}
         </div>
       );
     }
