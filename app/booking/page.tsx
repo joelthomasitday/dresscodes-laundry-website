@@ -27,7 +27,6 @@ import { Navigation } from "@/components/navigation";
 import { PriceEstimator } from "@/components/price-estimator";
 import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { SmartGarmentAnalyzer, type AnalysisResult } from "@/components/smart-garment-analyzer";
 
 export default function BookingPage() {
   const router = useRouter();
@@ -117,37 +116,6 @@ export default function BookingPage() {
     }
   };
 
-  const handleApplyAIAnalysis = (result: AnalysisResult) => {
-    // Map recommended service to existing IDs
-    const serviceMap: Record<string, string> = {
-      "normal_wash": "wash-fold",
-      "dry_clean": "dry-cleaning",
-      "stain_treatment": "premium",
-      "steam_iron": "ironing"
-    };
-
-    const mappedId = serviceMap[result.recommended_service] || "premium";
-    
-    // Enable service even if it was "Coming soon" for this specific AI-driven request
-    if (!selectedServices.includes(mappedId)) {
-      setSelectedServices(prev => [...prev, mappedId]);
-    }
-
-    // Update instructions with AI findings
-    const aiNote = `[AI Analysis] Garment: ${result.cloth_type} | Category: ${result.category} | Fabric: ${result.fabric_type} | Recommended: ${result.recommended_service.replace(/_/g, " ")}${result.stain_detected ? ` | Stain: ${result.stain_type}` : ""}`;
-    
-    setFormData(prev => ({
-      ...prev,
-      specialInstructions: prev.specialInstructions 
-        ? `${prev.specialInstructions}\n\n${aiNote}`
-        : aiNote
-    }));
-
-    toast({
-      title: "AI Analysis Applied",
-      description: `We've selected ${result.recommended_service.replace(/_/g, " ")} for your ${result.cloth_type}.`,
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -458,8 +426,6 @@ export default function BookingPage() {
                   </CardContent>
                 </Card>
 
-                {/* AI Analyzer */}
-                <SmartGarmentAnalyzer onApply={handleApplyAIAnalysis} />
 
                 {/* Date and Time Selection */}
                 <Card>

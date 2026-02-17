@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import { getTelHref, getWhatsAppHref, PHONE_DISPLAY } from "@/lib/phone";
-import { AiChatbot } from "@/components/ai-chatbot";
 
 const cardData = [
   {
@@ -515,7 +514,6 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-      <AiChatbot />
     </div>
   );
 }
