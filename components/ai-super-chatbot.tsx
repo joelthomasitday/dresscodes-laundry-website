@@ -624,7 +624,7 @@ export function AiSuperChatbot() {
         {/* Chat window - Premium Mobile-First Redesign */}
         <div
           className={cn(
-            "fixed transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] transform origin-bottom font-sans",
+            "fixed transition-all duration-300 ease-in-out transform origin-bottom font-sans",
             "z-50 flex flex-col bg-white overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.15)]",
             // Desktop positioning
             "sm:bottom-10 sm:right-10 sm:w-[420px] sm:h-[700px] sm:max-h-[calc(100dvh-120px)] sm:rounded-[24px] sm:border sm:border-black/[0.05]",

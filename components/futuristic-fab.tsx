@@ -35,7 +35,7 @@ export function FuturisticFab({ onClick, isOpen }: FuturisticFabProps) {
   return (
     <div 
       className={cn(
-        "fixed bottom-4 right-4 sm:bottom-10 sm:right-10 z-[70] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
+        "fixed bottom-4 right-4 sm:bottom-10 sm:right-10 z-[70] transition-all duration-500 ease-premium-ease",
         isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100 pointer-events-auto"
       )}
       onMouseMove={handleMouseMove}
