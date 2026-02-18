@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { getWhatsAppHref } from "@/lib/phone";
 import { FuturisticFab } from "./futuristic-fab";
+import { compressImage } from "@/lib/image-utils";
 
 // ── Types (new multi-garment schema) ───────────────────────────
 interface GarmentDetail {
@@ -166,34 +167,52 @@ export function AiSuperChatbot() {
   }, [isOpen]);
 
   // ── Multi-image upload handler ──────────────────────────────
-  const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newImages: { url: string; name: string }[] = [];
-    let processed = 0;
+    setIsLoading(true); // Show loading state while compressing
+    const fileArray = Array.from(files).slice(0, 5); // Max 5 images
 
-    const fileArray = Array.from(files).slice(0, 5); // Max 5 images at once
+    try {
+      const compressedImages = await Promise.all(
+        fileArray.map(async (file) => {
+          // Skip if > 10MB (though compression handles large files, extremely large ones might crash browser)
+          if (file.size > 15 * 1024 * 1024) {
+             alert(`"${file.name}" is too large (>15MB). Skipping.`);
+             return null;
+          }
+          
+          try {
+            // Compress to max 1024px width, 0.7 quality, max 300KB
+            const dataUrl = await compressImage(file, { 
+              maxWidth: 1024, 
+              quality: 0.7, 
+              maxOutputSizeKB: 300 
+            });
+            return { url: dataUrl, name: file.name };
+          } catch (error) {
+            console.error("Compression failed for", file.name, error);
+            alert(`Failed to process "${file.name}". Please try a different image.`);
+            return null;
+          }
+        })
+      );
 
-    for (const file of fileArray) {
-      if (file.size > 10 * 1024 * 1024) {
-        alert(`"${file.name}" is larger than 10MB. Skipping.`);
-        processed++;
-        continue;
-      }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push({ url: reader.result as string, name: file.name });
-        processed++;
-        if (processed === fileArray.length) {
-          setPendingImages((prev) => [...prev, ...newImages].slice(0, 5));
-        }
-      };
-      reader.readAsDataURL(file);
+      const validImages = compressedImages.filter((img): img is { url: string; name: string } => img !== null);
+      setPendingImages((prev) => [...prev, ...validImages].slice(0, 5));
+      
+      // Auto-send if images are valid
+      // if (validImages.length > 0 && !input.trim()) {
+      //   we can optionally auto-send here, but user might want to add text
+      // }
+      
+    } catch (error) {
+      console.error("Image processing error", error);
+    } finally {
+      setIsLoading(false);
+      if (fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
     }
-
-    e.target.value = "";
   }, []);
 
   const removePendingImage = useCallback((index: number) => {
