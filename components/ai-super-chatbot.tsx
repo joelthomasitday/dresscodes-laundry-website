@@ -115,6 +115,8 @@ const QUICK_ACTIONS = [
   { label: "Price List", icon: DollarSign, message: "Show me the price list" },
   { label: "Track Order", icon: Package, message: "Track my order" },
   { label: "Analyze Cloth", icon: Camera, message: "Analyze my garment" },
+  { label: "Express Wash", icon: Zap, message: "I need express laundry service" },
+  { label: "How it Works", icon: HelpCircle, message: "How does DressCodes work?" },
 ];
 
 // ── ID Generator ───────────────────────────────────────────────
@@ -143,7 +145,7 @@ export function AiSuperChatbot() {
       {
         id: generateId(),
         role: "assistant",
-        content: "Hi there! I'm your DressCodes AI. How can I help you today?",
+        content: "Hi! I'm Sparky, your laundry pal. How can I help you today?",
         timestamp: new Date(),
       },
     ]);
@@ -591,7 +593,7 @@ export function AiSuperChatbot() {
       {
         id: generateId(),
         role: "assistant",
-        content: "Hi there! I'm your DressCodes AI. How can I help you today?",
+        content: "Hi! I'm Sparky, your laundry pal. How can I help you today?",
         timestamp: new Date(),
       },
     ]);
@@ -634,16 +636,22 @@ export function AiSuperChatbot() {
           )}
         >
           {/* Premium Header - Sticky by default in flex-col */}
-          <div className="bg-[#0F3F36] text-white h-[72px] px-6 flex items-center justify-between shrink-0 shadow-md relative z-[110]">
+          <div className="bg-[#008c5b] text-white h-[76px] px-6 flex items-center justify-between shrink-0 shadow-lg relative z-[110] border-b border-white/10">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center border border-white/20 overflow-hidden p-1.5 transition-transform hover:scale-105 shadow-sm">
-                <Image src="/dresscodelogo2.png" alt="Logo" width={28} height={28} className="object-contain" />
+              <div className="w-11 h-11 rounded-[16px] bg-gradient-to-br from-[#008c5b] to-[#00a86b] flex items-center justify-center border-2 border-white/40 overflow-hidden transition-all hover:scale-105 shadow-[0_4px_12px_rgba(0,140,91,0.3)]">
+                <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7 text-white drop-shadow-md">
+                  <rect x="4" y="6" width="16" height="12" rx="3" className="fill-white/10 stroke-white" strokeWidth="1.5" />
+                  <circle cx="9" cy="11" r="1.2" fill="white" />
+                  <circle cx="15" cy="11" r="1.2" fill="white" />
+                  <path d="M10 14.5C10.5 15.2 11.2 15.5 12 15.5C12.8 15.5 13.5 15.2 14 14.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+                  <circle cx="12" cy="3" r="1.5" fill="white" />
+                </svg>
               </div>
               <div className="flex flex-col">
-                <h3 className="text-[15px] font-bold tracking-tight text-white/95">DressCodes AI</h3>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <p className="text-[11px] text-white/60 font-semibold uppercase tracking-wider">Online</p>
+                <h3 className="text-[17px] font-black tracking-tight text-white leading-tight">Sparky</h3>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  <p className="text-[10px] text-white/70 font-bold uppercase tracking-widest whitespace-nowrap">Online</p>
                 </div>
               </div>
             </div>
@@ -698,14 +706,19 @@ export function AiSuperChatbot() {
                     {/* Avatar - More subtle */}
                     <div
                       className={cn(
-                        "w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] overflow-hidden",
+                        "w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 shadow-[0_3px_12px_rgba(0,140,91,0.15)] overflow-hidden transition-all",
                         msg.role === "assistant"
-                          ? "bg-white border border-slate-100/80"
-                          : "bg-slate-100 text-slate-400"
+                          ? "bg-gradient-to-br from-[#008c5b] to-[#00a86b] border-2 border-white"
+                          : "bg-slate-100 text-slate-400 border-2 border-white"
                       )}
                     >
                       {msg.role === "assistant" ? (
-                        <Image src="/dresscodelogo2.png" alt="AI" width={28} height={28} className="object-contain p-1" />
+                        <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white">
+                          <rect x="4" y="6" width="16" height="12" rx="3" className="fill-white/10 stroke-white" strokeWidth="1.5" />
+                          <circle cx="9" cy="11" r="1" fill="white" />
+                          <circle cx="15" cy="11" r="1" fill="white" />
+                          <path d="M10 14.5C10.5 15.2 11.2 15.5 12 15.5C12.8 15.5 13.5 15.2 14 14.5" stroke="white" strokeWidth="1" strokeLinecap="round" />
+                        </svg>
                       ) : (
                         <User className="h-4 w-4" />
                       )}
@@ -730,10 +743,10 @@ export function AiSuperChatbot() {
                       {/* Text bubble - Compact & Balanced */}
                       <div
                         className={cn(
-                          "rounded-[18px] px-3.5 py-2.5 text-[14px] leading-[1.5] transition-all",
+                          "rounded-[20px] px-4 py-3 text-[14px] leading-[1.6] transition-all shadow-sm",
                           msg.role === "user"
-                            ? "bg-[#0F3F36] text-white rounded-tr-sm"
-                            : "bg-slate-100/60 text-slate-800 border border-black/[0.02] rounded-tl-sm"
+                            ? "bg-[#008c5b] text-white rounded-tr-sm"
+                            : "bg-white text-slate-700 border border-slate-100 rounded-tl-sm"
                         )}
                       >
                         {msg.content.split("\n").map((line, i) => (
@@ -788,15 +801,18 @@ export function AiSuperChatbot() {
                 {/* Typing Indicator */}
                 {isLoading && (
                   <div className="flex gap-3 max-w-[85%] animate-in fade-in duration-200">
-                    <div className="w-7 h-7 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                      <Image src="/dresscodelogo2.png" alt="AI" width={28} height={28} className="object-contain p-1" />
+                    <div className="w-9 h-9 rounded-[12px] bg-gradient-to-br from-[#008c5b] to-[#00a86b] flex items-center justify-center shrink-0 overflow-hidden shadow-md border-2 border-white">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white">
+                        <rect x="4" y="6" width="16" height="12" rx="3" className="fill-white/10 stroke-white" strokeWidth="1.5" />
+                        <path d="M10 14.5C10.5 15.2 11.2 15.5 12 15.5C12.8 15.5 13.5 15.2 14 14.5" stroke="white" strokeWidth="1" strokeLinecap="round" />
+                      </svg>
                     </div>
-                    <div className="bg-slate-100/60 text-slate-800 border border-black/[0.02] rounded-[18px] rounded-tl-sm px-3.5 py-3 shadow-sm">
+                    <div className="bg-white text-slate-800 border border-slate-100 rounded-[20px] rounded-tl-sm px-4 py-3.5 shadow-sm">
                       <div className="flex items-center gap-2">
                         <div className="flex gap-1.5">
-                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="w-1.5 h-1.5 bg-[#0F3F36]/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <span className="w-2 h-2 bg-[#008c5b]/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-2 h-2 bg-[#008c5b]/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-2 h-2 bg-[#008c5b]/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                         </div>
                       </div>
                     </div>
