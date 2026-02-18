@@ -36,10 +36,8 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
     { href: "/pricing", label: "Pricing" },
+    { href: "/booking", label: "Book Now" },
     { href: "/track", label: "Track Order" },
-    { href: "/collectionpoint", label: "Collection Point" },
-    { href: "/about", label: "About" },
-    { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ]
 
@@ -74,7 +72,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 size="sm"
                 className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
               >
-                <Link href="/pricing">Book Now</Link>
+                <Link href="/booking">Book Now</Link>
               </Button>
             </div>
 
@@ -118,7 +116,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 asChild
                 className="bg-gradient-to-r from-emerald-500 to-emerald-900 hover:from-emerald-600 hover:to-emerald-800 text-white transition-all duration-300 rounded-full"
               >
-                <Link href="/pricing">Schedule Pickup</Link>
+                <Link href="/booking">Schedule Pickup</Link>
               </Button>
             </div>
           </div>
@@ -222,7 +220,7 @@ export function Navigation({ variant = "solid" }: NavigationProps) {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full py-3 transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Link href="/pricing">Schedule Pickup</Link>
+                <Link href="/booking">Schedule Pickup</Link>
               </Button>
             </div>
           </div>

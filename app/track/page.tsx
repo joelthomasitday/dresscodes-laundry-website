@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Package, MapPin, ArrowRight } from "lucide-react";
+import { Footer } from "@/components/footer";
 
 export default function TrackSearchPage() {
   const [orderNumber, setOrderNumber] = useState("");
@@ -71,6 +72,7 @@ export default function TrackSearchPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

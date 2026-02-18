@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Award, Users, Clock, Leaf, Heart, Shield } from "lucide-react";
 import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "About Us - Professional Laundry Service | dresscode laundry",
@@ -355,7 +356,7 @@ export default function AboutPage() {
               asChild
               className="bg-white text-emerald-600 hover:bg-gray-100 transition-colors rounded-full"
             >
-              <Link href="/pricing">Schedule Your First Pickup</Link>
+              <Link href="/booking">Schedule Your First Pickup</Link>
             </Button>
             <Button
               size="lg"
@@ -368,6 +369,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

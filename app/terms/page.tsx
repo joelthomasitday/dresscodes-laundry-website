@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/navigation";
 import { Shield, AlertTriangle, Droplets, Eye, Truck, Clock, CreditCard } from "lucide-react";
+import { Footer } from "@/components/footer";
 
 export default function TermsPage() {
   return (
@@ -145,6 +146,7 @@ export default function TermsPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

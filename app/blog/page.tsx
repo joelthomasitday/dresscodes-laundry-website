@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
 
 export default function BlogPage() {
 
@@ -268,6 +269,7 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

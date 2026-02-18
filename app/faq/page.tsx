@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { HelpCircle, Phone, Mail } from "lucide-react";
 import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
 
 export default function FAQPage() {
   const faqCategories = [
@@ -308,6 +309,7 @@ export default function FAQPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

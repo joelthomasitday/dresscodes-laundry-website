@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Footer } from "@/components/footer";
 import {
   Shirt,
   Sparkles,
@@ -146,7 +147,7 @@ export default function ServicesPage() {
                         asChild
                         className="w-full bg-gradient-to-r from-emerald-500 to-emerald-900 hover:from-emerald-600 hover:to-emerald-800 transition-all duration-300 rounded-full"
                       >
-                        <Link href="/pricing">Book This Service</Link>
+                        <Link href="/booking">Book This Service</Link>
                       </Button>
                     </CardContent>
                   </div>
@@ -233,9 +234,9 @@ export default function ServicesPage() {
                 size="lg"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full"
               >
-                <Link href="/pricing" className="flex items-center gap-2">
+                <Link href="/booking" className="flex items-center gap-2">
                   <ShoppingCart className="h-5 w-5" />
-                  View Full Price List & Order
+                  Place an Order
                 </Link>
               </Button>
             </div>
@@ -275,7 +276,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">View All Items</Link>
+                      <Link href="/booking">View All Items</Link>
                     </Button>
                   </div>
                 </div>
@@ -314,7 +315,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">View All Items</Link>
+                      <Link href="/booking">View All Items</Link>
                     </Button>
                   </div>
                 </div>
@@ -353,7 +354,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">View All Items</Link>
+                      <Link href="/booking">View All Items</Link>
                     </Button>
                   </div>
                 </div>
@@ -394,7 +395,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">View All Items</Link>
+                      <Link href="/booking">View All Items</Link>
                     </Button>
                   </div>
                 </div>
@@ -435,7 +436,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">View All Items</Link>
+                      <Link href="/booking">View All Items</Link>
                     </Button>
                   </div>
                 </div>
@@ -470,7 +471,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="text-center pt-2">
                     <Button asChild variant="outline" size="sm" className="rounded-full">
-                      <Link href="/pricing">Order Now</Link>
+                      <Link href="/booking">Order Now</Link>
                     </Button>
                   </div>
                 </div>
@@ -493,9 +494,9 @@ export default function ServicesPage() {
                   size="lg"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full"
                 >
-                  <Link href="/pricing" className="flex items-center gap-2">
+                  <Link href="/booking" className="flex items-center gap-2">
                     <ShoppingCart className="h-5 w-5" />
-                    View Complete Price List
+                    View Price List & Order
                   </Link>
                 </Button>
                 <Button
@@ -504,7 +505,7 @@ export default function ServicesPage() {
                   size="lg"
                   className="rounded-full"
                 >
-                  <Link href="/pricing">Schedule Pickup</Link>
+                  <Link href="/booking">Schedule Pickup</Link>
                 </Button>
               </div>
             </div>
@@ -526,10 +527,11 @@ export default function ServicesPage() {
             asChild
             className="bg-white text-emerald-600 hover:bg-gray-100 transition-colors rounded-full"
           >
-            <Link href="/pricing">Schedule Your First Pickup</Link>
+            <Link href="/booking">Schedule Your First Pickup</Link>
           </Button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
