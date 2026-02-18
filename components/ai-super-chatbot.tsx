@@ -541,6 +541,18 @@ export function AiSuperChatbot() {
     );
   };
 
+  const clearChat = () => {
+    setMessages([
+      {
+        id: generateId(),
+        role: "assistant",
+        content: "Hi there! I'm your DressCodes AI. How can I help you today?",
+        timestamp: new Date(),
+      },
+    ]);
+    setShowQuickActions(true);
+  };
+
   const renderConfidenceScore = (score: number) => {
     // Hidden per user request - feels too technical for premium UI
     return null;
@@ -566,20 +578,20 @@ export function AiSuperChatbot() {
         <div
           className={cn(
             "fixed transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] transform origin-bottom font-sans",
-            "z-50 flex flex-col bg-white overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.08)]",
+            "z-50 flex flex-col bg-white overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.15)]",
             // Desktop positioning
-            "sm:bottom-10 sm:right-10 sm:w-[420px] sm:h-[700px] sm:max-h-[calc(100dvh-120px)] sm:rounded-[20px] sm:border sm:border-black/[0.05]",
-            // Mobile positioning (Full screen)
-            "max-sm:inset-0 max-sm:w-full max-sm:h-full max-sm:rounded-none",
+            "sm:bottom-10 sm:right-10 sm:w-[420px] sm:h-[700px] sm:max-h-[calc(100dvh-120px)] sm:rounded-[24px] sm:border sm:border-black/[0.05]",
+            // Mobile positioning (Full screen - Fixed to viewport)
+            "max-sm:fixed max-sm:inset-0 max-sm:w-full max-sm:h-[100dvh] max-sm:max-h-[100dvh] max-sm:rounded-none max-sm:z-[100]",
             isOpen
               ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
               : "opacity-0 scale-95 translate-y-8 pointer-events-none"
           )}
         >
-          {/* Premium Header */}
-          <div className="bg-[#0F3F36] text-white h-[72px] px-6 flex items-center justify-between shrink-0 shadow-sm relative z-10">
+          {/* Premium Header - Sticky by default in flex-col */}
+          <div className="bg-[#0F3F36] text-white h-[72px] px-6 flex items-center justify-between shrink-0 shadow-md relative z-[110]">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center border border-white/20 overflow-hidden p-1.5 transition-transform hover:scale-105">
+              <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center border border-white/20 overflow-hidden p-1.5 transition-transform hover:scale-105 shadow-sm">
                 <Image src="/dresscodelogo2.png" alt="Logo" width={28} height={28} className="object-contain" />
               </div>
               <div className="flex flex-col">
@@ -591,7 +603,20 @@ export function AiSuperChatbot() {
               </div>
             </div>
             
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
+              {/* Clear Chat Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-full h-10 w-10 transition-all active:scale-90"
+                onClick={clearChat}
+                title="Clear Conversation"
+              >
+                <Trash2 className="h-5 w-5" />
+              </Button>
+
+              <div className="w-px h-6 bg-white/10 mx-0.5 max-sm:hidden" />
+
               <a 
                 href={getWhatsAppHref("Hello, I need help with my laundry.")} 
                 target="_blank" 
@@ -601,10 +626,11 @@ export function AiSuperChatbot() {
               >
                 <WhatsAppIcon className="w-5 h-5" />
               </a>
+              
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white/70 hover:text-white hover:bg-white/10 rounded-full h-10 w-10 transition-all active:scale-90"
+                className="text-white/70 hover:text-white hover:bg-white/10 rounded-full h-10 w-10 transition-all active:scale-90 bg-white/5 max-sm:bg-white/10"
                 onClick={() => setIsOpen(false)}
               >
                 <X className="h-6 w-6" />
@@ -612,10 +638,10 @@ export function AiSuperChatbot() {
             </div>
           </div>
 
-          {/* Messages Area */}
-          <div className="flex-1 overflow-hidden relative bg-white">
-            <ScrollArea className="h-full w-full">
-              <div className="flex flex-col gap-4 p-5 pb-2">
+          {/* Messages Area - Ensure this is the only scrollable part */}
+          <div className="flex-1 overflow-hidden relative bg-white flex flex-col h-full">
+            <ScrollArea className="h-full w-full flex-1">
+              <div className="flex flex-col gap-4 p-5 pb-8">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
