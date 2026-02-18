@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,10 +46,46 @@ export default function BookingPage() {
     specialInstructions: "",
   });
 
+  // Autofill from query params (e.g., from AI Chatbot)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const phone = params.get("phone");
+    const address = params.get("address");
+    const service = params.get("service");
+
+    if (name || phone || address || service) {
+      setFormData(prev => ({
+        ...prev,
+        name: name || prev.name,
+        phone: phone || prev.phone,
+        address: address || prev.address,
+      }));
+
+      if (service) {
+        // Map service internal ID to form ID
+        const serviceMap: Record<string, string> = {
+          "normal_wash": "wash-fold",
+          "ironing": "ironing",
+          "dry_clean": "dry-cleaning",
+          "steam_iron": "steam-iron",
+          "stain_treatment": "stain-treatment",
+          "premium": "premium"
+        };
+        const mappedId = serviceMap[service];
+        if (mappedId) {
+          setSelectedServices([mappedId]);
+        }
+      }
+    }
+  }, []);
+
   const services = [
     { id: "wash-fold", name: "Wash & Fold", price: "₹140/kg" },
     { id: "dry-cleaning", name: "Dry Cleaning", price: "Coming soon" },
     { id: "ironing", name: "Ironing & Pressing", price: "₹20/piece" },
+    { id: "steam-iron", name: "Steam Ironing", price: "₹40/piece" },
+    { id: "stain-treatment", name: "Stain Treatment", price: "+₹100" },
     { id: "premium", name: "Premium Care", price: "Custom" },
   ];
 

@@ -16,67 +16,31 @@ const PRICING: Record<string, number> = {
 };
 
 // ── System Prompt with multi-garment schema ───────────────────
-const SYSTEM_PROMPT = `You are DressCodes AI, the official AI assistant for DressCodes, a premium laundry and dry cleaning service based in Kottayam, Kerala.
-
-You must support:
-- Multiple garment images in a single message
-- Garment detection per image
-- Stain detection per garment
-- Service recommendation
-- Price estimation
-- Booking creation
-- Order tracking
-- FAQs
-
-If multiple images are provided, analyze EACH image separately and return all garments inside a "garments" array.
-
-IMPORTANT SERVICE & PRICING INFORMATION:
-- Wash & Iron (per kg): ₹140
-- Wash & Iron (per piece): ₹30
-- Ironing Only (per piece): ₹20
-- Dry Cleaning starts at ₹150 per piece
-- Stain Treatment adds ₹50-₹150 depending on severity
-- Express service adds 50% surcharge
-- Steam Ironing: ₹40 per piece
-- Shoe Cleaning: ₹200 per pair
-
-SERVICES OFFERED:
-- Normal Wash (Wash & Fold/Iron)
-- Dry Cleaning
-- Stain Treatment (specialized)
-- Steam Iron
-- Shoe Cleaning
-
-ORDER STATUSES: CREATED → PICKUP_SCHEDULED → PICKED_UP → IN_LAUNDRY → READY → OUT_FOR_DELIVERY → DELIVERED
-
-BOOKING RULES:
-- When user wants to book, asks to schedule pickup, or says "book it", set intent to "create_booking".
-- Extract customer name, phone, and address from the conversation.
-- Detect the garment type from images or text.
-- Recommend the best service based on the cloth type and stains.
-- Calculate realistic price using the pricing info above.
-- Set booking_status:
-  - "ready_to_create" = ALL required fields are present (name, phone, address, at least one garment, service)
-  - "missing_information" = Some required fields are still missing
-  - "created" = NEVER set this yourself, the backend will set this after inserting into DB
-- In missing_fields, list ONLY the fields that are still null/missing: possible values are "name", "phone", "address", "cloth_type", "service"
-- Keep accumulating context across messages. If user gave name or service earlier, REMEMBER and PERSIST it unless they change it.
-- If a service has been recommended (e.g., normal_wash for a T-shirt) and the user provides other details like address or time, KEEP that service in the "recommended_service" field.
-- For pickup_time and pickup_date, extract them if the user specifies (e.g., "10am", "tomorrow", "tonight").
+const SYSTEM_PROMPT = `You are DressCodes AI, a multimodal assistant that analyzes garment images uploaded from mobile devices. 
+Images may be high resolution, compressed, rotated, or imperfect. 
+You must always respond with valid JSON even if image quality is poor or unclear. 
+Never return connection errors. Never say you cannot connect. 
+If image cannot be analyzed clearly, return intent 'cloth_analysis' with low confidence_score and explain briefly in response_message.
 
 STRICT RULES:
-1. ALWAYS respond in valid JSON using the schema below. Do NOT add any text outside the JSON.
-2. If an image is provided, analyze the garment carefully: detect cloth type, fabric, any stains, and recommend appropriate service.
-3. If MULTIPLE images are provided, analyze EACH image separately and include each garment as a separate entry in the "garments" array.
-4. For pricing estimates, use the pricing info above to calculate realistic estimates.
-5. If user mentions an order ID or tracking, set intent to "track_order".
-6. If user asks about booking OR says "book it" OR provides personal details for pickup, set intent to "create_booking".
-7. If user asks about prices, set intent to "price_estimate".
-8. If user sends an image, set intent to "cloth_analysis".
-9. For FAQs about services/hours/delivery, set intent to "faq".
-10. For anything else, set intent to "general_chat".
+1. Analyze the uploaded image(s). If image quality is low, partially visible, or unclear, still return structured JSON.
+2. Never return plain text.
+3. ALWAYS follow the JSON schema below.
 
-RESPONSE JSON SCHEMA (always return this exact structure):
+PRICING & SERVICES (Kottayam):
+- Wash & Iron (per kg/piece): ₹140 / ₹30
+- Ironing Only: ₹20 | Steam Iron: ₹40
+- Dry Cleaning: starts ₹150
+- Stain Treatment: +₹50-₹150
+- Express Service: +50% surcharge
+- Shoe Cleaning: ₹200/pair
+
+BOOKING LOGIC:
+- Intent "create_booking" when user wants pickup/booking.
+- booking_status: "ready_to_create" (if name, phone, address, fabric, service are ALL present) or "missing_information".
+- missing_fields: ["name", "phone", "address", "cloth_type", "service"].
+
+RESPONSE JSON SCHEMA:
 {
   "intent": "cloth_analysis | price_estimate | create_booking | track_order | faq | general_chat",
   "garments": [
@@ -84,7 +48,7 @@ RESPONSE JSON SCHEMA (always return this exact structure):
       "cloth_type": "string_or_null",
       "category": "casual | formal | ethnic | home_fabric | unknown | null",
       "fabric_type": "string_or_unknown",
-      "stain_detected": true_or_false_or_null,
+      "stain_detected": boolean_or_null,
       "stain_type": "string_or_none",
       "complexity_level": "low | medium | high | null"
     }
@@ -92,13 +56,11 @@ RESPONSE JSON SCHEMA (always return this exact structure):
   "total_quantity_estimate": number_or_null,
   "service_recommendation": {
     "recommended_service": "normal_wash | dry_clean | stain_treatment | steam_iron | mixed | null",
-    "express_recommended": true_or_false_or_null,
+    "express_recommended": boolean_or_null,
     "pickup_date": "string_or_null",
     "pickup_time": "string_or_null"
   },
-  "pricing": {
-    "estimated_total_price": number_or_null
-  },
+  "pricing": { "estimated_total_price": number_or_null },
   "customer_details": {
     "name": "string_or_null",
     "phone": "string_or_null",
@@ -110,15 +72,7 @@ RESPONSE JSON SCHEMA (always return this exact structure):
   "confidence_score": number_between_0_and_1
 }
 
-Rules:
-- If multiple garments exist, include all in the garments array.
-- If booking is requested, extract customer details from conversation.
-- If required booking fields are missing, list them in "missing_fields".
-- Never leave required keys out.
-- If unsure, reduce confidence_score.
-- Always return valid JSON.
-
-NEVER include markdown, explanations, or any text outside the JSON object.`;
+Never include markdown or text outside JSON.`;
 
 // ── TypeScript Interfaces ─────────────────────────────────────
 interface ChatMessage {
@@ -310,7 +264,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model: "nvidia/nemotron-nano-12b-v2-vl:free",
         messages: apiMessages,
-        temperature: 0.3,
+        temperature: 0.2,
         max_tokens: 1500,
         response_format: { type: "json_object" },
       }),
@@ -320,7 +274,7 @@ export async function POST(request: NextRequest) {
       const errorText = await response.text();
       console.error("OpenRouter API error:", response.status, errorText);
       const fallback = defaultResponse(
-        "I'm having trouble connecting to my AI service right now. Please try again in a moment, or contact us directly on WhatsApp for immediate assistance!"
+        "I'm having a bit of trouble analyzing this image right now. Could you please check the quality or try again? You can also reach us on WhatsApp!"
       );
       fallback.confidence_score = 0;
       return NextResponse.json(fallback);
@@ -560,7 +514,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Super Chat API error:", error);
     return NextResponse.json(
-      defaultResponse("Sorry, something went wrong on our end. Please try again or reach out on WhatsApp!")
+      defaultResponse("I encountered an unexpected issue while processing your request. Please try again or reach out on WhatsApp!")
     );
   }
 }

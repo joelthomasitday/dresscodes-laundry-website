@@ -32,6 +32,8 @@ import {
   UserCircle,
   Clock,
   Plus,
+  Edit2,
+  ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -253,12 +255,18 @@ export function AiSuperChatbot() {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Super chat error:", error);
+      
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const isTimeout = errorMessage.toLowerCase().includes("timeout") || errorMessage.toLowerCase().includes("abort");
+      
       setMessages((prev) => [
         ...prev,
         {
           id: generateId(),
           role: "assistant",
-          content: "Sorry, I'm having trouble connecting right now. Please try again or contact us on WhatsApp!",
+          content: isTimeout 
+            ? "The image analysis is taking a bit longer than expected. Please try a smaller image or check your connection!"
+            : "I'm having a bit of trouble analyzing that right now. Could you try rephrasing or sending the photo again? You can also reach us on WhatsApp!",
           timestamp: new Date(),
         },
       ]);
@@ -500,18 +508,36 @@ export function AiSuperChatbot() {
           </div>
 
           {data.missing_fields.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {data.missing_fields.map((field) => {
-                const labels: Record<string, string> = {
-                  name: "Name", phone: "Phone", address: "Location",
-                  cloth_type: "Garment Type", service: "Service Mode",
-                };
-                return (
-                  <Badge key={field} variant="outline" className="text-[9px] bg-white/50 border-emerald-100 text-[#0F3F36] font-bold uppercase px-2 py-0.5">
-                    + Need {labels[field] || field}
-                  </Badge>
-                );
-              })}
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {data.missing_fields.map((field) => {
+                  const labels: Record<string, string> = {
+                    name: "Name", phone: "Phone", address: "Location",
+                    cloth_type: "Garment Type", service: "Service Mode",
+                  };
+                  return (
+                    <Badge key={field} variant="outline" className="text-[9px] bg-white/50 border-emerald-100 text-[#0F3F36] font-bold uppercase px-2 py-0.5">
+                      + Need {labels[field] || field}
+                    </Badge>
+                  );
+                })}
+              </div>
+
+              <button
+                className="w-full mt-1.5 px-4 py-2.5 rounded-xl bg-white border border-[#0F3F36]/20 text-[#0F3F36] text-[11px] font-bold hover:bg-[#0F3F36] hover:text-white transition-all flex items-center justify-center gap-2 group shadow-sm active:scale-[0.98]"
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  if (data.customer_details?.name) params.set("name", data.customer_details.name);
+                  if (data.customer_details?.phone) params.set("phone", data.customer_details.phone);
+                  if (data.customer_details?.address) params.set("address", data.customer_details.address);
+                  if (data.service_recommendation?.recommended_service) params.set("service", data.service_recommendation.recommended_service);
+                  window.location.href = `/booking?${params.toString()}`;
+                }}
+              >
+                <Edit2 className="h-3.5 w-3.5" />
+                Fill Form Manually
+                <ArrowUpRight className="h-3 w-3 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
+              </button>
             </div>
           )}
         </div>
@@ -522,20 +548,39 @@ export function AiSuperChatbot() {
   };
 
   const renderBookingAction = (data: StructuredResponse) => {
-    // Don't show "Book Now" link if we're already in the booking flow
-    if (data.booking_status === "created" || data.booking_status === "missing_information") return null;
+    // Don't show if already created
+    if (data.booking_status === "created") return null;
     if (data.intent !== "create_booking" && data.intent !== "cloth_analysis") return null;
     // Show booking action if garments are detected
     if (data.intent === "cloth_analysis" && (!data.garments || data.garments.length === 0)) return null;
+
+    const navigateToBooking = () => {
+      const params = new URLSearchParams();
+      if (data.customer_details?.name) params.set("name", data.customer_details.name);
+      if (data.customer_details?.phone) params.set("phone", data.customer_details.phone);
+      if (data.customer_details?.address) params.set("address", data.customer_details.address);
+      if (data.service_recommendation?.recommended_service) params.set("service", data.service_recommendation.recommended_service);
+      window.location.href = `/booking?${params.toString()}`;
+    };
+
     return (
-      <div className="mt-2">
+      <div className="mt-4 space-y-2.5">
         <button
-          className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-black transition-all hover:-translate-y-0.5 shadow-lg active:scale-[0.98]"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-black transition-all hover:-translate-y-0.5 shadow-lg active:scale-[0.98]"
           onClick={() => sendMessage("I want to book a pickup for this")}
         >
-          <CalendarCheck className="h-4 w-4" />
-          Start Booking
-          <ArrowRight className="h-3 w-3 ml-auto" />
+          <Sparkles className="h-4 w-4 text-emerald-400" />
+          Quick Book with AI
+          <ArrowRight className="h-3 w-3 ml-auto opacity-40" />
+        </button>
+
+        <button
+          className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 text-[11px] font-bold hover:bg-slate-50 transition-all active:scale-[0.98]"
+          onClick={navigateToBooking}
+        >
+          <Edit2 className="h-3.5 w-3.5" />
+          Fill Manually & Edit
+          <ArrowUpRight className="h-3 w-3 ml-auto opacity-40" />
         </button>
       </div>
     );
